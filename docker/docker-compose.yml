@@ -1,0 +1,31 @@
+# Một container = một portal: Nuxt dev listen cùng cổng với publish host (PORTAL_DEV_PORT → NUXT_PORT trong container).
+# Gateway trong Docker proxy tới host.docker.internal:<cổng> — cổng đó phải = PORTAL_DEV_PORT và khớp portal:*:PORT trong docker/routes.txt (bash docker/gen-gateway-sites.sh).
+#
+#   docker compose --env-file .env -f docker-compose.yml up -d
+#
+# Mount cả repo portal (gồm node_modules) vào /workspace/portal.
+
+name: portal-${PORTAL_STACK_PREFIX:-base}
+
+services:
+  frontend-node:
+    container_name: ${PORTAL_STACK_PREFIX:-base}-portal-node
+    image: node:24
+    working_dir: /workspace
+    command: >
+      sh -c "
+      corepack enable &&
+      cd /workspace/portal &&
+      if [ ! -x node_modules/.bin/nuxt ]; then pnpm install; fi &&
+      pnpm run dev
+      "
+    environment:
+      CHOKIDAR_USEPOLLING: "true"
+      CHOKIDAR_INTERVAL: "100"
+      WATCHPACK_POLLING: "true"
+      NUXT_DEVTOOLS: "false"
+      NUXT_PORT: "${PORTAL_DEV_PORT:-3000}"
+    volumes:
+      - ..:/workspace/portal
+    ports:
+      - "${PORTAL_DEV_PORT:-3000}:${PORTAL_DEV_PORT:-3000}"

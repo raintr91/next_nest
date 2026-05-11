@@ -1,0 +1,43 @@
+# Nuxt dev/build outputs
+.output
+.data
+.nuxt
+.nitro
+.cache
+dist
+
+# Some local runs created by CLI flags (Nuxt có thể coi tên này là rootDir nếu truyền sai cờ)
+--host/
+--port/
+
+# Node dependencies
+node_modules
+.pnpm-store
+
+# Logs
+logs
+*.log
+
+# Misc
+.DS_Store
+.fleet
+.idea
+
+# Storybook
+storybook-static
+
+# Generated stories (keep hand-written stories in /stories)
+stories/auto/
+
+# Cypress artifacts
+cypress/screenshots/
+cypress/videos/
+cypress/downloads/
+cypress/results/
+
+# Local env files
+.env
+.env.*
+!.env.example
+!docker/.env.example
+node_modules

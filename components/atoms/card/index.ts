@@ -1,0 +1,6 @@
+export { default as Card } from '~/components/atoms/card/Card.vue'
+export { default as CardContent } from '~/components/atoms/card/CardContent.vue'
+export { default as CardDescription } from '~/components/atoms/card/CardDescription.vue'
+export { default as CardFooter } from '~/components/atoms/card/CardFooter.vue'
+export { default as CardHeader } from '~/components/atoms/card/CardHeader.vue'
+export { default as CardTitle } from '~/components/atoms/card/CardTitle.vue'

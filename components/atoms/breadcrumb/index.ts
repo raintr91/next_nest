@@ -1,0 +1,7 @@
+export { default as Breadcrumb } from '~/components/atoms/breadcrumb/Breadcrumb.vue'
+export { default as BreadcrumbEllipsis } from '~/components/atoms/breadcrumb/BreadcrumbEllipsis.vue'
+export { default as BreadcrumbItem } from '~/components/atoms/breadcrumb/BreadcrumbItem.vue'
+export { default as BreadcrumbLink } from '~/components/atoms/breadcrumb/BreadcrumbLink.vue'
+export { default as BreadcrumbList } from '~/components/atoms/breadcrumb/BreadcrumbList.vue'
+export { default as BreadcrumbPage } from '~/components/atoms/breadcrumb/BreadcrumbPage.vue'
+export { default as BreadcrumbSeparator } from '~/components/atoms/breadcrumb/BreadcrumbSeparator.vue'

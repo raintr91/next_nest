@@ -1,0 +1,92 @@
+{
+  "name": "base_nuxt4",
+  "type": "module",
+  "private": true,
+  "scripts": {
+    "build": "nuxt build",
+    "dev": "nuxt dev",
+    "dev:test": "nuxt dev --port 3005",
+    "storybook": "STORYBOOK_DISABLE_TELEMETRY=1 nuxt prepare && STORYBOOK_DISABLE_TELEMETRY=1 storybook dev -p 6006 --loglevel error",
+    "storybook:clean": "rm -rf node_modules/.cache/storybook",
+    "storybook:clean:gen": "node ./scripts/clean-generated-stories.mjs",
+    "storybook:fresh": "pnpm storybook:clean && pnpm storybook",
+    "storybook:build": "STORYBOOK_DISABLE_TELEMETRY=1 nuxt prepare && STORYBOOK_DISABLE_TELEMETRY=1 storybook build --loglevel error",
+    "storybook:gen": "node ./scripts/generate-stories.mjs",
+    "storybook:gen:force": "node ./scripts/generate-stories.mjs --force",
+    "test:unit": "vitest run",
+    "test:unit:watch": "vitest",
+    "test:unit:ui": "vitest --ui",
+    "test:unit:coverage": "vitest run --coverage",
+    "cypress:open": "cypress open",
+    "cypress:run": "cypress run",
+    "test:e2e": "start-server-and-test \"pnpm dev:test\" http://127.0.0.1:3005 \"CYPRESS_BASE_URL=http://127.0.0.1:3005 cypress run\"",
+    "test:e2e:remote": "CYPRESS_BASE_URL=${CYPRESS_BASE_URL:-http://portal.base.com} cypress run",
+    "generate": "nuxt generate",
+    "preview": "nuxt preview",
+    "postinstall": "nuxt prepare"
+  },
+  "dependencies": {
+    "@nuxt/eslint": "1.13.0",
+    "@nuxtjs/i18n": "^10.2.1",
+    "@nuxtjs/tailwindcss": "^6.14.0",
+    "@pinia/nuxt": "^0.11.3",
+    "@unovis/ts": "^1.6.4",
+    "@unovis/vue": "^1.6.4",
+    "@vee-validate/zod": "^4.15.1",
+    "@vueuse/core": "^14.2.1",
+    "class-variance-authority": "^0.7.1",
+    "clsx": "^2.1.1",
+    "embla-carousel-vue": "^8.6.0",
+    "eslint": "^9.39.2",
+    "lucide-vue-next": "^0.563.0",
+    "nuxt": "^4.3.0",
+    "pinia": "^3.0.4",
+    "@radix-icons/vue": "^1.0.0",
+    "radix-vue": "^1.9.17",
+    "tailwind-merge": "^3.4.0",
+    "tailwindcss-animate": "^1.0.7",
+    "vaul-vue": "^0.4.1",
+    "vee-validate": "^4.15.1",
+    "vue": "^3.5.27",
+    "vue-router": "^4.6.4",
+    "vue-sonner": "^2.0.9",
+    "zod": "^3.25.76",
+    "chart.js": "^4.4.0"
+  },
+  "pnpm": {
+    "onlyBuiltDependencies": [
+      "cypress",
+      "esbuild"
+    ]
+  },
+  "devDependencies": {
+    "@storybook/addon-a11y": "10.2.13",
+    "@storybook/addon-docs": "10.2.13",
+    "@storybook/addon-links": "10.2.13",
+    "@storybook/vue3": "10.2.13",
+    "@storybook/vue3-vite": "10.2.13",
+    "@vitejs/plugin-vue": "^6.0.4",
+    "@vitest/coverage-v8": "^4.0.18",
+    "@vitest/ui": "^4.0.18",
+    "autoprefixer": "^10.4.24",
+    "cypress": "^15.9.0",
+    "happy-dom": "^20.4.0",
+    "postcss": "^8.5.6",
+    "shadcn-nuxt": "^2.4.3",
+    "start-server-and-test": "^2.1.3",
+    "storybook": "10.2.13",
+    "tailwindcss": "^3.4.19",
+    "typescript": "^5.9.3",
+    "unplugin-auto-import": "^0.18.6",
+    "vitest": "^4.0.18"
+  },
+  "imports": {
+    "#scripts/*": "./scripts/*",
+    "#nuxt-eslint": "./.nuxt/eslint.config.mjs"
+  },
+  "storybook": {
+    "generatedDir": "stories/auto",
+    "manualStoriesGlob": "stories/*.stories.ts",
+    "preserveManual": true
+  }
+}

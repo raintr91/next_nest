@@ -1,0 +1,7 @@
+export { default as Stepper } from '~/components/atoms/stepper/Stepper.vue'
+export { default as StepperDescription } from '~/components/atoms/stepper/StepperDescription.vue'
+export { default as StepperIndicator } from '~/components/atoms/stepper/StepperIndicator.vue'
+export { default as StepperItem } from '~/components/atoms/stepper/StepperItem.vue'
+export { default as StepperSeparator } from '~/components/atoms/stepper/StepperSeparator.vue'
+export { default as StepperTitle } from '~/components/atoms/stepper/StepperTitle.vue'
+export { default as StepperTrigger } from '~/components/atoms/stepper/StepperTrigger.vue'

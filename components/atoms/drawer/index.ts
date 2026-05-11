@@ -1,0 +1,8 @@
+export { default as Drawer } from '~/components/atoms/drawer/Drawer.vue'
+export { default as DrawerContent } from '~/components/atoms/drawer/DrawerContent.vue'
+export { default as DrawerDescription } from '~/components/atoms/drawer/DrawerDescription.vue'
+export { default as DrawerFooter } from '~/components/atoms/drawer/DrawerFooter.vue'
+export { default as DrawerHeader } from '~/components/atoms/drawer/DrawerHeader.vue'
+export { default as DrawerOverlay } from '~/components/atoms/drawer/DrawerOverlay.vue'
+export { default as DrawerTitle } from '~/components/atoms/drawer/DrawerTitle.vue'
+export { DrawerClose, DrawerPortal, DrawerTrigger } from 'vaul-vue'

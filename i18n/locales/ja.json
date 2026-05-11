@@ -1,0 +1,11 @@
+{
+  "app": {
+    "title": "管理画面"
+  },
+  "common": {
+    "hello": "こんにちは"
+  },
+  "dashboard": {
+    "title": "ホーム"
+  }
+}
