@@ -13,7 +13,7 @@ So new forms can reuse one pattern: **schema + initialValues + submit()**.
 import { useApiForm } from '~/composables/forms/useApiForm'
 import { useField } from 'vee-validate'
 import { loginSchema } from '~/validations/auth/schemas'
-import type { LoginRequest } from '~/types/api/auth'
+import type { LoginRequest } from '~/models/auth/auth.types'
 
 const { onSubmit, errors, apiError, isSubmitting } = useApiForm<LoginRequest>({
   validationSchema: loginSchema,

@@ -1,9 +1,10 @@
 # Một container = một portal: Nuxt dev listen cùng cổng với publish host (PORTAL_DEV_PORT → NUXT_PORT trong container).
-# Gateway trong Docker proxy tới host.docker.internal:<cổng> — cổng đó phải = PORTAL_DEV_PORT và khớp portal:*:PORT trong docker/routes.txt (bash docker/gen-gateway-sites.sh).
+# Gateway nginx (stack docker/) proxy tới container <PORTAL_STACK_PREFIX>-portal-node trên base_shared_net (PORTAL_PROXY_TARGET=container) hoặc host.docker.internal (host).
 #
 #   docker compose --env-file .env -f docker-compose.yml up -d
 #
-# Mount cả repo portal (gồm node_modules) vào /workspace/portal.
+# Mount source portal (code + lockfile). node_modules → volume riêng (không trùng host).
+# Container khởi động root một nhịp: chown volume → setpriv HOST_UID (trùng host; .nuxt trên bind mount không root).
 
 name: portal-${PORTAL_STACK_PREFIX:-base}
 
@@ -11,21 +12,40 @@ services:
   frontend-node:
     container_name: ${PORTAL_STACK_PREFIX:-base}-portal-node
     image: node:24
+    user: "0:0"
     working_dir: /workspace
-    command: >
-      sh -c "
-      corepack enable &&
-      cd /workspace/portal &&
-      if [ ! -x node_modules/.bin/nuxt ]; then pnpm install; fi &&
-      pnpm run dev
-      "
+    command:
+      - /bin/sh
+      - /workspace/portal/docker/entrypoint-dev.sh
+      - sh
+      - -c
+      - mkdir -p /tmp/corepack /tmp/cache /tmp/config && cd /workspace/portal && if [ ! -x node_modules/.bin/nuxt ]; then corepack pnpm install; fi && corepack pnpm run dev
     environment:
+      HOST_UID: "${HOST_UID:-1000}"
+      HOST_GID: "${HOST_GID:-1000}"
       CHOKIDAR_USEPOLLING: "true"
       CHOKIDAR_INTERVAL: "100"
       WATCHPACK_POLLING: "true"
       NUXT_DEVTOOLS: "false"
       NUXT_PORT: "${PORTAL_DEV_PORT:-3000}"
+      HOME: /tmp
+      COREPACK_HOME: /tmp/corepack
+      XDG_CACHE_HOME: /tmp/cache
+      XDG_CONFIG_HOME: /tmp/config
     volumes:
       - ..:/workspace/portal
+      - portal_node_modules:/workspace/portal/node_modules
     ports:
       - "${PORTAL_DEV_PORT:-3000}:${PORTAL_DEV_PORT:-3000}"
+    networks:
+      - default
+      - shared
+
+networks:
+  shared:
+    name: ${BASE_SHARED_NETWORK_NAME:-base_shared_net}
+    external: true
+
+volumes:
+  portal_node_modules:
+    name: portal_${PORTAL_STACK_PREFIX:-base}_nodemodules

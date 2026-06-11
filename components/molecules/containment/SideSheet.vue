@@ -11,13 +11,13 @@ const emit = defineEmits<{ (e: 'update:open', v: boolean): void }>()
 </script>
 
 <template>
-  <AtSheet :open="props.open" @update:open="emit('update:open', $event)">
-    <AtSheetContent :side="props.side ?? 'right'" class="sm:max-w-md">
-      <AtSheetHeader v-if="props.title || $slots.title">
-        <AtSheetTitle>{{ props.title }}</AtSheetTitle>
+  <Sheet :open="props.open" @update:open="emit('update:open', $event)">
+    <SheetContent :side="props.side ?? 'right'" class="sm:max-w-md">
+      <SheetHeader v-if="props.title || $slots.title">
+        <SheetTitle>{{ props.title }}</SheetTitle>
         <slot name="title" />
-      </AtSheetHeader>
+      </SheetHeader>
       <slot />
-    </AtSheetContent>
-  </AtSheet>
+    </SheetContent>
+  </Sheet>
 </template>

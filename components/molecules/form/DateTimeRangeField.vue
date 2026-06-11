@@ -74,7 +74,7 @@ const timeStep = computed(() => (props.timeFormat === 'h' ? 3600 : props.timeFor
             :model-value="startDate"
             @update:model-value="startDate = $event ?? ''"
           />
-          <AtInput
+          <Input
             v-if="timeFormat === 'h'"
             type="number"
             min="0"
@@ -83,7 +83,7 @@ const timeStep = computed(() => (props.timeFormat === 'h' ? 3600 : props.timeFor
             class="w-20"
             @update:model-value="startTime = $event"
           />
-          <AtInput
+          <Input
             v-else
             type="time"
             :step="timeStep"
@@ -100,7 +100,7 @@ const timeStep = computed(() => (props.timeFormat === 'h' ? 3600 : props.timeFor
             :model-value="endDate"
             @update:model-value="endDate = $event ?? ''"
           />
-          <AtInput
+          <Input
             v-if="timeFormat === 'h'"
             type="number"
             min="0"
@@ -109,7 +109,7 @@ const timeStep = computed(() => (props.timeFormat === 'h' ? 3600 : props.timeFor
             class="w-20"
             @update:model-value="endTime = $event"
           />
-          <AtInput
+          <Input
             v-else
             type="time"
             :step="timeStep"

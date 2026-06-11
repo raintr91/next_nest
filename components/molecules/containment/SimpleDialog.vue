@@ -7,12 +7,12 @@ const emit = defineEmits<{ (e: 'update:open', v: boolean): void }>()
 </script>
 
 <template>
-  <AtDialog :open="props.open" @update:open="emit('update:open', $event)">
-    <AtDialogContent class="sm:max-w-md">
-      <AtDialogHeader>
-        <AtDialogTitle>{{ props.title }}</AtDialogTitle>
-      </AtDialogHeader>
+  <Dialog :open="props.open" @update:open="emit('update:open', $event)">
+    <DialogContent class="sm:max-w-md">
+      <DialogHeader>
+        <DialogTitle>{{ props.title }}</DialogTitle>
+      </DialogHeader>
       <slot />
-    </AtDialogContent>
-  </AtDialog>
+    </DialogContent>
+  </Dialog>
 </template>

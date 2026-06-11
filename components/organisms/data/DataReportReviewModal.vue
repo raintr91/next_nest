@@ -67,7 +67,7 @@ function formatMetric(value: unknown, precision = 2): string {
           <h3 class="text-lg font-semibold">レビュー集計プレビュー</h3>
           <p class="text-sm text-muted-foreground">{{ hotelName }} | {{ periodStart }} - {{ periodEnd }}</p>
         </div>
-        <AtButton variant="ghost" @click="emit('close')">閉じる</AtButton>
+        <Button variant="ghost" @click="emit('close')">閉じる</Button>
       </div>
 
       <div class="overflow-auto p-4">

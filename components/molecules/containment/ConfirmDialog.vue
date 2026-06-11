@@ -1,7 +1,7 @@
 <script setup lang="ts">
 /**
  * ConfirmDialog – dialog with title, description, confirm/cancel actions.
- * Reference: Vuetify Dialog (containment). Built from AtDialog, AtButton.
+ * Reference: Vuetify Dialog (containment). Built from Dialog, Button.
  */
 const props = withDefaults(
   defineProps<{
@@ -44,27 +44,27 @@ function onCancel() {
 </script>
 
 <template>
-  <AtDialog :open="props.open" @update:open="onOpenChange">
-    <AtDialogContent class="sm:max-w-md">
-      <AtDialogHeader>
-        <AtDialogTitle>{{ title }}</AtDialogTitle>
-        <AtDialogDescription v-if="description">
+  <Dialog :open="props.open" @update:open="onOpenChange">
+    <DialogContent class="sm:max-w-md">
+      <DialogHeader>
+        <DialogTitle>{{ title }}</DialogTitle>
+        <DialogDescription v-if="description">
           {{ description }}
-        </AtDialogDescription>
-      </AtDialogHeader>
+        </DialogDescription>
+      </DialogHeader>
       <slot />
-      <AtDialogFooter class="gap-2 sm:gap-0">
-        <AtButton variant="outline" :disabled="loading" @click="onCancel">
+      <DialogFooter class="gap-2 sm:gap-0">
+        <Button variant="outline" :disabled="loading" @click="onCancel">
           {{ cancelLabel }}
-        </AtButton>
-        <AtButton
+        </Button>
+        <Button
           :variant="variant === 'destructive' ? 'destructive' : 'default'"
           :disabled="loading"
           @click="onConfirm"
         >
           {{ confirmLabel }}
-        </AtButton>
-      </AtDialogFooter>
-    </AtDialogContent>
-  </AtDialog>
+        </Button>
+      </DialogFooter>
+    </DialogContent>
+  </Dialog>
 </template>

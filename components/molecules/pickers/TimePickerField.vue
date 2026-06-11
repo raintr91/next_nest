@@ -8,7 +8,7 @@ const props = defineProps<{ label?: string; name?: string }>()
 
 <template>
   <MoFormField v-if="props.label" :label="props.label" :name="props.name">
-    <AtInput v-model="model" type="time" />
+    <Input v-model="model" type="time" />
   </MoFormField>
-  <AtInput v-else v-model="model" type="time" />
+  <Input v-else v-model="model" type="time" />
 </template>

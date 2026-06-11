@@ -8,18 +8,18 @@ const props = defineProps<{
 </script>
 
 <template>
-  <AtCarousel>
-    <AtCarouselContent>
+  <Carousel>
+    <CarouselContent>
       <template v-if="props.slides?.length">
-        <AtCarouselItem v-for="s in props.slides" :key="s.id">
+        <CarouselItem v-for="s in props.slides" :key="s.id">
           <slot :name="s.id" :slide="s">{{ s.content }}</slot>
-        </AtCarouselItem>
+        </CarouselItem>
       </template>
       <template v-else>
         <slot />
       </template>
-    </AtCarouselContent>
-    <AtCarouselPrevious />
-    <AtCarouselNext />
-  </AtCarousel>
+    </CarouselContent>
+    <CarouselPrevious />
+    <CarouselNext />
+  </Carousel>
 </template>

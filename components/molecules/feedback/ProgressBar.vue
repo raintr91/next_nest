@@ -17,6 +17,6 @@ const pct = computed(() => Math.round((props.modelValue ?? 0) * 100))
       <span v-if="props.label">{{ props.label }}</span>
       <span v-if="props.showValue" class="text-muted-foreground">{{ pct }}%</span>
     </div>
-    <AtProgress :model-value="props.modelValue ?? 0" />
+    <Progress :model-value="props.modelValue ?? 0" />
   </div>
 </template>

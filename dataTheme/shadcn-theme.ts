@@ -88,12 +88,12 @@ export function renderShadcnDashboardContent(): VNode[] {
       h('button', { class: 'inline-flex items-center justify-center rounded-md text-sm font-medium bg-primary text-primary-foreground h-9 px-4' }, 'Download')
     ]),
     h('div', { class: 'grid gap-4 sm:grid-cols-2 lg:grid-cols-4 mb-6' }, MOCK_SHADCN_STATS.map((stat) =>
-      h('AtCard', null, {
+      h('Card', null, {
         default: () => [
-          h('AtCardHeader', { class: 'flex flex-row items-center justify-between pb-2' }, {
-            default: () => [h('AtCardTitle', { class: 'text-sm font-medium text-muted-foreground' }, stat.title)]
+          h('CardHeader', { class: 'flex flex-row items-center justify-between pb-2' }, {
+            default: () => [h('CardTitle', { class: 'text-sm font-medium text-muted-foreground' }, stat.title)]
           }),
-          h('AtCardContent', null, {
+          h('CardContent', null, {
             default: () => [
               h('div', { class: 'text-2xl font-bold' }, stat.value),
               h('p', { class: 'text-xs text-muted-foreground' }, stat.desc)
@@ -103,23 +103,23 @@ export function renderShadcnDashboardContent(): VNode[] {
       })
     )),
     h('div', { class: 'grid gap-4 lg:grid-cols-7' }, [
-      h('AtCard', { class: 'lg:col-span-4' }, {
+      h('Card', { class: 'lg:col-span-4' }, {
         default: () => [
-          h('AtCardHeader', null, { default: () => [h('AtCardTitle', null, 'Overview')] }),
-          h('AtCardContent', { class: 'ps-2' }, {
+          h('CardHeader', null, { default: () => [h('CardTitle', null, 'Overview')] }),
+          h('CardContent', { class: 'ps-2' }, {
             default: () => [renderShadcnOverviewChart()]
           })
         ]
       }),
-      h('AtCard', { class: 'lg:col-span-3' }, {
+      h('Card', { class: 'lg:col-span-3' }, {
         default: () => [
-          h('AtCardHeader', null, {
+          h('CardHeader', null, {
             default: () => [
-              h('AtCardTitle', null, 'Recent Sales'),
-              h('AtCardDescription', null, 'You made 265 sales this month.')
+              h('CardTitle', null, 'Recent Sales'),
+              h('CardDescription', null, 'You made 265 sales this month.')
             ]
           }),
-          h('AtCardContent', null, {
+          h('CardContent', null, {
             default: () =>
               h('div', { class: 'space-y-6' }, MOCK_SHADCN_RECENT_SALES.map((sale) =>
                 h('div', { class: 'flex items-center gap-4', key: sale.email }, [

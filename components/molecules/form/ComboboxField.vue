@@ -29,53 +29,53 @@ function onInputFromTrigger(v: string) {
 
 <template>
   <MoFormField v-if="props.label" :label="props.label" :name="props.name">
-    <AtPopover v-model:open="open">
-      <AtPopoverTrigger>
-        <AtInput
+    <Popover v-model:open="open">
+      <PopoverTrigger>
+        <Input
           :model-value="displayText"
           :placeholder="props.placeholder ?? 'Type or select...'"
           class="w-full"
           @update:model-value="onInputFromTrigger"
           @focus="open = true"
         />
-      </AtPopoverTrigger>
-      <AtPopoverContent class="w-[var(--radix-popover-trigger-width)] p-0" align="start">
-        <AtCommand :filter-function="filterFn" @update:model-value="onSelect">
-          <AtCommandInput :placeholder="props.placeholder ?? 'Search...'" />
-          <AtCommandList>
-            <AtCommandEmpty>No results. Press Enter to use current text.</AtCommandEmpty>
-            <AtCommandItem
+      </PopoverTrigger>
+      <PopoverContent class="w-[var(--radix-popover-trigger-width)] p-0" align="start">
+        <Command :filter-function="filterFn" @update:model-value="onSelect">
+          <CommandInput :placeholder="props.placeholder ?? 'Search...'" />
+          <CommandList>
+            <CommandEmpty>No results. Press Enter to use current text.</CommandEmpty>
+            <CommandItem
               v-for="opt in props.options"
               :key="opt.value"
               :value="opt.value"
             >
               {{ opt.label }}
-            </AtCommandItem>
-          </AtCommandList>
-        </AtCommand>
-      </AtPopoverContent>
-    </AtPopover>
+            </CommandItem>
+          </CommandList>
+        </Command>
+      </PopoverContent>
+    </Popover>
   </MoFormField>
-  <AtPopover v-else v-model:open="open">
-    <AtPopoverTrigger>
-      <AtInput
+  <Popover v-else v-model:open="open">
+    <PopoverTrigger>
+      <Input
         :model-value="displayText"
         :placeholder="props.placeholder ?? 'Type or select...'"
         class="w-full"
         @update:model-value="onInputFromTrigger"
         @focus="open = true"
       />
-    </AtPopoverTrigger>
-    <AtPopoverContent class="w-[var(--radix-popover-trigger-width)] p-0" align="start">
-      <AtCommand :filter-function="filterFn" @update:model-value="onSelect">
-        <AtCommandInput :placeholder="props.placeholder ?? 'Search...'" />
-        <AtCommandList>
-          <AtCommandEmpty>No results.</AtCommandEmpty>
-          <AtCommandItem v-for="opt in props.options" :key="opt.value" :value="opt.value">
+    </PopoverTrigger>
+    <PopoverContent class="w-[var(--radix-popover-trigger-width)] p-0" align="start">
+      <Command :filter-function="filterFn" @update:model-value="onSelect">
+        <CommandInput :placeholder="props.placeholder ?? 'Search...'" />
+        <CommandList>
+          <CommandEmpty>No results.</CommandEmpty>
+          <CommandItem v-for="opt in props.options" :key="opt.value" :value="opt.value">
             {{ opt.label }}
-          </AtCommandItem>
-        </AtCommandList>
-      </AtCommand>
-    </AtPopoverContent>
-  </AtPopover>
+          </CommandItem>
+        </CommandList>
+      </Command>
+    </PopoverContent>
+  </Popover>
 </template>

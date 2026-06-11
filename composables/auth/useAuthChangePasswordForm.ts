@@ -1,36 +1,25 @@
-import type { ChangePasswordRequest } from '~/types/api/auth'
-import { isApiValidationError } from '~/utils/apiValidation'
+import type { ChangePasswordRequest } from '~/models/auth/auth.types'
+import { useApiForm } from '~/composables/forms/useApiForm'
+import { changePasswordSchema } from '~/validations/auth/schemas'
 
 export function useAuthChangePasswordForm() {
   const auth = useAuth()
   const { t } = useI18n()
-
-  const apiError = ref<string | null>(null)
   const successMessage = ref<string | null>(null)
 
-  const isSubmitting = ref(false)
-
-  const onSubmit = async (values: ChangePasswordRequest) => {
-    apiError.value = null
-    successMessage.value = null
-
-    try {
-      isSubmitting.value = true
+  const form = useApiForm<ChangePasswordRequest>({
+    validationSchema: changePasswordSchema,
+    initialValues: { current_password: '', password: '', password_confirmation: '' },
+    getErrorMessage: (error) => (error as Error)?.message ?? t('auth.feedback.submitFailed'),
+    submit: async (values) => {
+      successMessage.value = null
       await auth.changePassword(values)
       successMessage.value = t('auth.feedback.passwordChanged')
-    } catch (e: any) {
-      if (isApiValidationError(e)) throw e
-      apiError.value = e?.message ?? t('auth.feedback.changeFailed')
-      throw e
-    } finally {
-      isSubmitting.value = false
     }
-  }
+  })
 
   return {
-    apiError,
-    successMessage,
-    isSubmitting,
-    onSubmit
+    ...form,
+    successMessage
   }
 }

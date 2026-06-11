@@ -6,8 +6,8 @@ const pos = posMap[props.position ?? 'bottom-right']
 
 <template>
   <div :class="['fixed z-40', pos]">
-    <AtButton size="icon" class="h-12 w-12 rounded-full shadow-lg">
+    <Button size="icon" class="h-12 w-12 rounded-full shadow-lg">
       <slot />
-    </AtButton>
+    </Button>
   </div>
 </template>

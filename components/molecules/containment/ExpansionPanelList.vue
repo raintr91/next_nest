@@ -9,13 +9,13 @@ const props = defineProps<{
 </script>
 
 <template>
-  <AtAccordion :type="props.type ?? 'single'" class="w-full">
-    <AtAccordionItem v-for="item in props.items" :key="item.value" :value="item.value">
-      <AtAccordionTrigger>{{ item.title }}</AtAccordionTrigger>
-      <AtAccordionContent>
+  <Accordion :type="props.type ?? 'single'" class="w-full">
+    <AccordionItem v-for="item in props.items" :key="item.value" :value="item.value">
+      <AccordionTrigger>{{ item.title }}</AccordionTrigger>
+      <AccordionContent>
         <template v-if="item.content">{{ item.content }}</template>
         <slot v-else :name="item.value" :item="item" />
-      </AtAccordionContent>
-    </AtAccordionItem>
-  </AtAccordion>
+      </AccordionContent>
+    </AccordionItem>
+  </Accordion>
 </template>

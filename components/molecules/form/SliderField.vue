@@ -19,14 +19,14 @@ const sliderValue = computed({
 
 <template>
   <MoFormField v-if="props.label" :label="props.label" :name="props.name">
-    <AtSlider
+    <Slider
       v-model="sliderValue"
       :min="props.min ?? 0"
       :max="props.max ?? 100"
       :step="props.step ?? 1"
     />
   </MoFormField>
-  <AtSlider
+  <Slider
     v-else
     v-model="sliderValue"
     :min="props.min ?? 0"

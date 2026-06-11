@@ -18,43 +18,43 @@ function toggle(v: string, checked: boolean) {
 
 <template>
   <MoFormField v-if="props.label" :label="props.label" :name="props.name">
-    <AtPopover v-model:open="open">
-      <AtPopoverTrigger>
-        <AtButton variant="outline" class="w-full justify-start text-left font-normal">
+    <Popover v-model:open="open">
+      <PopoverTrigger>
+        <Button variant="outline" class="w-full justify-start text-left font-normal">
           {{ displayText }}
-        </AtButton>
-      </AtPopoverTrigger>
-      <AtPopoverContent class="w-[var(--radix-popover-trigger-width)] p-0" align="start">
+        </Button>
+      </PopoverTrigger>
+      <PopoverContent class="w-[var(--radix-popover-trigger-width)] p-0" align="start">
         <div class="max-h-60 overflow-auto p-1">
           <label
             v-for="opt in props.options"
             :key="opt.value"
             class="flex cursor-pointer items-center gap-2 rounded-sm px-2 py-1.5 text-sm hover:bg-accent"
           >
-            <AtCheckbox :checked="model.includes(opt.value)" @update:checked="(c) => toggle(opt.value, c)" />
+            <Checkbox :checked="model.includes(opt.value)" @update:checked="(c) => toggle(opt.value, c)" />
             {{ opt.label }}
           </label>
         </div>
-      </AtPopoverContent>
-    </AtPopover>
+      </PopoverContent>
+    </Popover>
   </MoFormField>
-  <AtPopover v-else v-model:open="open">
-    <AtPopoverTrigger>
-      <AtButton variant="outline" class="w-full justify-start text-left font-normal">
+  <Popover v-else v-model:open="open">
+    <PopoverTrigger>
+      <Button variant="outline" class="w-full justify-start text-left font-normal">
         {{ displayText }}
-      </AtButton>
-    </AtPopoverTrigger>
-    <AtPopoverContent class="w-[var(--radix-popover-trigger-width)] p-0" align="start">
+      </Button>
+    </PopoverTrigger>
+    <PopoverContent class="w-[var(--radix-popover-trigger-width)] p-0" align="start">
       <div class="max-h-60 overflow-auto p-1">
         <label
           v-for="opt in props.options"
           :key="opt.value"
           class="flex cursor-pointer items-center gap-2 rounded-sm px-2 py-1.5 text-sm hover:bg-accent"
         >
-          <AtCheckbox :checked="model.includes(opt.value)" @update:checked="(c) => toggle(opt.value, c)" />
+          <Checkbox :checked="model.includes(opt.value)" @update:checked="(c) => toggle(opt.value, c)" />
           {{ opt.label }}
         </label>
       </div>
-    </AtPopoverContent>
-  </AtPopover>
+    </PopoverContent>
+  </Popover>
 </template>

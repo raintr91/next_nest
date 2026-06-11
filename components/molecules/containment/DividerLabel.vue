@@ -3,5 +3,5 @@ const p = defineProps<{ label?: string }>()
 </script>
 
 <template>
-  <AtSeparator :label="p.label" class="my-2" />
+  <Separator :label="p.label" class="my-2" />
 </template>

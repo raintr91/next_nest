@@ -27,8 +27,8 @@ function typeIcon(type: ToastType): string {
 </script>
 
 <template>
-  <AtToastProvider>
-    <AtToast
+  <ToastProvider>
+    <Toast
       v-for="t in toasts"
       :key="t.id"
       :open="t.open"
@@ -49,17 +49,17 @@ function typeIcon(type: ToastType): string {
             {{ typeIcon(t.type) }}
           </span>
           <div class="flex-1 space-y-1">
-            <AtToastTitle v-if="t.title">
+            <ToastTitle v-if="t.title">
               {{ t.title }}
-            </AtToastTitle>
-            <AtToastDescription>
+            </ToastTitle>
+            <ToastDescription>
               {{ t.message }}
-            </AtToastDescription>
+            </ToastDescription>
           </div>
-          <AtToastClose />
+          <ToastClose />
         </div>
       </div>
-    </AtToast>
-    <AtToastViewport />
-  </AtToastProvider>
+    </Toast>
+    <ToastViewport />
+  </ToastProvider>
 </template>

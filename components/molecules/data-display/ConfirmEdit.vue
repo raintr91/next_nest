@@ -27,9 +27,9 @@ function cancel() {
 <template>
   <div class="inline-flex items-center gap-2">
     <template v-if="editing">
-      <AtInput v-model="draft" :placeholder="props.placeholder" class="h-8 w-48" @keydown.enter="confirm" @keydown.esc="cancel" />
-      <AtButton size="sm" @click="confirm">OK</AtButton>
-      <AtButton size="sm" variant="outline" @click="cancel">Cancel</AtButton>
+      <Input v-model="draft" :placeholder="props.placeholder" class="h-8 w-48" @keydown.enter="confirm" @keydown.esc="cancel" />
+      <Button size="sm" @click="confirm">OK</Button>
+      <Button size="sm" variant="outline" @click="cancel">Cancel</Button>
     </template>
     <button v-else type="button" class="text-left underline decoration-dashed underline-offset-2" @click="start">
       <slot>{{ props.modelValue || props.placeholder || 'Edit' }}</slot>

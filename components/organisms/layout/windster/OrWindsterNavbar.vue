@@ -14,7 +14,7 @@ const emit = defineEmits<{ (e: 'toggle-sidebar'): void }>()
     <div class="px-3 py-3 lg:px-5 lg:pl-3">
       <div class="flex items-center justify-between">
         <div class="flex items-center justify-start">
-          <AtButton
+          <Button
             variant="ghost"
             size="icon"
             class="lg:hidden mr-2"
@@ -22,7 +22,7 @@ const emit = defineEmits<{ (e: 'toggle-sidebar'): void }>()
             @click="emit('toggle-sidebar')"
           >
             <Menu class="size-6" />
-          </AtButton>
+          </Button>
           <NuxtLink
             to="/"
             class="flex items-center text-xl font-bold lg:ml-2.5"
@@ -34,7 +34,7 @@ const emit = defineEmits<{ (e: 'toggle-sidebar'): void }>()
               <span class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none text-muted-foreground">
                 <Search class="size-5" />
               </span>
-              <AtInput
+              <Input
                 type="text"
                 :placeholder="searchPlaceholder ?? 'Search'"
                 class="pl-10 bg-muted/50 border-border"
@@ -43,14 +43,14 @@ const emit = defineEmits<{ (e: 'toggle-sidebar'): void }>()
           </div>
         </div>
         <div class="flex items-center gap-2">
-          <AtButton
+          <Button
             variant="ghost"
             size="icon"
             class="lg:hidden"
             aria-label="Search"
           >
             <Search class="size-6" />
-          </AtButton>
+          </Button>
           <div class="hidden lg:flex items-center">
             <span class="mr-5 text-base text-muted-foreground">Open source ❤️</span>
           </div>

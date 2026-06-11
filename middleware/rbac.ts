@@ -1,4 +1,4 @@
-import type { Role } from '~/types/api/auth'
+import type { Role } from '~/models/user/user.types'
 
 export default defineNuxtRouteMiddleware(async (to) => {
   const auth = useAuth()

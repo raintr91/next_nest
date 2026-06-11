@@ -1,5 +1,6 @@
 import { toTypedSchema } from '@vee-validate/zod'
 import { z } from 'zod'
+import type { LoginRequest } from '~/models/auth/auth.types'
 import { authValidationMessages as m } from '~/validations/auth/messages'
 import { rules } from '~/validations/common/rules'
 import { commonValidationMessages as cm } from '~/validations/common/messages'
@@ -7,12 +8,14 @@ import { commonValidationMessages as cm } from '~/validations/common/messages'
 const email = rules.email(m.emailInvalid)
 const password = z.string().min(8, m.passwordMin8).max(128, cm.maxLength(128))
 
-export const loginSchema = toTypedSchema(
-  z.object({
-    email,
-    password
-  })
-)
+const loginObjectSchema = z.object({
+  email,
+  password
+})
+
+export const loginSchema = toTypedSchema(loginObjectSchema)
+
+export type { LoginRequest }
 
 export const registerSchema = toTypedSchema(
   z

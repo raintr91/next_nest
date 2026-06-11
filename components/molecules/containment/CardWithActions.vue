@@ -4,7 +4,7 @@ import { cn } from '~/utils/cn'
 
 /**
  * CardWithActions – card with title, optional actions slot, content, optional footer.
- * Reference: Vuetify Card (containment). Built from AtCard, AtButton.
+ * Reference: Vuetify Card (containment). Built from Card, Button.
  */
 const props = defineProps<{
   title?: string
@@ -13,21 +13,21 @@ const props = defineProps<{
 </script>
 
 <template>
-  <AtCard :class="cn(props.class)">
-    <AtCardHeader class="flex flex-row items-center justify-between space-y-0">
-      <AtCardTitle v-if="title || $slots.title">
+  <Card :class="cn(props.class)">
+    <CardHeader class="flex flex-row items-center justify-between space-y-0">
+      <CardTitle v-if="title || $slots.title">
         <template v-if="title">{{ title }}</template>
         <slot v-else name="title" />
-      </AtCardTitle>
+      </CardTitle>
       <div v-if="$slots.actions" class="flex items-center gap-2">
         <slot name="actions" />
       </div>
-    </AtCardHeader>
-    <AtCardContent>
+    </CardHeader>
+    <CardContent>
       <slot />
-    </AtCardContent>
-    <AtCardFooter v-if="$slots.footer">
+    </CardContent>
+    <CardFooter v-if="$slots.footer">
       <slot name="footer" />
-    </AtCardFooter>
-  </AtCard>
+    </CardFooter>
+  </Card>
 </template>

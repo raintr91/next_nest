@@ -1,7 +1,7 @@
 <script setup lang="ts">
 /**
  * SnackbarTrigger – trigger that shows a toast/snackbar. Ref: Vuetify Snackbar.
- * Uses useToast() from atoms; wrap app with AtToastProvider + AtToaster.
+ * Uses useToast() from ui/toast; wrap app with ToastProvider + Toaster.
  */
 const props = defineProps<{
   title?: string

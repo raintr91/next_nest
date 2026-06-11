@@ -55,7 +55,7 @@ function toggleMulti(name: string, value: string, checked: boolean) {
     <template v-for="f in props.filters" :key="f.name">
       <!-- text -->
       <MoFormField v-if="f.type === 'text_field'" :label="f.label" class="w-full sm:max-w-[200px]">
-        <AtInput
+        <Input
           :model-value="String(getValue(f.name) ?? '')"
           :placeholder="f.placeholder"
           @update:model-value="setValue(f.name, $event)"
@@ -72,19 +72,19 @@ function toggleMulti(name: string, value: string, checked: boolean) {
       />
       <!-- select single -->
       <MoFormField v-else-if="f.type === 'select' && !f.multiple" :label="f.label" class="w-full sm:max-w-[180px]">
-        <AtSelect
+        <Select
           :model-value="String(getValue(f.name) ?? '')"
           @update:model-value="setValue(f.name, $event)"
         >
-          <AtSelectTrigger class="w-full">
-            <AtSelectValue :placeholder="f.placeholder ?? 'Chọn'" />
-          </AtSelectTrigger>
-          <AtSelectContent>
-            <AtSelectItem v-for="o in opts(f)" :key="o.value" :value="o.value">
+          <SelectTrigger class="w-full">
+            <SelectValue :placeholder="f.placeholder ?? 'Chọn'" />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem v-for="o in opts(f)" :key="o.value" :value="o.value">
               {{ o.label }}
-            </AtSelectItem>
-          </AtSelectContent>
-        </AtSelect>
+            </SelectItem>
+          </SelectContent>
+        </Select>
       </MoFormField>
       <!-- select multiple -->
       <div v-else-if="f.type === 'select' && f.multiple" class="w-full sm:max-w-[200px]">
@@ -108,7 +108,7 @@ function toggleMulti(name: string, value: string, checked: boolean) {
       </div>
       <!-- checkbox single -->
       <MoFormField v-else-if="f.type === 'checkbox' && !f.data?.length" :label="f.label" class="flex flex-row items-center gap-2">
-        <AtCheckbox
+        <Checkbox
           :checked="!!model[f.name]"
           @update:checked="setValue(f.name, $event)"
         />
@@ -122,7 +122,7 @@ function toggleMulti(name: string, value: string, checked: boolean) {
             :key="o.value"
             class="flex cursor-pointer items-center gap-2 rounded border px-2 py-1 text-sm"
           >
-            <AtCheckbox
+            <Checkbox
               :checked="((model[f.name] as string[]) ?? []).includes(o.value)"
               @update:checked="toggleMulti(f.name, o.value, $event)"
             />
@@ -159,8 +159,8 @@ function toggleMulti(name: string, value: string, checked: boolean) {
       </div>
     </template>
     <div class="flex shrink-0 gap-2">
-      <AtButton type="submit" :disabled="props.pending">Search</AtButton>
-      <AtButton type="button" variant="outline" :disabled="props.pending" @click="onReset">Clear</AtButton>
+      <Button type="submit" :disabled="props.pending">Search</Button>
+      <Button type="button" variant="outline" :disabled="props.pending" @click="onReset">Clear</Button>
       <slot name="extra-actions" />
     </div>
   </form>

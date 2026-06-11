@@ -38,7 +38,13 @@ pnpm dev
    docker compose --env-file portal/docker/.env -f portal/docker/docker-compose.yml up -d
    ```
 
-Compose **chỉ** cần `PORTAL_STACK_PREFIX` + `PORTAL_DEV_PORT` (cùng giá trị cho publish host và `NUXT_PORT` trong container). **`NUXT_PUBLIC_API_BASE`** đặt trong **`portal/.env`**. Cổng trong **`docker/routes.txt`** (đoạn portal `…:PORT`) phải **trùng `PORTAL_DEV_PORT`**, rồi `bash docker/gen-gateway-sites.sh` + restart gateway — nếu không sẽ **502** (nginx gọi nhầm cổng trên host).
+Trong **`portal/docker/.env`** đặt **`HOST_UID`** / **`HOST_GID`** trùng `id -u` và `id -g` trên máy host (mặc định `1000`). **Volume `node_modules`** lúc tạo thường là `root:root`; entrypoint chạy **root** một nhịp để `chown` volume rồi **`setpriv`** xuống UID đó — `pnpm`/`nuxt` ghi bind mount (vd. **`.nuxt`**) vẫn đúng user host, không còn file kiểu `root:root`. Compose gọi **`corepack pnpm`** (không `corepack enable` + `pnpm`) vì user đó không được tạo symlink trong `/usr/local/bin`.
+
+**`node_modules` tách biệt:** trong Docker, `node_modules` nằm trên **volume** có tên dạng `portal_<prefix>_nodemodules` (repo `portal_1`: `portal1_<prefix>_nodemodules`), không ghi đè thư mục `portal/node_modules` trên máy (với `portal_1` là `portal_1/node_modules`). Bạn có thể trên host: `rm -rf node_modules && pnpm install`, chạy `pnpm storybook` / script khác — không đụng bản cài trong container. Sau khi đổi dependency trong `package.json` / lockfile, chạy lại `pnpm install` **trong container** (restart stack hoặc `docker compose exec frontend-node …`) hoặc xóa volume rồi `up` lại: `docker compose … down -v` (chỉ khi muốn cài sạch volume).
+
+Nếu trước đó đã có file root trong repo: `sudo chown -R "$(id -un):$(id -gn)" portal/.nuxt` (và thư mục tương tự).
+
+Compose cần **`PORTAL_STACK_PREFIX`** trùng **TÊN** đầu dòng trong `docker/routes.txt` (vd `base` → container `base-portal-node` mà gateway gọi khi `PORTAL_PROXY_TARGET=container` trong `docker/.env`). **`BASE_SHARED_NETWORK_NAME`** trong `portal/docker/.env` khớp `docker/.env` (cùng mạng với gateway). **`NUXT_PUBLIC_API_BASE`** đặt trong **`portal/.env`**. Cổng trong **`docker/routes.txt`** (đoạn portal `…:PORT`) phải **trùng `PORTAL_DEV_PORT`**, rồi `bash docker/gen-gateway-sites.sh` + **restart gateway** — nếu không sẽ **502**.
 
 Nhiều clone: thêm dòng `docker/routes.txt`; mỗi portal **một `PORTAL_DEV_PORT`** riêng trên host.
 
@@ -48,7 +54,7 @@ API client (`stores/useAuth.ts`, `$apiFetch`) dùng prefix **`/api/auth/*`** (lo
 
 ## Storybook
 
-Chạy UI catalog (theme preview, atoms/molecules). Script gọi `nuxt prepare` trước để alias Nuxt hoạt động.
+Chạy UI catalog (theme preview, atoms/molecules). Script gọi `nuxt prepare` trước để alias Nuxt hoạt động; nếu thư mục **`stories/auto/`** (story sinh từ component) trống — thường sau clone vì thư mục đó **gitignored** — sẽ tự chạy `generate-stories.mjs` một lần rồi mới mở Storybook.
 
 ```bash
 pnpm install
@@ -56,6 +62,7 @@ pnpm storybook
 ```
 
 - Mặc định mở **http://127.0.0.1:6006** (xem `package.json` nếu đổi port).
+- **Chỉ thấy vài story (vd. layout):** chạy tay `pnpm storybook:gen` (hoặc `pnpm storybook:gen:force` để ghi đè mọi file auto).
 - **Build tĩnh** (CI / kiểm tra build): `pnpm storybook:build`
 - **Cache lỗi / story cũ**: `pnpm storybook:fresh` (xóa cache rồi chạy lại dev server).
 - **Sinh story tự động** (tùy dự án): `pnpm storybook:gen` hoặc `pnpm storybook:gen:force` — chi tiết trong `scripts/generate-stories.mjs`.
@@ -112,6 +119,7 @@ Mặc định `test:e2e:remote` dùng `http://portal.base.com` nếu không set 
 - Public:
   - `/auth`
   - `/auth/login`
+  - `/auth/register`
   - `/password/reset`
   - `/password/reset/:token`
   - `/404`
@@ -134,6 +142,12 @@ Mặc định `test:e2e:remote` dùng `http://portal.base.com` nếu không set 
 - `plugins/fetch.ts` + `utils/fetchUtils.ts`: API client + attach token + normalize lỗi
 - `components/organisms/data/`: bộ component bảng/list dùng chung
 - `composables/useCommonBreadcrumbs.ts`: state breadcrumb dùng chung
+
+### Kiến trúc 4 tầng (Composables / Services / Stores / Models)
+
+Xem chi tiết đối chiếu chuẩn vs hiện trạng: **[docs/ARCHITECTURE.md](docs/ARCHITECTURE.md)**
+
+Tóm tắt: 4 tầng `composables` → `services` → `stores` → `models/validations`; auth + data table đã theo chuẩn.
 
 ## Quy ước đặt tên mới
 

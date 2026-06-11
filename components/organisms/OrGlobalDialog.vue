@@ -32,8 +32,8 @@ function onOpenChange(open: boolean) {
 </script>
 
 <template>
-  <AtAlertDialog :open="visible" @update:open="onOpenChange">
-    <AtAlertDialogContent
+  <AlertDialog :open="visible" @update:open="onOpenChange">
+    <AlertDialogContent
       :class="{
         'border-l-4 border-primary': type === 'info',
         'border-l-4 border-amber-500': type === 'warning',
@@ -41,7 +41,7 @@ function onOpenChange(open: boolean) {
         'border-l-4 border-primary': type === 'confirm'
       }"
     >
-      <AtAlertDialogHeader>
+      <AlertDialogHeader>
         <div class="flex items-center gap-3">
           <span
             v-if="type === 'info'"
@@ -68,18 +68,18 @@ function onOpenChange(open: boolean) {
             ✕
           </span>
           <div class="flex-1">
-            <AtAlertDialogTitle>{{ title }}</AtAlertDialogTitle>
-            <AtAlertDialogDescription class="mt-2 whitespace-pre-line">
+            <AlertDialogTitle>{{ title }}</AlertDialogTitle>
+            <AlertDialogDescription class="mt-2 whitespace-pre-line">
               {{ text }}
-            </AtAlertDialogDescription>
+            </AlertDialogDescription>
           </div>
         </div>
-      </AtAlertDialogHeader>
+      </AlertDialogHeader>
       <div v-if="!hideBtn" class="mt-4 flex justify-end gap-2">
-        <AtAlertDialogCancel v-if="!hideBtnCancel">
+        <AlertDialogCancel v-if="!hideBtnCancel">
           {{ btnCancelTitle }}
-        </AtAlertDialogCancel>
-        <AtAlertDialogAction
+        </AlertDialogCancel>
+        <AlertDialogAction
           v-if="!hideBtnConfirm"
           :class="{
             'bg-primary text-primary-foreground hover:bg-primary/90': dialogColor === 'primary',
@@ -89,8 +89,8 @@ function onOpenChange(open: boolean) {
           @click="dialogStore.confirm()"
         >
           {{ btnConfirmTitle }}
-        </AtAlertDialogAction>
+        </AlertDialogAction>
       </div>
-    </AtAlertDialogContent>
-  </AtAlertDialog>
+    </AlertDialogContent>
+  </AlertDialog>
 </template>

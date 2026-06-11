@@ -22,7 +22,7 @@ const emit = defineEmits<{ (e: 'submit'): void; (e: 'cancel'): void }>()
     <template #footer>
       <div class="flex justify-end gap-2">
         <slot name="footer-before" />
-        <AtButton
+        <Button
           v-if="props.cancelLabel !== false"
           variant="outline"
           :class="props.cancelClass"
@@ -30,10 +30,10 @@ const emit = defineEmits<{ (e: 'submit'): void; (e: 'cancel'): void }>()
           @click="emit('cancel')"
         >
           {{ props.cancelLabel ?? 'Cancel' }}
-        </AtButton>
-        <AtButton :class="props.submitClass" :disabled="props.loading" @click="emit('submit')">
+        </Button>
+        <Button :class="props.submitClass" :disabled="props.loading" @click="emit('submit')">
           {{ props.submitLabel ?? 'Save' }}
-        </AtButton>
+        </Button>
       </div>
     </template>
   </MoCardWithActions>

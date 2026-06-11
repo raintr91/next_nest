@@ -7,14 +7,14 @@ const emit = defineEmits<{ (e: 'update:modelValue', v: string): void }>()
 </script>
 
 <template>
-  <AtToggleGroup
+  <ToggleGroup
     :model-value="modelValue"
     type="single"
     class="inline-flex rounded-md border p-1"
     @update:model-value="(v) => emit('update:modelValue', v ?? '')"
   >
-    <AtToggleGroupItem v-for="opt in options" :key="opt.value" :value="opt.value" class="rounded-sm px-3">
+    <ToggleGroupItem v-for="opt in options" :key="opt.value" :value="opt.value" class="rounded-sm px-3">
       {{ opt.label }}
-    </AtToggleGroupItem>
-  </AtToggleGroup>
+    </ToggleGroupItem>
+  </ToggleGroup>
 </template>

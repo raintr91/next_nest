@@ -6,15 +6,16 @@ import type {
   ChangePasswordRequest,
   ForgotPasswordRequest,
   LoginRequest,
-  MeResponse,
   RegisterRequest,
   ResetPasswordRequest,
   TokenResponse
-} from '~/types/api/auth'
-import type { ApiResponse } from '~/types/api/common'
+} from '~/models/auth/auth.types'
+import type { UserMe } from '~/models/user/user.types'
+import { createAuthService } from '~/services/auth.service'
 
 export const useAuth = defineStore('useAuth', () => {
   const { $apiFetch } = useNuxtApp()
+  const authService = createAuthService($apiFetch)
 
   const tokenCookie = useCookie<string | null>('auth_token', {
     sameSite: 'lax',
@@ -26,7 +27,7 @@ export const useAuth = defineStore('useAuth', () => {
     secure: false
   })
 
-  const userCookie = useCookie<MeResponse | null>('auth_user', {
+  const userCookie = useCookie<UserMe | null>('auth_user', {
     sameSite: 'lax',
     secure: false
   })
@@ -37,7 +38,7 @@ export const useAuth = defineStore('useAuth', () => {
 
   const setToken = (value: string | null) => { tokenCookie.value = value }
   const setRefreshToken = (value: string | null) => { refreshTokenCookie.value = value }
-  const setUser = (value: MeResponse | null) => { userCookie.value = value }
+  const setUser = (value: UserMe | null) => { userCookie.value = value }
 
   const logout = () => {
     setToken(null)
@@ -45,85 +46,67 @@ export const useAuth = defineStore('useAuth', () => {
     setUser(null)
   }
 
-  const fetchMe = async () => {
-    if (!tokenCookie.value) { setUser(null); return null }
-    try {
-      const res = await $apiFetch<ApiResponse<MeResponse>>('/api/auth/me', { method: 'GET' })
-      if (!('success' in res) || res.success !== true) throw res
-      setUser(res.data)
-      return res.data
-    } catch {
-      return userCookie.value
-    }
-  }
-
   const setTokensFromResponse = (data: TokenResponse) => {
     setToken(data.accessToken ?? data.token ?? null)
     setRefreshToken(data.refreshToken ?? null)
   }
 
+  const fetchMe = async () => {
+    if (!tokenCookie.value) {
+      setUser(null)
+      return null
+    }
+    try {
+      const user = await authService.fetchMe()
+      setUser(user)
+      return user
+    } catch {
+      return userCookie.value
+    }
+  }
+
   const login = async (payload: LoginRequest) => {
-    // Ensure old/expired token is not reused on login request.
     logout()
+    const data = await authService.login(payload)
 
-    const res = await $apiFetch<ApiResponse<{ token?: string | null; user?: MeResponse } & TokenResponse>>('/api/auth/login', {
-      method: 'POST',
-      body: payload
-    })
-    if (!('success' in res) || res.success !== true) throw res
-
-    const issuedToken = res.data.accessToken ?? res.data.token ?? null
+    const issuedToken = data.accessToken ?? data.token ?? null
     if (!issuedToken) {
       throw new Error('Login succeeded but token was not returned.')
     }
 
     setToken(issuedToken)
-    setRefreshToken(res.data.refreshToken ?? null)
+    setRefreshToken(data.refreshToken ?? null)
 
-    if (res.data.user) {
-      setUser(res.data.user)
+    if (data.user) {
+      setUser(data.user)
     } else {
       await fetchMe()
     }
-    return res.data
+    return data
   }
 
   const register = async (payload: RegisterRequest) => {
-    const res = await $apiFetch<ApiResponse<TokenResponse>>('/api/auth/register', {
-      method: 'POST',
-      body: { name: payload.name ?? 'User', email: payload.email, password: payload.password }
-    })
-    if (!('success' in res) || res.success !== true) throw res
-    setTokensFromResponse(res.data)
+    const data = await authService.register(payload)
+    setTokensFromResponse(data)
     await fetchMe()
-    return res.data
+    return data
   }
 
   const forgotPassword = async (payload: ForgotPasswordRequest) => {
-    const res = await $apiFetch<ApiResponse<null>>('/api/auth/forgot-pass', {
-      method: 'POST',
-      body: payload
-    })
-    if (!('success' in res) || res.success !== true) throw res
-    return res
+    return authService.forgotPassword(payload)
   }
 
   const resetPassword = async (payload: ResetPasswordRequest) => {
-    const res = await $apiFetch<ApiResponse<null>>('/api/auth/reset-pass', {
-      method: 'POST',
-      body: payload
-    })
-    if (!('success' in res) || res.success !== true) throw res
-    return res
+    return authService.resetPassword(payload)
   }
 
-  const changePassword = async (_payload: ChangePasswordRequest) => {
-    throw new Error('changePassword not implemented for this portal')
+  const changePassword = async (payload: ChangePasswordRequest) => {
+    return authService.changePassword(payload)
   }
 
   const apiLogout = async () => {
     try {
-      await $apiFetch('/api/auth/logout', { method: 'POST' })
+      await authService.logout()
     } finally {
       logout()
     }

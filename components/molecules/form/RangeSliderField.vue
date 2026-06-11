@@ -16,14 +16,14 @@ const maxVal = computed(() => props.max ?? 100)
 
 <template>
   <MoFormField v-if="props.label" :label="props.label" :name="props.name">
-    <AtSlider
+    <Slider
       v-model="model"
       :min="minVal"
       :max="maxVal"
       :step="props.step ?? 1"
     />
   </MoFormField>
-  <AtSlider
+  <Slider
     v-else
     v-model="model"
     :min="minVal"

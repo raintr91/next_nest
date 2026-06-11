@@ -1,7 +1,7 @@
 <script setup lang="ts">
 /**
  * BottomSheet – sheet that slides from bottom. Ref: Vuetify Bottom sheet.
- * Built from AtSheet, AtSheetContent (side=bottom).
+ * Built from Sheet, SheetContent (side=bottom).
  */
 const props = defineProps<{
   open?: boolean
@@ -11,13 +11,13 @@ const emit = defineEmits<{ (e: 'update:open', v: boolean): void }>()
 </script>
 
 <template>
-  <AtSheet :open="props.open" @update:open="emit('update:open', $event)">
-    <AtSheetContent side="bottom" class="rounded-t-xl">
-      <AtSheetHeader v-if="title || $slots.title">
-        <AtSheetTitle>{{ title }}</AtSheetTitle>
+  <Sheet :open="props.open" @update:open="emit('update:open', $event)">
+    <SheetContent side="bottom" class="rounded-t-xl">
+      <SheetHeader v-if="title || $slots.title">
+        <SheetTitle>{{ title }}</SheetTitle>
         <slot name="title" />
-      </AtSheetHeader>
+      </SheetHeader>
       <slot />
-    </AtSheetContent>
-  </AtSheet>
+    </SheetContent>
+  </Sheet>
 </template>

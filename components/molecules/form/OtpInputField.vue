@@ -5,11 +5,11 @@ const props = withDefaults(defineProps<{ label?: string; name?: string; digits?:
 
 <template>
   <MoFormField v-if="props.label" :label="props.label" :name="props.name">
-    <AtPinInput v-model="model" class="gap-1">
-      <AtPinInputInput v-for="i in props.digits" :key="i" />
-    </AtPinInput>
+    <PinInput v-model="model" class="gap-1">
+      <PinInputInput v-for="i in props.digits" :key="i" />
+    </PinInput>
   </MoFormField>
-  <AtPinInput v-else v-model="model" class="gap-1">
-    <AtPinInputInput v-for="i in props.digits" :key="i" />
-  </AtPinInput>
+  <PinInput v-else v-model="model" class="gap-1">
+    <PinInputInput v-for="i in props.digits" :key="i" />
+  </PinInput>
 </template>

@@ -1,36 +1,25 @@
-import type { ForgotPasswordRequest } from '~/types/api/auth'
-import { isApiValidationError } from '~/utils/apiValidation'
+import type { ForgotPasswordRequest } from '~/models/auth/auth.types'
+import { useApiForm } from '~/composables/forms/useApiForm'
+import { forgotPasswordSchema } from '~/validations/auth/schemas'
 
 export function useAuthForgotPasswordForm() {
   const auth = useAuth()
   const { t } = useI18n()
-
-  const apiError = ref<string | null>(null)
   const successMessage = ref<string | null>(null)
 
-  const isSubmitting = ref(false)
-
-  const onSubmit = async (values: ForgotPasswordRequest) => {
-    apiError.value = null
-    successMessage.value = null
-
-    try {
-      isSubmitting.value = true
+  const form = useApiForm<ForgotPasswordRequest>({
+    validationSchema: forgotPasswordSchema,
+    initialValues: { email: '' },
+    getErrorMessage: (error) => (error as Error)?.message ?? t('auth.feedback.submitFailed'),
+    submit: async (values) => {
+      successMessage.value = null
       await auth.forgotPassword(values)
       successMessage.value = t('auth.feedback.forgotPasswordSent')
-    } catch (e: any) {
-      if (isApiValidationError(e)) throw e
-      apiError.value = e?.message ?? t('auth.feedback.submitFailed')
-      throw e
-    } finally {
-      isSubmitting.value = false
     }
-  }
+  })
 
   return {
-    apiError,
-    successMessage,
-    isSubmitting,
-    onSubmit
+    ...form,
+    successMessage
   }
 }

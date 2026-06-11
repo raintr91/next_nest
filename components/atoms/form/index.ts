@@ -1,7 +1,0 @@
-export { default as FormControl } from '~/components/atoms/form/FormControl.vue'
-export { default as FormDescription } from '~/components/atoms/form/FormDescription.vue'
-export { default as FormItem } from '~/components/atoms/form/FormItem.vue'
-export { default as FormLabel } from '~/components/atoms/form/FormLabel.vue'
-export { default as FormMessage } from '~/components/atoms/form/FormMessage.vue'
-export { FORM_ITEM_INJECTION_KEY } from '~/components/atoms/form/injectionKeys'
-export { Form, Field as FormField, FieldArray as FormFieldArray } from 'vee-validate'

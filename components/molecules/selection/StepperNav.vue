@@ -12,15 +12,15 @@ const current = computed(() => Math.max(0, Math.min(props.modelValue ?? 0, props
 </script>
 
 <template>
-  <AtStepper :model-value="current" @update:model-value="(v) => emit('update:modelValue', Number(v))">
+  <Stepper :model-value="current" @update:model-value="(v) => emit('update:modelValue', Number(v))">
     <template v-for="(step, i) in steps" :key="step.id">
-      <AtStepperSeparator v-if="i > 0" />
-      <AtStepperItem :step="i">
-        <AtStepperTrigger>
-          <AtStepperIndicator />
-          <AtStepperTitle>{{ step.label }}</AtStepperTitle>
-        </AtStepperTrigger>
-      </AtStepperItem>
+      <StepperSeparator v-if="i > 0" />
+      <StepperItem :step="i">
+        <StepperTrigger>
+          <StepperIndicator />
+          <StepperTitle>{{ step.label }}</StepperTitle>
+        </StepperTrigger>
+      </StepperItem>
     </template>
-  </AtStepper>
+  </Stepper>
 </template>

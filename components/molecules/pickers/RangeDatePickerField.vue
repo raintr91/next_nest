@@ -12,18 +12,18 @@ function displayText() {
 </script>
 
 <template>
-  <AtPopover v-model:open="open">
-    <AtPopoverTrigger>
-      <AtButton variant="outline" class="w-full justify-start text-left font-normal">
+  <Popover v-model:open="open">
+    <PopoverTrigger>
+      <Button variant="outline" class="w-full justify-start text-left font-normal">
         {{ displayText() }}
-      </AtButton>
-    </AtPopoverTrigger>
-    <AtPopoverContent class="w-auto p-0" align="start">
-      <AtRangeCalendar
+      </Button>
+    </PopoverTrigger>
+    <PopoverContent class="w-auto p-0" align="start">
+      <RangeCalendar
         v-model="model"
         initial-focus
         @update:model-value="open = false"
       />
-    </AtPopoverContent>
-  </AtPopover>
+    </PopoverContent>
+  </Popover>
 </template>

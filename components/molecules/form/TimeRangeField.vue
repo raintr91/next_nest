@@ -51,7 +51,7 @@ function onEndInput(e: Event) {
   <MoFormField v-if="props.label" :label="props.label" class="space-y-2">
     <div class="flex flex-wrap items-center gap-2">
       <template v-if="props.format === 'h'">
-        <AtInput
+        <Input
           type="number"
           min="0"
           max="23"
@@ -61,7 +61,7 @@ function onEndInput(e: Event) {
           @input="onStartInput"
         />
         <span class="text-muted-foreground">–</span>
-        <AtInput
+        <Input
           type="number"
           min="0"
           max="23"
@@ -72,7 +72,7 @@ function onEndInput(e: Event) {
         />
       </template>
       <template v-else>
-        <AtInput
+        <Input
           type="time"
           :step="step"
           :value="model.start"
@@ -80,7 +80,7 @@ function onEndInput(e: Event) {
           @input="onStartInput"
         />
         <span class="text-muted-foreground">–</span>
-        <AtInput
+        <Input
           type="time"
           :step="step"
           :value="model.end"
@@ -92,7 +92,7 @@ function onEndInput(e: Event) {
   </MoFormField>
   <div v-else class="flex flex-wrap items-center gap-2">
     <template v-if="props.format === 'h'">
-      <AtInput
+      <Input
         type="number"
         min="0"
         max="23"
@@ -101,7 +101,7 @@ function onEndInput(e: Event) {
         @input="onStartInput"
       />
       <span class="text-muted-foreground">–</span>
-      <AtInput
+      <Input
         type="number"
         min="0"
         max="23"
@@ -111,9 +111,9 @@ function onEndInput(e: Event) {
       />
     </template>
     <template v-else>
-      <AtInput type="time" :step="step" :value="model.start" class="w-32" @input="onStartInput" />
+      <Input type="time" :step="step" :value="model.start" class="w-32" @input="onStartInput" />
       <span class="text-muted-foreground">–</span>
-      <AtInput type="time" :step="step" :value="model.end" class="w-32" @input="onEndInput" />
+      <Input type="time" :step="step" :value="model.end" class="w-32" @input="onEndInput" />
     </template>
   </div>
 </template>

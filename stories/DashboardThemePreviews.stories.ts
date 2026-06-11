@@ -11,10 +11,10 @@ import OrShadcnSidebar from '../components/organisms/layout/OrShadcnSidebar.vue'
 // @ts-expect-error Vue SFC
 import OrShadcnNavbar from '../components/organisms/layout/OrShadcnNavbar.vue'
 // @ts-expect-error Vue SFC
-import AtSidebarProvider from '../components/atoms/sidebar/SidebarProvider.vue'
+import SidebarProvider from '../components/ui/sidebar/SidebarProvider.vue'
 // @ts-expect-error Vue SFC
-import AtSidebarInset from '../components/atoms/sidebar/SidebarInset.vue'
-import { SIDEBAR_WIDTH } from '../components/atoms/sidebar/utils'
+import SidebarInset from '../components/ui/sidebar/SidebarInset.vue'
+import { SIDEBAR_WIDTH } from '../components/ui/sidebar/utils'
 
 function isActiveFn(currentPath: string) {
   return (path: string) =>
@@ -66,7 +66,7 @@ function renderShadcnLayout(brandLabel: string, mainContent: ReturnType<typeof h
     brandLabel,
     collapsible: 'none'
   })
-  const insetNode = h(AtSidebarInset, null, () => [
+  const insetNode = h(SidebarInset, null, () => [
     h(OrShadcnNavbar, { title: 'Dashboard', onLogout: noop }),
     h('div', { class: 'flex-1 p-4 md:p-6' }, content)
   ])
@@ -75,7 +75,7 @@ function renderShadcnLayout(brandLabel: string, mainContent: ReturnType<typeof h
     dir: 'ltr',
     style: 'position: relative; min-height: 100vh; direction: ltr;'
   }, [
-    h(AtSidebarProvider, { defaultOpen: true, class: 'min-h-svh w-full', dir: 'ltr' }, () => [
+    h(SidebarProvider, { defaultOpen: true, class: 'min-h-svh w-full', dir: 'ltr' }, () => [
       h('div', { style: 'position: relative; width: 100%; min-height: 100vh;' }, [
         h('div', {
           style: `position: absolute; left: 0; top: 0; bottom: 0; width: ${SIDEBAR_WIDTH}; z-index: 10;`
@@ -89,7 +89,7 @@ function renderShadcnLayout(brandLabel: string, mainContent: ReturnType<typeof h
 
 const ShadcnThemePreview = defineComponent({
   name: 'ShadcnThemePreview',
-  components: { OrShadcnSidebar, OrShadcnNavbar, AtSidebarProvider, AtSidebarInset },
+  components: { OrShadcnSidebar, OrShadcnNavbar, SidebarProvider, SidebarInset },
   render() {
     return renderShadcnLayout('Shadcn Portal', renderShadcnDashboardContent(), shadcnNav)
   }

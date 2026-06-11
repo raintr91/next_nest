@@ -47,25 +47,25 @@ watchEffect(() => {
 </script>
 
 <template>
-  <AtSidebar side="left" :collapsible="props.collapsible" class="border-r border-sidebar-border">
-    <AtSidebarHeader class="border-b border-sidebar-border">
+  <Sidebar side="left" :collapsible="props.collapsible" class="border-r border-sidebar-border">
+    <SidebarHeader class="border-b border-sidebar-border">
       <div class="flex h-14 items-center gap-2 px-3">
         <NuxtLink to="/" class="flex items-center gap-2 font-semibold text-sidebar-foreground">
           <span class="flex h-8 w-8 items-center justify-center rounded-lg bg-primary text-primary-foreground text-sm font-medium">S</span>
           <span class="group-data-[collapsible=icon]:hidden">{{ props.brandLabel ?? 'Shadcn Portal' }}</span>
         </NuxtLink>
       </div>
-    </AtSidebarHeader>
-    <AtSidebarContent>
-      <AtSidebarGroup>
-        <AtSidebarGroupContent>
-          <AtSidebarMenu>
-            <AtSidebarMenuItem v-for="item in props.navigation" :key="item.path">
+    </SidebarHeader>
+    <SidebarContent>
+      <SidebarGroup>
+        <SidebarGroupContent>
+          <SidebarMenu>
+            <SidebarMenuItem v-for="item in props.navigation" :key="item.path">
               <div v-if="hasChildren(item)" class="flex items-center">
-                <AtSidebarMenuButton :as="NuxtLink" :to="item.path" :is-active="props.isActive(item.path)" :tooltip="item.name" class="flex-1">
+                <SidebarMenuButton :as="NuxtLink" :to="item.path" :is-active="props.isActive(item.path)" :tooltip="item.name" class="flex-1">
                   <component :is="item.icon" class="size-5 shrink-0" />
                   <span>{{ item.name }}</span>
-                </AtSidebarMenuButton>
+                </SidebarMenuButton>
                 <button
                   type="button"
                   class="mr-1 inline-flex h-7 w-7 items-center justify-center rounded-md text-sidebar-foreground/70 hover:bg-sidebar-accent"
@@ -76,32 +76,32 @@ watchEffect(() => {
                   <ChevronRight v-else class="size-4" />
                 </button>
               </div>
-              <AtSidebarMenuButton v-else :as="NuxtLink" :to="item.path" :is-active="props.isActive(item.path)" :tooltip="item.name">
+              <SidebarMenuButton v-else :as="NuxtLink" :to="item.path" :is-active="props.isActive(item.path)" :tooltip="item.name">
                 <component :is="item.icon" class="size-5 shrink-0" />
                 <span>{{ item.name }}</span>
-              </AtSidebarMenuButton>
-              <AtSidebarMenu v-if="item.children?.length && isParentExpanded(item)" class="pl-6">
-                <AtSidebarMenuItem v-for="child in item.children" :key="child.path">
-                  <AtSidebarMenuButton :as="NuxtLink" :to="child.path" :is-active="props.isActive(child.path)" :tooltip="child.name">
+              </SidebarMenuButton>
+              <SidebarMenu v-if="item.children?.length && isParentExpanded(item)" class="pl-6">
+                <SidebarMenuItem v-for="child in item.children" :key="child.path">
+                  <SidebarMenuButton :as="NuxtLink" :to="child.path" :is-active="props.isActive(child.path)" :tooltip="child.name">
                     <component :is="child.icon" class="size-4 shrink-0" />
                     <span>{{ child.name }}</span>
-                  </AtSidebarMenuButton>
-                </AtSidebarMenuItem>
-              </AtSidebarMenu>
-            </AtSidebarMenuItem>
-          </AtSidebarMenu>
-        </AtSidebarGroupContent>
-      </AtSidebarGroup>
-    </AtSidebarContent>
-    <AtSidebarFooter class="border-t border-sidebar-border">
-      <AtSidebarMenu>
-        <AtSidebarMenuItem>
-          <AtSidebarMenuButton :as="NuxtLink" to="/workspace/settings" :tooltip="'Settings'">
+                  </SidebarMenuButton>
+                </SidebarMenuItem>
+              </SidebarMenu>
+            </SidebarMenuItem>
+          </SidebarMenu>
+        </SidebarGroupContent>
+      </SidebarGroup>
+    </SidebarContent>
+    <SidebarFooter class="border-t border-sidebar-border">
+      <SidebarMenu>
+        <SidebarMenuItem>
+          <SidebarMenuButton :as="NuxtLink" to="/workspace/settings" :tooltip="'Settings'">
             <Settings class="size-5 shrink-0" />
             <span>Settings</span>
-          </AtSidebarMenuButton>
-        </AtSidebarMenuItem>
-      </AtSidebarMenu>
-    </AtSidebarFooter>
-  </AtSidebar>
+          </SidebarMenuButton>
+        </SidebarMenuItem>
+      </SidebarMenu>
+    </SidebarFooter>
+  </Sidebar>
 </template>

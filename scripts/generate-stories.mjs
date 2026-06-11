@@ -15,7 +15,7 @@ const force = argv.has('--force')
 const includeRootComponents = argv.has('--include-components')
 
 const COMPONENT_DIRS = [
-  { dir: path.join(rootDir, 'components', 'atoms'), group: 'Atoms' },
+  { dir: path.join(rootDir, 'components', 'ui'), group: 'UI' },
   { dir: path.join(rootDir, 'components', 'molecules'), group: 'Molecules' },
   { dir: path.join(rootDir, 'components', 'organisms'), group: 'Organisms' },
   ...(includeRootComponents ? [{ dir: path.join(rootDir, 'components'), group: 'App' }] : [])

@@ -1,37 +1,23 @@
-import type { ResetPasswordRequest } from '~/types/api/auth'
-import { isApiValidationError } from '~/utils/apiValidation'
+import type { ResetPasswordRequest } from '~/models/auth/auth.types'
+import { useApiForm } from '~/composables/forms/useApiForm'
+import { resetPasswordSchema } from '~/validations/auth/schemas'
 
-export function useAuthResetPasswordForm() {
+export function useAuthResetPasswordForm(initial?: Partial<Pick<ResetPasswordRequest, 'email' | 'token'>>) {
   const auth = useAuth()
   const { t } = useI18n()
 
-  const apiError = ref<string | null>(null)
-  const successMessage = ref<string | null>(null)
-
-  const isSubmitting = ref(false)
-
-  const onSubmit = async (values: ResetPasswordRequest) => {
-    apiError.value = null
-    successMessage.value = null
-
-    try {
-      isSubmitting.value = true
+  return useApiForm<ResetPasswordRequest>({
+    validationSchema: resetPasswordSchema,
+    initialValues: {
+      email: initial?.email ?? '',
+      token: initial?.token ?? '',
+      password: '',
+      password_confirmation: ''
+    },
+    getErrorMessage: (error) => (error as Error)?.message ?? t('auth.feedback.submitFailed'),
+    submit: async (values) => {
       await auth.resetPassword(values)
-      successMessage.value = t('auth.feedback.passwordUpdated')
       await navigateTo('/auth/login')
-    } catch (e: any) {
-      if (isApiValidationError(e)) throw e
-      apiError.value = e?.message ?? t('auth.feedback.updateFailed')
-      throw e
-    } finally {
-      isSubmitting.value = false
     }
-  }
-
-  return {
-    apiError,
-    successMessage,
-    isSubmitting,
-    onSubmit
-  }
+  })
 }

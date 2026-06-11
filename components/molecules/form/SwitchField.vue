@@ -9,8 +9,8 @@ const props = defineProps<{ label?: string; name?: string }>()
 <template>
   <MoFormField v-if="props.label" :label="props.label" :name="props.name" class="flex flex-row items-center justify-between gap-4">
     <template #default>
-      <AtSwitch v-model="model" />
+      <Switch v-model="model" />
     </template>
   </MoFormField>
-  <AtSwitch v-else v-model="model" />
+  <Switch v-else v-model="model" />
 </template>

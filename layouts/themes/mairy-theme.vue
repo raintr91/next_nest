@@ -155,7 +155,7 @@ const currentUserName = computed(() => auth.user?.full_name || auth.user?.name |
   <div class="min-h-svh bg-[#f3f5f9] text-[#2c2c2c]">
     <header class="fixed inset-x-0 top-0 z-30 flex h-14 items-center justify-between border-b border-[#dfe3ea] bg-white px-4 lg:px-6">
       <div class="flex items-center gap-3">
-        <AtButton
+        <Button
           variant="ghost"
           size="icon"
           class="h-9 w-9 lg:hidden"
@@ -163,7 +163,7 @@ const currentUserName = computed(() => auth.user?.full_name || auth.user?.name |
           @click="mobileMenuOpen = true"
         >
           <ChevronRight class="size-5" />
-        </AtButton>
+        </Button>
         <img src="/img/logo.svg" alt="Portal" class="h-6 w-auto" />
       </div>
 
@@ -172,19 +172,19 @@ const currentUserName = computed(() => auth.user?.full_name || auth.user?.name |
         <div class="header-user-name hidden md:block">
           <span class="semi-bold">{{ currentUserName }}</span>
         </div>
-        <AtDropdownMenu>
-          <AtDropdownMenuTrigger class="profile-dropdown-toggle" aria-label="Open user menu">
+        <DropdownMenu>
+          <DropdownMenuTrigger class="profile-dropdown-toggle" aria-label="Open user menu">
             <span class="thumbnail-wrapper d32 circular inline">
               <img src="/img/avatar-default.svg" alt="Avatar" width="32" height="32" />
             </span>
-          </AtDropdownMenuTrigger>
-          <AtDropdownMenuContent align="end" class="w-48">
-            <AtDropdownMenuItem class="cursor-pointer text-red-600" @click="onLogout">
+          </DropdownMenuTrigger>
+          <DropdownMenuContent align="end" class="w-48">
+            <DropdownMenuItem class="cursor-pointer text-red-600" @click="onLogout">
               <LogOut class="mr-2 size-4" />
               {{ t('common.logout') }}
-            </AtDropdownMenuItem>
-          </AtDropdownMenuContent>
-        </AtDropdownMenu>
+            </DropdownMenuItem>
+          </DropdownMenuContent>
+        </DropdownMenu>
       </div>
     </header>
 

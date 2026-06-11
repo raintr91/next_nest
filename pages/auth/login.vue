@@ -1,32 +1,15 @@
 <script setup lang="ts">
-import { useForm, useField } from 'vee-validate'
-import type { LoginRequest } from '~/types/api/auth'
+import { useField } from 'vee-validate'
 import { useAuthLoginForm } from '~/composables/auth/useAuthLoginForm'
-import { loginSchema } from '~/validations/auth/schemas'
-import { applyValidationErrorsToForm } from '~/utils/apiValidation'
 
 definePageMeta({
   layout: false,
   middleware: 'guest'
 })
 
-const { apiError, isSubmitting, onSubmit: submitLogin } = useAuthLoginForm()
-
-const { handleSubmit, errors, setErrors } = useForm<LoginRequest>({
-  validationSchema: loginSchema,
-  initialValues: { email: '', password: '' }
-})
-
+const { apiError, isSubmitting, onSubmit, errors } = useAuthLoginForm()
 const { value: email } = useField<string>('email')
 const { value: password } = useField<string>('password')
-
-const onSubmit = handleSubmit(async (values) => {
-  try {
-    await submitLogin(values)
-  } catch (e) {
-    if (applyValidationErrorsToForm(e, setErrors)) return
-  }
-})
 </script>
 
 <template>

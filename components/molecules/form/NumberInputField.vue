@@ -20,7 +20,7 @@ const inputStr = computed({
 
 <template>
   <MoFormField :label="props.label" :name="props.name" :error="props.error">
-    <AtInput
+    <Input
       v-model="inputStr"
       type="number"
       :min="props.min"

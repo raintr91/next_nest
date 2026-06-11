@@ -64,7 +64,7 @@ watchEffect(() => {
         <ul class="space-y-1 pb-2">
           <li class="lg:hidden">
             <div class="relative">
-              <AtInput
+              <Input
                 type="text"
                 placeholder="Search"
                 class="pl-10"

@@ -15,9 +15,9 @@ const emit = defineEmits<{ (e: 'submit'): void }>()
     <MoCardWithActions :title="props.title ?? 'Sign in'" class="w-full max-w-md">
       <slot />
       <template #footer>
-        <AtButton class="w-full" :disabled="props.loading" @click="emit('submit')">
+        <Button class="w-full" :disabled="props.loading" @click="emit('submit')">
           {{ props.submitLabel ?? 'Submit' }}
-        </AtButton>
+        </Button>
       </template>
     </MoCardWithActions>
   </div>

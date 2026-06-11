@@ -1,32 +1,18 @@
-import type { RegisterRequest } from '~/types/api/auth'
-import { isApiValidationError } from '~/utils/apiValidation'
+import type { RegisterRequest } from '~/models/auth/auth.types'
+import { useApiForm } from '~/composables/forms/useApiForm'
+import { registerSchema } from '~/validations/auth/schemas'
 
 export function useAuthRegisterForm() {
   const auth = useAuth()
   const { t } = useI18n()
 
-  const apiError = ref<string | null>(null)
-
-  const isSubmitting = ref(false)
-
-  const onSubmit = async (values: RegisterRequest) => {
-    apiError.value = null
-    try {
-      isSubmitting.value = true
+  return useApiForm<RegisterRequest>({
+    validationSchema: registerSchema,
+    initialValues: { name: '', email: '', password: '', password_confirmation: '' },
+    getErrorMessage: (error) => (error as Error)?.message ?? t('auth.feedback.registerFailed'),
+    submit: async (values) => {
       await auth.register(values)
       await navigateTo('/')
-    } catch (e: any) {
-      if (isApiValidationError(e)) throw e
-      apiError.value = e?.message ?? t('auth.feedback.registerFailed')
-      throw e
-    } finally {
-      isSubmitting.value = false
     }
-  }
-
-  return {
-    apiError,
-    isSubmitting,
-    onSubmit
-  }
+  })
 }

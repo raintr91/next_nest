@@ -13,19 +13,19 @@ function onSelect(item: (typeof props.items)[0]) {
 </script>
 
 <template>
-  <AtDropdownMenu>
-    <AtDropdownMenuTrigger>
+  <DropdownMenu>
+    <DropdownMenuTrigger>
       <slot name="trigger" />
-    </AtDropdownMenuTrigger>
-    <AtDropdownMenuContent>
-      <AtDropdownMenuItem
+    </DropdownMenuTrigger>
+    <DropdownMenuContent>
+      <DropdownMenuItem
         v-for="(item, i) in props.items"
         :key="i"
         :disabled="item.disabled"
         @select="onSelect(item)"
       >
         {{ item.label }}
-      </AtDropdownMenuItem>
-    </AtDropdownMenuContent>
-  </AtDropdownMenu>
+      </DropdownMenuItem>
+    </DropdownMenuContent>
+  </DropdownMenu>
 </template>

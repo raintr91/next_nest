@@ -49,13 +49,11 @@ export default defineNuxtConfig({
   modules: ['@nuxt/eslint', '@pinia/nuxt', '@nuxtjs/tailwindcss', '@nuxtjs/i18n', 'shadcn-nuxt'],
   css: ['~/assets/css/main.css'],
   shadcn: {
-    componentDir: [
-      { path: './components/atoms', prefix: 'At' },
-      { path: './components/molecules', prefix: 'Mo' }
-    ]
+    prefix: '',
+    componentDir: './components/ui'
   },
   components: [
-    { path: '~/components/atoms', pathPrefix: false },
+    { path: '~/components/molecules', pathPrefix: false, prefix: 'Mo' },
     { path: '~/components/organisms', pathPrefix: false }
   ],
   i18n: {

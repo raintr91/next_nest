@@ -1,7 +1,7 @@
 <script setup lang="ts">
 /**
  * PaginationBar – pagination with first/prev/next/last. Ref: Vuetify Pagination.
- * Built from AtPagination (radix), AtButton.
+ * Built from Pagination (radix), Button.
  */
 const props = defineProps<{
   page: number
@@ -17,10 +17,10 @@ function go(n: number) {
 
 <template>
   <nav class="flex items-center gap-2" role="navigation" aria-label="Pagination">
-    <AtButton variant="outline" size="icon" :disabled="props.page <= 1" @click="go(1)">«</AtButton>
-    <AtButton variant="outline" size="icon" :disabled="props.page <= 1" @click="go(props.page - 1)">‹</AtButton>
+    <Button variant="outline" size="icon" :disabled="props.page <= 1" @click="go(1)">«</Button>
+    <Button variant="outline" size="icon" :disabled="props.page <= 1" @click="go(props.page - 1)">‹</Button>
     <span class="px-2 text-sm text-muted-foreground">{{ props.page }} / {{ props.totalPages }}</span>
-    <AtButton variant="outline" size="icon" :disabled="props.page >= props.totalPages" @click="go(props.page + 1)">›</AtButton>
-    <AtButton variant="outline" size="icon" :disabled="props.page >= props.totalPages" @click="go(props.totalPages)">»</AtButton>
+    <Button variant="outline" size="icon" :disabled="props.page >= props.totalPages" @click="go(props.page + 1)">›</Button>
+    <Button variant="outline" size="icon" :disabled="props.page >= props.totalPages" @click="go(props.totalPages)">»</Button>
   </nav>
 </template>

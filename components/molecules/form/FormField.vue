@@ -4,7 +4,7 @@ import { cn } from '~/utils/cn'
 
 /**
  * FormField – label + default slot (input) + optional error message.
- * Reference: Vuetify Text field / Form (form inputs). Built from AtLabel, AtFormItem, AtFormControl, AtFormMessage.
+ * Reference: Vuetify Text field / Form (form inputs). Built from Label, FormItem, FormControl, FormMessage.
  */
 const props = defineProps<{
   label?: string
@@ -16,17 +16,17 @@ const props = defineProps<{
 </script>
 
 <template>
-  <AtFormItem :class="cn(props.class)">
-    <AtFormLabel v-if="label" :for="name">
+  <FormItem :class="cn(props.class)">
+    <FormLabel v-if="label" :for="name">
       {{ label }}
       <span v-if="required" class="text-destructive">*</span>
-    </AtFormLabel>
-    <AtFormControl>
+    </FormLabel>
+    <FormControl>
       <slot />
-    </AtFormControl>
-    <AtFormMessage v-if="error" class="text-destructive">
+    </FormControl>
+    <FormMessage v-if="error" class="text-destructive">
       {{ error }}
-    </AtFormMessage>
+    </FormMessage>
     <slot name="hint" />
-  </AtFormItem>
+  </FormItem>
 </template>

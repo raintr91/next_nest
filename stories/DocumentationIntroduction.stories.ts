@@ -21,7 +21,7 @@ Chào team. Đây là **Storybook** dùng để xem và test toàn bộ UI compo
 ## Scripts
 
 - \`pnpm run storybook\` — Chạy Storybook (port 6006)
-- \`pnpm run storybook:gen\` — Tạo stories từ atoms/molecules/organisms
+- \`pnpm run storybook:gen\` — Tạo stories từ ui/molecules/organisms
         `.trim()
       }
     }
@@ -50,7 +50,7 @@ export const ReadMe: Story = {
         <h2>Scripts</h2>
         <ul>
           <li><code>pnpm run storybook</code> — Chạy Storybook (port 6006)</li>
-          <li><code>pnpm run storybook:gen</code> — Tạo stories từ atoms/molecules/organisms</li>
+          <li><code>pnpm run storybook:gen</code> — Tạo stories từ ui/molecules/organisms</li>
         </ul>
       </div>
     `

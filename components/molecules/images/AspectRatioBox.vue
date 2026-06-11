@@ -6,7 +6,7 @@ const props = defineProps<{ ratio?: number }>()
 </script>
 
 <template>
-  <AtAspectRatio :ratio="props.ratio ?? 16 / 9">
+  <AspectRatio :ratio="props.ratio ?? 16 / 9">
     <slot />
-  </AtAspectRatio>
+  </AspectRatio>
 </template>

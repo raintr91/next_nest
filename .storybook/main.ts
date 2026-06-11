@@ -7,7 +7,10 @@ import AutoImport from 'unplugin-auto-import/vite'
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
 
 const config: StorybookConfig = {
-  stories: ['../stories/**/*.stories.@(ts|tsx|js|jsx)'],
+  stories: [
+    '../stories/*.stories.@(ts|tsx|js|jsx)',
+    '../stories/auto/**/*.stories.js'
+  ],
   addons: ['@storybook/addon-links', '@storybook/addon-a11y', '@storybook/addon-docs', 'storybook/viewport'],
   framework: {
     name: '@storybook/vue3-vite',

@@ -9,20 +9,20 @@ const props = defineProps<{
 </script>
 
 <template>
-  <AtTable>
-    <AtTableHeader>
-      <AtTableRow>
-        <AtTableHead v-for="col in props.columns" :key="col.key">{{ col.label ?? col.key }}</AtTableHead>
-      </AtTableRow>
-    </AtTableHeader>
-    <AtTableBody>
-      <AtTableRow v-for="(row, i) in props.items" :key="i">
-        <AtTableCell v-for="col in props.columns" :key="col.key">
+  <Table>
+    <TableHeader>
+      <TableRow>
+        <TableHead v-for="col in props.columns" :key="col.key">{{ col.label ?? col.key }}</TableHead>
+      </TableRow>
+    </TableHeader>
+    <TableBody>
+      <TableRow v-for="(row, i) in props.items" :key="i">
+        <TableCell v-for="col in props.columns" :key="col.key">
           <slot :name="`cell-${col.key}`" :item="row" :value="row[col.key]">
             {{ row[col.key] }}
           </slot>
-        </AtTableCell>
-      </AtTableRow>
-    </AtTableBody>
-  </AtTable>
+        </TableCell>
+      </TableRow>
+    </TableBody>
+  </Table>
 </template>

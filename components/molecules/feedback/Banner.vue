@@ -17,9 +17,9 @@ const emit = defineEmits<{ (e: 'dismiss'): void }>()
     <span class="flex-1">{{ props.title }}</span>
     <div class="flex items-center gap-2">
       <slot name="action" />
-      <AtButton variant="ghost" size="icon" aria-label="Dismiss" @click="emit('dismiss')">
+      <Button variant="ghost" size="icon" aria-label="Dismiss" @click="emit('dismiss')">
         <slot name="dismiss">×</slot>
-      </AtButton>
+      </Button>
     </div>
   </div>
 </template>

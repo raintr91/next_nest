@@ -6,40 +6,40 @@ import { defineComponent, h } from 'vue'
 
 import '~/assets/css/main.css'
 
-import AtButton from '~/components/atoms/button/Button.vue'
-import AtInput from '~/components/atoms/input/Input.vue'
-import AtLabel from '~/components/atoms/label/Label.vue'
-import AtCard from '~/components/atoms/card/Card.vue'
-import AtCardHeader from '~/components/atoms/card/CardHeader.vue'
-import AtCardTitle from '~/components/atoms/card/CardTitle.vue'
-import AtCardDescription from '~/components/atoms/card/CardDescription.vue'
-import AtCardContent from '~/components/atoms/card/CardContent.vue'
-import AtCardFooter from '~/components/atoms/card/CardFooter.vue'
-import AtTable from '~/components/atoms/table/Table.vue'
-import AtTableBody from '~/components/atoms/table/TableBody.vue'
-import AtTableCell from '~/components/atoms/table/TableCell.vue'
-import AtTableHead from '~/components/atoms/table/TableHead.vue'
-import AtTableHeader from '~/components/atoms/table/TableHeader.vue'
-import AtTableRow from '~/components/atoms/table/TableRow.vue'
-import AtDropdownMenu from '~/components/atoms/dropdown-menu/DropdownMenu.vue'
-import AtDropdownMenuTrigger from '~/components/atoms/dropdown-menu/DropdownMenuTrigger.vue'
-import AtDropdownMenuContent from '~/components/atoms/dropdown-menu/DropdownMenuContent.vue'
-import AtDropdownMenuItem from '~/components/atoms/dropdown-menu/DropdownMenuItem.vue'
-import AtDropdownMenuSeparator from '~/components/atoms/dropdown-menu/DropdownMenuSeparator.vue'
+import Button from '~/components/ui/button/Button.vue'
+import Input from '~/components/ui/input/Input.vue'
+import Label from '~/components/ui/label/Label.vue'
+import Card from '~/components/ui/card/Card.vue'
+import CardHeader from '~/components/ui/card/CardHeader.vue'
+import CardTitle from '~/components/ui/card/CardTitle.vue'
+import CardDescription from '~/components/ui/card/CardDescription.vue'
+import CardContent from '~/components/ui/card/CardContent.vue'
+import CardFooter from '~/components/ui/card/CardFooter.vue'
+import Table from '~/components/ui/table/Table.vue'
+import TableBody from '~/components/ui/table/TableBody.vue'
+import TableCell from '~/components/ui/table/TableCell.vue'
+import TableHead from '~/components/ui/table/TableHead.vue'
+import TableHeader from '~/components/ui/table/TableHeader.vue'
+import TableRow from '~/components/ui/table/TableRow.vue'
+import DropdownMenu from '~/components/ui/dropdown-menu/DropdownMenu.vue'
+import DropdownMenuTrigger from '~/components/ui/dropdown-menu/DropdownMenuTrigger.vue'
+import DropdownMenuContent from '~/components/ui/dropdown-menu/DropdownMenuContent.vue'
+import DropdownMenuItem from '~/components/ui/dropdown-menu/DropdownMenuItem.vue'
+import DropdownMenuSeparator from '~/components/ui/dropdown-menu/DropdownMenuSeparator.vue'
 import {
-  Sidebar as AtSidebar,
-  SidebarContent as AtSidebarContent,
-  SidebarFooter as AtSidebarFooter,
-  SidebarGroup as AtSidebarGroup,
-  SidebarGroupContent as AtSidebarGroupContent,
-  SidebarHeader as AtSidebarHeader,
-  SidebarInset as AtSidebarInset,
-  SidebarMenu as AtSidebarMenu,
-  SidebarMenuButton as AtSidebarMenuButton,
-  SidebarMenuItem as AtSidebarMenuItem,
-  SidebarProvider as AtSidebarProvider,
-  SidebarTrigger as AtSidebarTrigger
-} from '~/components/atoms/sidebar/index'
+  Sidebar,
+  SidebarContent,
+  SidebarFooter,
+  SidebarGroup,
+  SidebarGroupContent,
+  SidebarHeader,
+  SidebarInset,
+  SidebarMenu,
+  SidebarMenuButton,
+  SidebarMenuItem,
+  SidebarProvider,
+  SidebarTrigger
+} from '~/components/ui/sidebar/index'
 
 setup((app) => {
   const router = createRouter({
@@ -55,38 +55,38 @@ setup((app) => {
   router.replace('/')
   app.use(router)
 
-  app.component('AtButton', AtButton)
-  app.component('AtInput', AtInput)
-  app.component('AtLabel', AtLabel)
-  app.component('AtCard', AtCard)
-  app.component('AtCardHeader', AtCardHeader)
-  app.component('AtCardTitle', AtCardTitle)
-  app.component('AtCardDescription', AtCardDescription)
-  app.component('AtCardContent', AtCardContent)
-  app.component('AtCardFooter', AtCardFooter)
-  app.component('AtTable', AtTable)
-  app.component('AtTableBody', AtTableBody)
-  app.component('AtTableCell', AtTableCell)
-  app.component('AtTableHead', AtTableHead)
-  app.component('AtTableHeader', AtTableHeader)
-  app.component('AtTableRow', AtTableRow)
-  app.component('AtDropdownMenu', AtDropdownMenu)
-  app.component('AtDropdownMenuTrigger', AtDropdownMenuTrigger)
-  app.component('AtDropdownMenuContent', AtDropdownMenuContent)
-  app.component('AtDropdownMenuItem', AtDropdownMenuItem)
-  app.component('AtDropdownMenuSeparator', AtDropdownMenuSeparator)
-  app.component('AtSidebar', AtSidebar)
-  app.component('AtSidebarContent', AtSidebarContent)
-  app.component('AtSidebarFooter', AtSidebarFooter)
-  app.component('AtSidebarGroup', AtSidebarGroup)
-  app.component('AtSidebarGroupContent', AtSidebarGroupContent)
-  app.component('AtSidebarHeader', AtSidebarHeader)
-  app.component('AtSidebarInset', AtSidebarInset)
-  app.component('AtSidebarMenu', AtSidebarMenu)
-  app.component('AtSidebarMenuButton', AtSidebarMenuButton)
-  app.component('AtSidebarMenuItem', AtSidebarMenuItem)
-  app.component('AtSidebarProvider', AtSidebarProvider)
-  app.component('AtSidebarTrigger', AtSidebarTrigger)
+  app.component('Button', Button)
+  app.component('Input', Input)
+  app.component('Label', Label)
+  app.component('Card', Card)
+  app.component('CardHeader', CardHeader)
+  app.component('CardTitle', CardTitle)
+  app.component('CardDescription', CardDescription)
+  app.component('CardContent', CardContent)
+  app.component('CardFooter', CardFooter)
+  app.component('Table', Table)
+  app.component('TableBody', TableBody)
+  app.component('TableCell', TableCell)
+  app.component('TableHead', TableHead)
+  app.component('TableHeader', TableHeader)
+  app.component('TableRow', TableRow)
+  app.component('DropdownMenu', DropdownMenu)
+  app.component('DropdownMenuTrigger', DropdownMenuTrigger)
+  app.component('DropdownMenuContent', DropdownMenuContent)
+  app.component('DropdownMenuItem', DropdownMenuItem)
+  app.component('DropdownMenuSeparator', DropdownMenuSeparator)
+  app.component('Sidebar', Sidebar)
+  app.component('SidebarContent', SidebarContent)
+  app.component('SidebarFooter', SidebarFooter)
+  app.component('SidebarGroup', SidebarGroup)
+  app.component('SidebarGroupContent', SidebarGroupContent)
+  app.component('SidebarHeader', SidebarHeader)
+  app.component('SidebarInset', SidebarInset)
+  app.component('SidebarMenu', SidebarMenu)
+  app.component('SidebarMenuButton', SidebarMenuButton)
+  app.component('SidebarMenuItem', SidebarMenuItem)
+  app.component('SidebarProvider', SidebarProvider)
+  app.component('SidebarTrigger', SidebarTrigger)
 
   // NuxtLink mock: no template string to avoid runtime compileToFunction
   app.component(

@@ -11,6 +11,7 @@ Các lệnh sau **không** xóa hay ghi đè stories viết tay:
 |------|--------|
 | `pnpm storybook:clean` | Chỉ xóa cache Storybook (`node_modules/.cache/storybook`). **Không** xóa file stories. |
 | `pnpm storybook:fresh` | Clean cache rồi chạy Storybook. Stories viết tay giữ nguyên. |
+| `pnpm storybook` | `nuxt prepare` → nếu `stories/auto/` chưa có `*.stories.js` thì chạy `generate-stories.mjs` → mở Storybook. |
 | `pnpm storybook:gen` | Tạo stories auto vào `stories/auto/`; không ghi đè `stories/*.stories.ts`. |
 | `pnpm storybook:clean:gen` | Chỉ xóa thư mục `stories/auto/` (stories auto-generate). **Giữ nguyên** `stories/*.stories.ts`. |
 

@@ -7,7 +7,7 @@ import { useDataTableLogic } from '~/components/molecules/layout/useDataTableLog
 /**
  * DataTable – table with sorting, search, pagination.
  * Reference: Vuetify v-data-table (https://vuetifyjs.com/en/components/data-tables/introduction/)
- * Built from atoms: AtTable, AtInput, AtButton.
+ * Built from atoms: Table, Input, Button.
  * Logic tested in tests/unit/molecules/layout/dataTableLogic.test.ts
  */
 
@@ -42,17 +42,17 @@ const {
 <template>
   <div :class="cn('space-y-4', props.class)">
     <div v-if="props.searchPlaceholder !== false" class="flex justify-end">
-      <AtInput
+      <Input
         v-model="search"
         type="search"
         :placeholder="props.searchPlaceholder"
         class="max-w-xs"
       />
     </div>
-    <AtTable>
-      <AtTableHeader>
-        <AtTableRow>
-          <AtTableHead
+    <Table>
+      <TableHeader>
+        <TableRow>
+          <TableHead
             v-for="col in props.columns"
             :key="col.key"
             :class="col.sortable ? 'cursor-pointer select-none hover:bg-muted/50' : ''"
@@ -65,19 +65,19 @@ const {
                 <span v-else>↓</span>
               </template>
             </span>
-          </AtTableHead>
-        </AtTableRow>
-      </AtTableHeader>
-      <AtTableBody>
-        <AtTableRow v-for="(row, i) in paginatedItems" :key="i">
-          <AtTableCell v-for="col in props.columns" :key="col.key">
+          </TableHead>
+        </TableRow>
+      </TableHeader>
+      <TableBody>
+        <TableRow v-for="(row, i) in paginatedItems" :key="i">
+          <TableCell v-for="col in props.columns" :key="col.key">
             <slot :name="`cell-${col.key}`" :row="row" :value="cellValue(row, col.key)">
               {{ cellValue(row, col.key) }}
             </slot>
-          </AtTableCell>
-        </AtTableRow>
-      </AtTableBody>
-    </AtTable>
+          </TableCell>
+        </TableRow>
+      </TableBody>
+    </Table>
     <div
       v-if="totalPages > 1"
       class="flex items-center justify-between px-2 py-1 text-sm text-muted-foreground"
@@ -86,22 +86,22 @@ const {
         Page {{ page }} of {{ totalPages }} ({{ sortedItems.length }} items)
       </span>
       <div class="flex gap-2">
-        <AtButton
+        <Button
           variant="outline"
           size="sm"
           :disabled="page <= 1"
           @click="goPrev"
         >
           Prev
-        </AtButton>
-        <AtButton
+        </Button>
+        <Button
           variant="outline"
           size="sm"
           :disabled="page >= totalPages"
           @click="goNext"
         >
           Next
-        </AtButton>
+        </Button>
       </div>
     </div>
     <slot name="below" />

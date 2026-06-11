@@ -25,9 +25,9 @@ async function onLogout() {
 </script>
 
 <template>
-  <AtSidebarProvider :default-open="true" class="min-h-svh w-full">
+  <SidebarProvider :default-open="true" class="min-h-svh w-full">
     <OrShadcnSidebar :navigation="navigation" :is-active="isActive" brand-label="Shadcn Portal" />
-    <AtSidebarInset>
+    <SidebarInset>
       <OrShadcnNavbar :title="pageTitle" @logout="onLogout">
         <template #actions>
           <slot name="navbar-actions" />
@@ -36,6 +36,6 @@ async function onLogout() {
       <div class="flex-1 p-4 md:p-6">
         <slot />
       </div>
-    </AtSidebarInset>
-  </AtSidebarProvider>
+    </SidebarInset>
+  </SidebarProvider>
 </template>

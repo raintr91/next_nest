@@ -7,7 +7,7 @@ const props = defineProps<{ placeholder?: string; disabled?: boolean }>()
 </script>
 
 <template>
-  <AtInput
+  <Input
     v-model="model"
     type="search"
     :placeholder="props.placeholder ?? 'Search...'"

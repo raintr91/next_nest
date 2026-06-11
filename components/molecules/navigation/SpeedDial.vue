@@ -14,7 +14,7 @@ const open = ref(false)
   <div class="fixed bottom-6 right-6 z-40 flex flex-col-reverse items-end gap-2">
     <template v-if="props.actions?.length">
       <div v-if="open" class="flex flex-col-reverse gap-2">
-          <AtButton
+          <Button
             v-for="(a, i) in props.actions"
             :key="i"
             variant="outline"
@@ -23,10 +23,10 @@ const open = ref(false)
             @click="a.onClick?.(); open = false"
           >
             {{ a.label }}
-          </AtButton>
+          </Button>
         </div>
     </template>
-    <AtButton
+    <Button
       size="icon"
       class="h-12 w-12 rounded-full shadow-lg"
       :aria-expanded="open"
@@ -34,6 +34,6 @@ const open = ref(false)
     >
       <slot name="icon" />
       <span v-if="!$slots.icon" aria-hidden="true">+</span>
-    </AtButton>
+    </Button>
   </div>
 </template>
