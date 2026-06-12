@@ -1,5 +1,5 @@
-# Một container = một portal: Nuxt dev listen cùng cổng với publish host (PORTAL_DEV_PORT → NUXT_PORT trong container).
-# Gateway nginx (stack docker/) proxy tới container <PORTAL_STACK_PREFIX>-portal-node trên base_shared_net (PORTAL_PROXY_TARGET=container) hoặc host.docker.internal (host).
+# Một container = một portal. Gateway → <PORTAL_STACK_PREFIX>-portal-node:3000 trên base_shared_net (không publish ra host).
+# pnpm dev chỉ chạy trong container; trên host: install, test, storybook, …
 #
 #   docker compose --env-file .env -f docker-compose.yml up -d
 #
@@ -27,7 +27,7 @@ services:
       CHOKIDAR_INTERVAL: "100"
       WATCHPACK_POLLING: "true"
       NUXT_DEVTOOLS: "false"
-      NUXT_PORT: "${PORTAL_DEV_PORT:-3000}"
+      NUXT_PORT: "3000"
       HOME: /tmp
       COREPACK_HOME: /tmp/corepack
       XDG_CACHE_HOME: /tmp/cache
@@ -35,8 +35,6 @@ services:
     volumes:
       - ..:/workspace/portal
       - portal_node_modules:/workspace/portal/node_modules
-    ports:
-      - "${PORTAL_DEV_PORT:-3000}:${PORTAL_DEV_PORT:-3000}"
     networks:
       - default
       - shared

@@ -15,7 +15,7 @@ pnpm dev
 
 ### Docker (tách stack — nhiều project song song)
 
-1. **Hạ tầng chung** (`docker/`): MySQL + gateway 80/443 — **tạo** network `base_shared_net` (bước này phải chạy trước `api/local`).
+1. **Hạ tầng chung** (`docker/`): MySQL + gateway 80/443 — **tạo** network `base_shared_net` (bước này phải chạy trước `api/docker`).
 
    ```bash
    cp docker/.env.example docker/.env   # MYSQL_* + TLS; gateway: docker/routes.txt
@@ -23,15 +23,15 @@ pnpm dev
    docker compose up -d                  # từ repo root (include docker/docker-compose.yml)
    ```
 
-2. **API** (`api/local/`): PHP-FPM + nginx; dùng mạng `base_shared_net` đã có (external). Cấu hình DB trong `api/src/.env` (vd. `DB_HOST=base_mysql`).
+2. **API** (`api/docker/`): PHP-FPM + nginx; dùng mạng `base_shared_net` đã có (external). Cấu hình DB trong `api/src/.env` (vd. `DB_HOST=base_mysql`).
 
    ```bash
-   cd api/local && docker compose up -d
+   cd api/docker && docker compose --env-file .env up -d
    ```
 
    Trong `api/src/.env` (Laravel) đặt `DB_HOST=base_mysql` và `DB_*` khớp `docker/.env`.
 
-3. **Portal** (`portal/docker/`): Nuxt dev publish `PORTAL_DEV_PORT` → host. Trong `portal/docker/.env` đặt **`PORTAL_STACK_PREFIX`** cùng kiểu với **`API_STACK_PREFIX`** của clone đó (vd `base`, `p1`) để project Compose `portal-<prefix>` và container `<prefix>-portal-node` không đụng nhau.
+3. **Portal** (`portal/docker/`): Nuxt dev trong container, join `base_shared_net`. Trong `portal/docker/.env` đặt **`PORTAL_STACK_PREFIX`** khớp `stack` trong `docker/routes.json`.
 
    ```bash
    cp portal/docker/.env.example portal/docker/.env
