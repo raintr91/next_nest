@@ -1,0 +1,38 @@
+---
+description: Portal Base — composables, services, stores, models, validations
+globs: composables/**/*,services/**/*,stores/**/*,models/**/*,validations/**/*
+alwaysApply: false
+---
+
+# Data layers
+
+## Composables (`composables/`)
+
+Orchestration UI: submit, loading, navigation, guards. Gọi store/service — **không** `$apiFetch` trực tiếp.
+
+```ts
+// ✅ composables/customer/useCustomerList.ts
+const { $apiFetch } = useNuxtApp()
+const service = createCustomerService($apiFetch)
+```
+
+## Services (`services/`)
+
+HTTP only. Factory `createXxxService(api)`. Parse response qua `parseApiData` / `parseSchemaOrThrow`.
+
+## Stores (`stores/`)
+
+Client state (token, list cache, toast, dialog). Gọi service — không embed endpoint strings.
+
+## Models vs Validations
+
+| | `models/` | `validations/` |
+|--|-----------|----------------|
+| Mục đích | API contract Zod | Form rules vee-validate |
+| Độ chặt | Lỏng (`password: string`) | Chặt (min 8, email…) |
+
+## Form base
+
+```ts
+useApiForm<T>({ validationSchema, initialValues, submit })
+```

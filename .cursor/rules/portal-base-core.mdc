@@ -1,0 +1,30 @@
+---
+description: Portal Base (Nuxt 4) — core conventions. Fallback khi AI tool không load skill.
+alwaysApply: true
+---
+
+# Portal Base — Core
+
+Nuxt 4 auth-first portal. Chi tiết: `docs/ARCHITECTURE.md`, `docs/E2E-TESTIDS.md`, skill `.cursor/skills/portal-base/`.
+
+## 4 tầng (bắt buộc)
+
+`pages/components` → `composables` → `services` + `stores` → `models` + `validations` → `$apiFetch`
+
+- **Không** gọi `$apiFetch` trong page/component
+- **Không** import ngược: `models/` → stores/services/composables
+- Form: `useApiForm` + `validations/` (chặt) + `models/` (API contract)
+
+## Thêm feature (thứ tự)
+
+`models/` → `services/` → `stores/` (optional) → `composables/` → `validations/` → `pages/` + `testId`
+
+## UI tiers
+
+`components/ui/` (shadcn) → `molecules/` (`Mo*`) → `organisms/` (`Data*`, `OrGlobal*`)
+
+Không copy legacy: `layouts/themes/*`, `dataTheme/*`.
+
+## E2E
+
+Playwright only (`tests/e2e/`). Gắn `data-testid` **trước** viết spec. `page.getByTestId()`.

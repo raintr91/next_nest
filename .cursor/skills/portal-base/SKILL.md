@@ -14,6 +14,8 @@ Auth-first Nuxt 4 portal. Stack: Vue 3, Pinia, vee-validate + Zod, shadcn-vue, T
 
 **Docs in repo:** `docs/ARCHITECTURE.md`, `docs/E2E-TESTIDS.md`, `README.md`
 
+**Cursor rules (fallback khi tool không load skill):** `.cursor/rules/portal-base-*.mdc`
+
 ---
 
 ## 1. Layer architecture (bắt buộc)
