@@ -18,7 +18,7 @@ describe('Auth guard', () => {
   it('/auth/login is publicly accessible without authentication', () => {
     cy.visit('/auth/login', { failOnStatusCode: false })
     cy.url({ timeout: 8000 }).should('include', '/auth/login')
-    cy.get('input#email', { timeout: 8000 }).should('exist')
+    cy.getByTestId('auth-login-email-input', { timeout: 8000 }).should('exist')
   })
 
   it('/auth route is publicly accessible without authentication', () => {

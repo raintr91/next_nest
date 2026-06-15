@@ -12,6 +12,8 @@ const props = withDefaults(
     cancelLabel?: string
     variant?: 'default' | 'destructive'
     loading?: boolean
+    /** Root id; title/content/buttons use suffixes — see docs/E2E-TESTIDS.md */
+    testId?: string
   }>(),
   {
     title: 'Confirm',
@@ -45,21 +47,27 @@ function onCancel() {
 
 <template>
   <Dialog :open="props.open" @update:open="onOpenChange">
-    <DialogContent class="sm:max-w-md">
+    <DialogContent class="sm:max-w-md" :test-id="testId">
       <DialogHeader>
-        <DialogTitle>{{ title }}</DialogTitle>
-        <DialogDescription v-if="description">
+        <DialogTitle :data-testid="testId ? `${testId}-title` : undefined">{{ title }}</DialogTitle>
+        <DialogDescription v-if="description" :data-testid="testId ? `${testId}-content` : undefined">
           {{ description }}
         </DialogDescription>
       </DialogHeader>
       <slot />
       <DialogFooter class="gap-2 sm:gap-0">
-        <Button variant="outline" :disabled="loading" @click="onCancel">
+        <Button
+          variant="outline"
+          :disabled="loading"
+          :test-id="testId ? `${testId}-cancel-btn` : undefined"
+          @click="onCancel"
+        >
           {{ cancelLabel }}
         </Button>
         <Button
           :variant="variant === 'destructive' ? 'destructive' : 'default'"
           :disabled="loading"
+          :test-id="testId ? `${testId}-confirm-btn` : undefined"
           @click="onConfirm"
         >
           {{ confirmLabel }}

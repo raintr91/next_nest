@@ -10,6 +10,8 @@ export interface BreadcrumbItem {
 const props = defineProps<{
   items: BreadcrumbItem[]
   class?: HTMLAttributes['class']
+  /** Root nav test id; items → `{testId}-item-{n}`, current → `{testId}-current` */
+  testId?: string
 }>()
 
 function isInternalLink(href?: string) {
@@ -18,13 +20,19 @@ function isInternalLink(href?: string) {
 </script>
 
 <template>
-  <nav aria-label="breadcrumb" :class="cn(props.class)">
+  <nav aria-label="breadcrumb" :class="cn(props.class)" :data-testid="testId">
     <ol class="mairy-breadcrumb">
-      <li v-for="(item, index) in items" :key="`${item.label}-${index}`" class="mairy-breadcrumb-item">
+      <li
+        v-for="(item, index) in items"
+        :key="`${item.label}-${index}`"
+        class="mairy-breadcrumb-item"
+        :data-testid="testId ? `${testId}-item-${index}` : undefined"
+      >
         <NuxtLink
           v-if="item.href && isInternalLink(item.href) && index < items.length - 1"
           :to="item.href"
           class="mairy-breadcrumb-link"
+          :data-testid="testId ? `${testId}-link-${index}` : undefined"
         >
           {{ item.label }}
         </NuxtLink>
@@ -32,10 +40,11 @@ function isInternalLink(href?: string) {
           v-else-if="item.href && index < items.length - 1"
           :href="item.href"
           class="mairy-breadcrumb-link"
+          :data-testid="testId ? `${testId}-link-${index}` : undefined"
         >
           {{ item.label }}
         </a>
-        <span v-else class="mairy-breadcrumb-current">{{ item.label }}</span>
+        <span v-else class="mairy-breadcrumb-current" :data-testid="testId ? `${testId}-current` : undefined">{{ item.label }}</span>
       </li>
     </ol>
   </nav>

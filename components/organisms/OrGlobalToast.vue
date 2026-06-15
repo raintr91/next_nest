@@ -33,12 +33,14 @@ function typeIcon(type: ToastType): string {
       :key="t.id"
       :open="t.open"
       :variant="variantFor(t.type)"
+      data-testid="app-toast"
       @update:open="(open) => !open && toastStore.hide(t.id)"
     >
       <div class="grid gap-1">
         <div class="flex items-start gap-3">
           <span
             class="flex h-8 w-8 shrink-0 items-center justify-center rounded-full text-sm"
+            data-testid="app-toast-icon"
             :class="{
               'bg-primary/10 text-primary': t.type === 'info',
               'bg-destructive/10 text-destructive': t.type === 'error',
@@ -49,14 +51,14 @@ function typeIcon(type: ToastType): string {
             {{ typeIcon(t.type) }}
           </span>
           <div class="flex-1 space-y-1">
-            <ToastTitle v-if="t.title">
+            <ToastTitle v-if="t.title" data-testid="app-toast-title">
               {{ t.title }}
             </ToastTitle>
-            <ToastDescription>
+            <ToastDescription data-testid="app-toast-message">
               {{ t.message }}
             </ToastDescription>
           </div>
-          <ToastClose />
+          <ToastClose data-testid="app-toast-close" />
         </div>
       </div>
     </Toast>

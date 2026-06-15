@@ -12,19 +12,21 @@ const props = defineProps<{
   error?: string
   required?: boolean
   class?: HTMLAttributes['class']
+  /** Root test id; label → `{testId}-label`, error → `{testId}-error` */
+  testId?: string
 }>()
 </script>
 
 <template>
-  <FormItem :class="cn(props.class)">
-    <FormLabel v-if="label" :for="name">
+  <FormItem :class="cn(props.class)" :data-testid="testId ? `${testId}-wrapper` : undefined">
+    <FormLabel v-if="label" :for="name" :data-testid="testId ? `${testId}-label` : undefined">
       {{ label }}
       <span v-if="required" class="text-destructive">*</span>
     </FormLabel>
     <FormControl>
       <slot />
     </FormControl>
-    <FormMessage v-if="error" class="text-destructive">
+    <FormMessage v-if="error" class="text-destructive" :data-testid="testId ? `${testId}-error` : undefined">
       {{ error }}
     </FormMessage>
     <slot name="hint" />

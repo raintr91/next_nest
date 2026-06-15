@@ -90,6 +90,8 @@ pnpm test:unit:coverage
 
 ## Cypress (e2e)
 
+**Quy ước selector:** mọi page/module phải gắn `data-testid` theo [docs/E2E-TESTIDS.md](docs/E2E-TESTIDS.md) **trước** khi viết spec. Prop Vue `testId` → HTML `data-testid` (shared UI: `Button`, `Input`, `FormField`, `Dialog`, `BreadcrumbNav`, …).
+
 **Cách khuyến nghị** — tự bật Nuxt dev trên port **3005** rồi chạy Cypress (dùng `start-server-and-test`):
 
 ```bash
@@ -113,6 +115,14 @@ CYPRESS_BASE_URL=https://portal.example.com pnpm test:e2e:remote
 ```
 
 Mặc định `test:e2e:remote` dùng `http://portal.base.com` nếu không set biến môi trường.
+
+Trong spec, ưu tiên `cy.getByTestId('module-field-input')` (custom command trong `cypress/support/e2e.ts`). Ví dụ: `cypress/e2e/login.cy.ts` dùng prefix `auth-login-*`.
+
+### Bước 1 — Chuẩn hóa FE trước E2E
+
+1. Gắn `testId` trên shared components; page truyền id theo module scope.
+2. Bao phủ không chỉ form: alert, dialog/modal, toast, breadcrumb, menu, page title, label.
+3. Không selector bằng `id` HTML / class CSS — xem bảng naming đầy đủ trong [docs/E2E-TESTIDS.md](docs/E2E-TESTIDS.md).
 
 ## Route hiện tại
 

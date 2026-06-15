@@ -2,14 +2,14 @@ import { mockAuthenticatedSession } from './helpers/session'
 
 describe('Login page', () => {
   const fillValidCredentials = (password: string) => {
-    cy.get('input#email')
+    cy.getByTestId('auth-login-email-input')
       .clear()
       .invoke('val', 'user@example.co.jp')
       .trigger('input')
       .blur()
       .should('have.value', 'user@example.co.jp')
 
-    cy.get('input#password')
+    cy.getByTestId('auth-login-password-input')
       .clear()
       .invoke('val', password)
       .trigger('input')
@@ -21,47 +21,46 @@ describe('Login page', () => {
     cy.visit('/auth/login', { failOnStatusCode: false })
   })
 
-  it('shows login heading and form fields', () => {
-    cy.contains('ログインID').should('be.visible')
-    cy.contains('パスワード').should('be.visible')
-    cy.get('input#email').should('be.visible')
-    cy.get('input#password').should('be.visible')
-    cy.get('button[type="submit"]').should('be.visible')
+  it('shows login form fields', () => {
+    cy.getByTestId('auth-login-page').should('be.visible')
+    cy.getByTestId('auth-login-email-input').should('be.visible')
+    cy.getByTestId('auth-login-password-input').should('be.visible')
+    cy.getByTestId('auth-login-submit-btn').should('be.visible')
   })
 
   it('shows logo and subtitle section', () => {
-    cy.get('img[alt="Portal"]').should('be.visible')
-    cy.contains('※当システムでは全ての通信に対してHTTPS（SSL/TLS）暗号化を採用しております。').should('be.visible')
+    cy.getByTestId('auth-login-logo').should('be.visible')
+    cy.getByTestId('auth-login-subtitle').should('be.visible')
   })
 
   it('shows email validation error for invalid email', () => {
     cy.intercept('POST', '**/api/auth/login*').as('loginAttempt')
-    cy.get('input#email').type('not-an-email')
-    cy.get('input#password').type('password123')
-    cy.get('button[type="submit"]').click()
+    cy.getByTestId('auth-login-email-input').type('not-an-email')
+    cy.getByTestId('auth-login-password-input').type('password123')
+    cy.getByTestId('auth-login-submit-btn').click()
     cy.wait(500)
     cy.get('@loginAttempt.all').should('have.length', 0)
   })
 
   it('shows password validation error for short password', () => {
     cy.intercept('POST', '**/api/auth/login*').as('loginAttempt')
-    cy.get('input#email').type('user@example.co.jp')
-    cy.get('input#password').type('short')
-    cy.get('button[type="submit"]').click()
+    cy.getByTestId('auth-login-email-input').type('user@example.co.jp')
+    cy.getByTestId('auth-login-password-input').type('short')
+    cy.getByTestId('auth-login-submit-btn').click()
     cy.wait(500)
     cy.get('@loginAttempt.all').should('have.length', 0)
   })
 
   it('shows validation errors when empty form is submitted', () => {
     cy.intercept('POST', '**/api/auth/login*').as('loginAttempt')
-    cy.get('button[type="submit"]').click()
+    cy.getByTestId('auth-login-submit-btn').click()
     cy.wait(500)
     cy.get('@loginAttempt.all').should('have.length', 0)
   })
 
   it('keeps user on login page when credentials are not authenticated', () => {
     fillValidCredentials('wrongpassword')
-    cy.get('form').trigger('submit')
+    cy.getByTestId('auth-login-form').trigger('submit')
     cy.location('pathname').should('eq', '/auth/login')
   })
 

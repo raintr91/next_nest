@@ -32,8 +32,9 @@ function onOpenChange(open: boolean) {
 </script>
 
 <template>
-  <AlertDialog :open="visible" @update:open="onOpenChange">
+  <AlertDialog :open="visible" data-testid="app-dialog" @update:open="onOpenChange">
     <AlertDialogContent
+      test-id="app-dialog-content"
       :class="{
         'border-l-4 border-primary': type === 'info',
         'border-l-4 border-amber-500': type === 'warning',
@@ -68,19 +69,20 @@ function onOpenChange(open: boolean) {
             ✕
           </span>
           <div class="flex-1">
-            <AlertDialogTitle>{{ title }}</AlertDialogTitle>
-            <AlertDialogDescription class="mt-2 whitespace-pre-line">
+            <AlertDialogTitle data-testid="app-dialog-title">{{ title }}</AlertDialogTitle>
+            <AlertDialogDescription class="mt-2 whitespace-pre-line" data-testid="app-dialog-message">
               {{ text }}
             </AlertDialogDescription>
           </div>
         </div>
       </AlertDialogHeader>
       <div v-if="!hideBtn" class="mt-4 flex justify-end gap-2">
-        <AlertDialogCancel v-if="!hideBtnCancel">
+        <AlertDialogCancel v-if="!hideBtnCancel" data-testid="app-dialog-cancel-btn">
           {{ btnCancelTitle }}
         </AlertDialogCancel>
         <AlertDialogAction
           v-if="!hideBtnConfirm"
+          data-testid="app-dialog-confirm-btn"
           :class="{
             'bg-primary text-primary-foreground hover:bg-primary/90': dialogColor === 'primary',
             'bg-amber-500 text-white hover:bg-amber-600': dialogColor === 'amber',

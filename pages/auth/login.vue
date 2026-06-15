@@ -13,18 +13,18 @@ const { value: password } = useField<string>('password')
 </script>
 
 <template>
-  <div class="bg-white">
+  <div class="bg-white" data-testid="auth-login-page">
     <div class="bg-[#E3CD00] py-[50px]" style="padding-left:clamp(20px,8vw,160px);padding-right:clamp(20px,8vw,160px)">
       <div class="bg-white px-[25px]">
-        <form class="flex items-center" @submit.prevent="onSubmit">
+        <form class="flex items-center" data-testid="auth-login-form" @submit.prevent="onSubmit">
           <!-- Logo col -->
           <div class="flex shrink-0 items-center justify-center py-[30px] pr-6" style="width:150px">
-            <img src="/img/logo_white.svg" alt="mairy" style="height:70px;width:auto;max-width:130px" />
+            <img src="/img/logo_white.svg" alt="mairy" data-testid="auth-login-logo" style="height:70px;width:auto;max-width:130px" />
           </div>
 
           <!-- Fields col -->
           <div class="py-[30px] pr-6">
-            <div v-if="apiError" class="mb-3 rounded border border-red-300 bg-red-50 px-3 py-2 text-sm text-red-700">
+            <div v-if="apiError" class="mb-3 rounded border border-red-300 bg-red-50 px-3 py-2 text-sm text-red-700" data-testid="auth-login-error-alert" role="alert">
               {{ apiError }}
             </div>
 
@@ -36,6 +36,7 @@ const { value: password } = useField<string>('password')
                 autocomplete="email"
                 placeholder="ログインID"
                 required
+                data-testid="auth-login-email-input"
                 class="border border-gray-300 px-3"
                 :class="errors.email ? 'border-red-400 bg-[#FDDDDD]' : ''"
                 style="width:230px;height:44px;font-size:15px"
@@ -50,17 +51,18 @@ const { value: password } = useField<string>('password')
                 autocomplete="current-password"
                 placeholder="パスワード"
                 required
+                data-testid="auth-login-password-input"
                 class="border border-gray-300 px-3"
                 :class="errors.password ? 'border-red-400 bg-[#FDDDDD]' : ''"
                 style="width:230px;height:44px;font-size:15px"
               />
             </div>
 
-            <div v-if="errors.email || errors.password" class="mb-2 text-sm text-red-600">
+            <div v-if="errors.email || errors.password" class="mb-2 text-sm text-red-600" data-testid="auth-login-validation-error">
               {{ errors.email || errors.password }}
             </div>
 
-            <p class="text-gray-600" style="font-size:14px">
+            <p class="text-gray-600" data-testid="auth-login-subtitle" style="font-size:14px">
               ※当システムでは全ての通信に対してHTTPS（SSL/TLS）暗号化を採用しております。
             </p>
           </div>
@@ -70,12 +72,13 @@ const { value: password } = useField<string>('password')
             <button
               type="submit"
               :disabled="isSubmitting"
+              data-testid="auth-login-submit-btn"
               class="w-full py-[0.7rem] text-white disabled:opacity-60"
               style="background-color:#4EAAFF;font-size:18px"
             >
               {{ isSubmitting ? 'ログイン中...' : 'ログイン' }}
             </button>
-            <NuxtLink to="/password/reset" class="whitespace-nowrap text-[#4EAAFF] underline" style="font-size:16px">
+            <NuxtLink to="/password/reset" class="whitespace-nowrap text-[#4EAAFF] underline" data-testid="auth-login-forgot-link" style="font-size:16px">
               パスワードお忘れの方はこちら
             </NuxtLink>
           </div>

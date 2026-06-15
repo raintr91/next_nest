@@ -10,6 +10,8 @@ interface Props extends PrimitiveProps {
   variant?: ButtonVariants["variant"]
   size?: ButtonVariants["size"]
   class?: HTMLAttributes["class"]
+  /** Maps to `data-testid` — see docs/E2E-TESTIDS.md */
+  testId?: string
 }
 
 const props = withDefaults(defineProps<Props>(), {
@@ -21,6 +23,7 @@ const props = withDefaults(defineProps<Props>(), {
   <Primitive
     :as="as"
     :as-child="asChild"
+    :data-testid="testId"
     :class="cn(buttonVariants({ variant, size }), props.class)"
   >
     <slot />
