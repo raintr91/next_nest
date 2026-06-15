@@ -1,8 +1,8 @@
 # E2E — Chuẩn hóa `data-testid` (Portal Base)
 
-Tài liệu quy ước gắn **`data-testid`** trên FE và viết Cypress E2E ổn định. Áp dụng **trước khi** viết hoặc mở rộng test E2E cho module/page mới.
+Tài liệu quy ước gắn **`data-testid`** trên FE và viết Playwright E2E ổn định. Áp dụng **trước khi** viết hoặc mở rộng test E2E cho module/page mới.
 
-> **Quick link:** [README — Cypress](../README.md#cypress-e2e) · Helper: `utils/testId.ts`
+> **Quick link:** [README — Playwright](../README.md#playwright-e2e) · Helper: `utils/testId.ts`
 
 ---
 
@@ -20,7 +20,7 @@ Tài liệu quy ước gắn **`data-testid`** trên FE và viết Cypress E2E �
    - Page title / heading
    - Label form (khi test cần assert text hoặc liên kết field)
 3. **Không dùng `id` HTML** làm selector chính — `id` dễ trùng, thay đổi theo form state, SSR hydration.
-4. **Ưu tiên `cy.getByTestId()`** trong test; fallback `cy.contains` / `getByRole` khi semantic rõ (heading `h1`, `role="alert"`).
+4. **Ưu tiên `page.getByTestId()`** trong test; fallback `getByRole` khi semantic rõ (heading `h1`, `role="alert"`).
 5. Gắn test id **ở shared UI** (`components/ui/*`, `components/molecules/*`, `components/organisms/*`) qua prop **`testId`** — page chỉ truyền giá trị, không lặp markup.
 
 ### 1.2 Quy ước đặt tên
@@ -129,63 +129,51 @@ Prop Vue **`testId`** map sang HTML **`data-testid`**. Helper: `utils/testId.ts`
 - [ ] Alert lỗi API / validation có `-alert` hoặc `-error`
 - [ ] Dialog confirm có `-dialog` + nút `-confirm-btn` / `-cancel-btn`
 - [ ] Nav item sidebar có `nav-{id}`
-- [ ] Cypress spec dùng `cy.getByTestId()`, không `input#email`
+- [ ] Playwright spec dùng `page.getByTestId()`, không `input#email`
 
 ---
 
-## Bước 2 — Viết Cypress E2E
+## Bước 2 — Viết Playwright E2E
 
 ### 2.1 Chạy test
 
 ```bash
-pnpm test:e2e              # tự bật Nuxt port 3005 + Cypress headless
-pnpm cypress:open          # UI tương tác (app phải chạy sẵn)
-CYPRESS_BASE_URL=http://127.0.0.1:3004 pnpm cypress:run
+pnpm test:e2e              # tự bật Nuxt E2E port 3005 + Playwright headless
+pnpm test:e2e:ui           # UI tương tác
+pnpm test:e2e:report       # HTML report
+PLAYWRIGHT_SKIP_WEBSERVER=1 PLAYWRIGHT_BASE_URL=http://127.0.0.1:3004 pnpm exec playwright test
 ```
 
-### 2.2 Custom command `getByTestId`
+### 2.2 Selector `getByTestId`
 
-File: `cypress/support/e2e.ts`
+Playwright có sẵn `page.getByTestId()` (map `data-testid`).
 
 ```ts
-Cypress.Commands.add('getByTestId', (testId: string, options?: Partial<Cypress.Loggable & Cypress.Timeoutable>) => {
-  return cy.get(`[data-testid="${testId}"]`, options)
-})
+await page.getByTestId('auth-login-email-input').fill('user@example.com')
+await page.getByTestId('auth-login-submit-btn').click()
+await expect(page.getByTestId('auth-login-error-alert')).toBeVisible()
 ```
 
-**Ưu tiên:**
+**Fallback semantic:**
 
 ```ts
-cy.getByTestId('auth-login-email-input').type('user@example.com')
-cy.getByTestId('auth-login-submit-btn').click()
-cy.getByTestId('auth-login-error-alert').should('be.visible')
-```
-
-**Fallback semantic** (khi không có test id hoặc assert a11y):
-
-```ts
-cy.get('[role="alert"]').should('contain', 'Invalid credentials')
-cy.get('h1').should('contain', 'Customers')
+await expect(page.getByRole('alert')).toContainText('Invalid credentials')
+await expect(page.getByRole('heading', { level: 1 })).toContainText('Customers')
 ```
 
 ### 2.3 Pattern test file
 
 ```ts
-describe('Customer list', () => {
-  beforeEach(() => {
-    cy.visit('/customers')
+import { expect, test } from '@playwright/test'
+
+test.describe('Customer list', () => {
+  test.beforeEach(async ({ page }) => {
+    await page.goto('/customers')
   })
 
-  it('shows page shell', () => {
-    cy.getByTestId('customers-page').should('be.visible')
-    cy.getByTestId('customers-page-title').should('contain', 'Customers')
-  })
-
-  it('creates a customer', () => {
-    cy.getByTestId('customers-create-btn').click()
-    cy.getByTestId('customer-name-input').type('Acme')
-    cy.getByTestId('customer-save-btn').click()
-    cy.getByTestId('app-toast-message').should('contain', 'Created')
+  test('shows page shell', async ({ page }) => {
+    await expect(page.getByTestId('customers-page')).toBeVisible()
+    await expect(page.getByTestId('customers-page-title')).toContainText('Customers')
   })
 })
 ```
@@ -204,11 +192,37 @@ Store `toastStore` / `dialogStore` render qua `OrGlobalToast` / `OrGlobalDialog`
 | `app-dialog-confirm-btn` | Xác nhận |
 | `app-dialog-cancel-btn` | Hủy |
 
+### 2.5 Layout integrity — phát hiện sớm layout vỡ
+
+Helper chung quét DOM và fail khi:
+
+| Loại | Phát hiện |
+|------|-----------|
+| `overflow` | Nội dung tràn (`scrollWidth/Height` > `clientWidth/Height`) — gây lệch cột, text đè |
+| `collapsed` | Shell rỗng/co: `*-page` quá thấp, button/control quá nhỏ, title/label trống |
+| `overlap` | Hai element `[data-testid]` chồng lên nhau (intersection > 64px²) |
+
+**Playwright:**
+
+```ts
+import { assertLayoutIntegrity } from './helpers/assertLayoutIntegrity'
+
+await page.goto('/customers')
+await assertLayoutIntegrity(page)
+await assertLayoutIntegrity(page, { skipOverlap: true, minPageHeight: 120 })
+```
+
+File: `tests/e2e/helpers/layoutIntegrity.ts` · wrapper: `assertLayoutIntegrity.ts`
+
+**Khuyến nghị:** gọi `assertLayoutIntegrity` ngay sau `visit` + mock API xong trong smoke/functional spec — bắt lỗi layout sớm trước khi assert nghiệp vụ.
+
+**Skip mặc định:** `app-toast*`, `app-dialog*` (overlay cố định).
+
 ---
 
 ## Tài liệu liên quan
 
-- [README.md](../README.md) — setup, Docker, Cypress
+- [README.md](../README.md) — setup, Docker, Playwright
 - [ARCHITECTURE.md](./ARCHITECTURE.md) — kiến trúc 4 tầng
-- `cypress/e2e/login.cy.ts` — ví dụ spec dùng `getByTestId`
+- `tests/e2e/login.spec.ts` — ví dụ spec dùng `getByTestId`
 - `utils/testId.ts` — helper map prop → attribute

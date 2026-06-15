@@ -88,35 +88,27 @@ pnpm test:unit:coverage
 
 ---
 
-## Cypress (e2e)
+## Playwright (e2e)
 
-**Quy ước selector:** mọi page/module phải gắn `data-testid` theo [docs/E2E-TESTIDS.md](docs/E2E-TESTIDS.md) **trước** khi viết spec. Prop Vue `testId` → HTML `data-testid` (shared UI: `Button`, `Input`, `FormField`, `Dialog`, `BreadcrumbNav`, …).
-
-**Cách khuyến nghị** — tự bật Nuxt dev trên port **3005** rồi chạy Cypress (dùng `start-server-and-test`):
+**Quy ước selector:** mọi page/module phải gắn `data-testid` theo [docs/E2E-TESTIDS.md](docs/E2E-TESTIDS.md) **trước** khi viết spec. Prop Vue `testId` → HTML `data-testid`.
 
 ```bash
 pnpm install
-pnpm test:e2e
+pnpm test:e2e              # Nuxt E2E port 3005 + Playwright headless
+pnpm test:e2e:ui           # UI tương tác
+pnpm test:e2e:report       # mở HTML report
 ```
 
-**Chạy Cypress khi app đã chạy sẵn** (ví dụ `pnpm dev` ở port khác):
+**App đã chạy sẵn / remote:**
 
 ```bash
-export CYPRESS_BASE_URL=http://127.0.0.1:3004
-pnpm cypress:run
-# hoặc mở UI tương tác
-pnpm cypress:open
+PLAYWRIGHT_SKIP_WEBSERVER=1 PLAYWRIGHT_BASE_URL=http://127.0.0.1:3004 pnpm exec playwright test
+PLAYWRIGHT_SKIP_WEBSERVER=1 PLAYWRIGHT_BASE_URL=https://portal.example.com pnpm test:e2e:remote
 ```
 
-**Chỉ định host từ xa** (portal đã deploy, không dùng dev server local):
+E2E dùng build dir `.nuxt-e2e` + `NUXT_E2E_PORT` (mặc định `3005`) — tách khỏi `pnpm dev` / `NUXT_PORT`.
 
-```bash
-CYPRESS_BASE_URL=https://portal.example.com pnpm test:e2e:remote
-```
-
-Mặc định `test:e2e:remote` dùng `http://portal.base.com` nếu không set biến môi trường.
-
-Trong spec, ưu tiên `cy.getByTestId('module-field-input')` (custom command trong `cypress/support/e2e.ts`). Ví dụ: `cypress/e2e/login.cy.ts` dùng prefix `auth-login-*`.
+Trong spec: `page.getByTestId()`, sau `goto` gọi `assertLayoutIntegrity(page)` — xem [docs/E2E-TESTIDS.md](docs/E2E-TESTIDS.md).
 
 ### Bước 1 — Chuẩn hóa FE trước E2E
 

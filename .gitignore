@@ -30,10 +30,13 @@ storybook-static
 stories/auto/
 
 # Cypress artifacts
-cypress/screenshots/
-cypress/videos/
-cypress/downloads/
-cypress/results/
+playwright-report/
+test-results/
+blob-report/
+playwright/.cache/
+
+# Nuxt E2E build dir (tách khỏi .nuxt dev)
+.nuxt-e2e
 
 # Local env files
 .env
