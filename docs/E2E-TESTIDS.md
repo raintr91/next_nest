@@ -1,8 +1,8 @@
 # E2E — Chuẩn hóa `data-testid` (Portal Base)
 
-Tài liệu quy ước gắn **`data-testid`** trên FE và viết Playwright E2E ổn định. Áp dụng **trước khi** viết hoặc mở rộng test E2E cho module/page mới.
+Tài liệu quy ước gắn **`data-testid`** trên FE và viết Playwright E2E ổn định. Áp dụng **trước khi** QA record Rapi hoặc viết Playwright.
 
-> **Quick link:** [README — Playwright](../README.md#playwright-e2e) · Helper: `utils/testId.ts`
+> **Quick link:** [README — Playwright](../README.md#playwright-e2e) · [Rapi Recorder — QA](./RAPI-RECORDER-QA.md) · Helper: `utils/testId.ts`
 
 ---
 

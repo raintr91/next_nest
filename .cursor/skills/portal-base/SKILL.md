@@ -3,18 +3,20 @@ name: portal-base
 description: >-
   Develop Portal Base (Nuxt 4): 4-layer architecture (composables → services →
   stores → models), UI component tiers, data-testid for Playwright E2E, and
-  layout integrity checks. Use when adding pages, forms, modules, shared UI,
-  E2E specs, or when the user mentions portal base, testId, data-testid, or
-  portal conventions.
+  layout integrity checks, or Rapi Recorder to Playwright conversion. Use when adding
+  pages, forms, modules, shared UI, E2E specs, converting QA Rapi scripts, or when
+  the user mentions portal base, testId, data-testid, Rapi, or portal conventions.
 ---
 
 # Portal Base (Nuxt 4)
 
 Auth-first Nuxt 4 portal. Stack: Vue 3, Pinia, vee-validate + Zod, shadcn-vue, Tailwind, Playwright E2E.
 
-**Docs in repo:** `docs/ARCHITECTURE.md`, `docs/E2E-TESTIDS.md`, `README.md`
+**Docs in repo:** `docs/ARCHITECTURE.md`, `docs/E2E-TESTIDS.md`, `docs/RAPI-RECORDER-QA.md`, `README.md`
 
-**Cursor rules (fallback khi tool không load skill):** `.cursor/rules/portal-base-*.mdc`
+**Cursor rules (fallback khi tool không load skill):** `.cursor/rules/portal-base-*.mdc`, `.cursor/rules/portal-rapi-playwright.mdc`
+
+**Rapi → Playwright (Dev/AI):** `.cursor/skills/portal-rapi-playwright/`
 
 ---
 
@@ -176,6 +178,8 @@ Hoặc dùng `utils/testId.ts` → `testIdAttr(testId)`, `testIdSuffix(testId, '
 ---
 
 ## 4. Playwright E2E
+
+Quy trình: **prototype mock (phase 1)** → QA record Rapi (phase 1.5) → Dev convert Playwright (phase 2.5~3). Xem `docs/RAPI-RECORDER-QA.md` (QA) và skill `portal-rapi-playwright` (convert).
 
 ```bash
 pnpm test:e2e          # port 3005, .nuxt-e2e

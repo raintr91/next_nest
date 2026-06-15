@@ -1,0 +1,34 @@
+---
+description: Portal — convert Rapi Recorder sang Playwright (Page Object, testId, Faker, storageState)
+globs: tests/e2e/**/*
+alwaysApply: false
+---
+
+# Rapi → Playwright (Dev / AI)
+
+QA rules: `docs/RAPI-RECORDER-QA.md` · Skill: `.cursor/skills/portal-rapi-playwright/`
+
+## Convert checklist
+
+1. `getByTestId` only — **không** xpath, css selector, nth-child
+2. UI qua **Page Object** (`tests/e2e/pages/`) — spec không `getByTestId` trực tiếp
+3. `auth.*` → login trong test; **còn lại** → `test.use({ storageState: 'tests/e2e/storage/admin.json' })`
+4. Literal data → `@faker-js/faker`
+5. Row cố định → `randomRow` helper
+6. File: `tests/e2e/{module}/{module.action.result}.spec.ts`
+7. Test độc lập, parallel-safe — không share mutable DB state
+8. Assertion map: Text→`toContainText`, Visible→`toBeVisible`, Hidden→`toBeHidden`, Class→`toHaveClass`, CSS→`toHaveCSS`
+
+## Cấm trong spec
+
+```ts
+page.locator('.btn')      // ❌
+page.locator('//div')     // ❌
+await page.fill('#email') // ❌
+```
+
+## Được trong Page Object
+
+```ts
+page.getByTestId('hotel-create-btn')  // ✅
+```

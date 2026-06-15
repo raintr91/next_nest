@@ -6,6 +6,8 @@ alwaysApply: false
 
 # Playwright E2E
 
+**QA record:** `docs/RAPI-RECORDER-QA.md` · **Convert Rapi:** `.cursor/skills/portal-rapi-playwright/`
+
 ```bash
 pnpm test:e2e          # .nuxt-e2e, port NUXT_E2E_PORT (3005)
 pnpm test:e2e:ui
