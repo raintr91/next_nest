@@ -1,0 +1,41 @@
+---
+description: Portal Base — giới hạn ~200 dòng/file, ~20 dòng/function; vượt thì tách
+alwaysApply: true
+---
+
+# Kích thước code (Portal)
+
+Ngưỡng **mềm** — ưu tiên khi thêm/sửa code. Vượt ngưỡng → **tách file/function** trong cùng PR, không để nợ.
+
+## File — ~200 dòng
+
+Đếm cả template + script + style (file `.vue`), hoặc toàn file `.ts`.
+
+| Vượt ~200 | Tách theo |
+|-----------|-----------|
+| Page `.vue` | Composable + sub-component |
+| Composable | Nhiều composable nhỏ (`useXxxForm`, `useXxxList`) |
+| Service | File theo aggregate hoặc nhóm endpoint |
+| Store | Store theo domain; action phức tạp → service |
+| Spec E2E | Page Object + helper; mỗi testcase 1 file |
+
+**Không** pad file bằng comment/block trống để “đủ dòng”.
+
+## Function / method — ~20 dòng
+
+Áp dụng: composable, service method, store action, helper, setup logic trong `<script setup>`.
+
+| Vượt ~20 | Tách thành |
+|----------|------------|
+| Submit handler dài | `buildPayload()`, `validateBeforeSubmit()`, `handleApiError()` |
+| Map/transform | `mapRowToForm()`, `normalizeFilters()` |
+| Template logic | Computed hoặc helper pure function |
+
+Arrow function trong template → tránh; đưa vào composable.
+
+## Ngoại lệ (chấp nhận được)
+
+- Generated/stub file — regenerate thay vì tách tay
+- Config khai báo dài nhưng không có logic (`routes`, zod schema flat) — cân nhắc file riêng nếu > ~250
+
+Skill: `.cursor/skills/portal-base/SKILL.md` · Component: `portal-component-split.mdc`

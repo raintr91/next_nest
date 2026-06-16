@@ -1,0 +1,59 @@
+---
+description: Portal Base — tách component hợp lý, tránh all-in-one page
+globs: pages/**/*,components/**/*
+alwaysApply: false
+---
+
+# Tách component (Portal)
+
+**Không** viết all-in-one: page dài gồm header + filter + table + form + dialog trong một file.
+
+## Khi nào tách
+
+| Dấu hiệu | Hành động |
+|----------|-----------|
+| Page > ~150 dòng (template + script) | Tách section thành organism/molecule |
+| Block lặp ≥ 2 lần | Component dùng chung |
+| Form nhiều section | `MoXxxSection.vue` hoặc field group |
+| Dialog/modal riêng flow | `MoXxxDialog.vue` / `ConfirmDialog` + composable |
+| Table + toolbar + pagination | `DataResourceTable` + `DataPageHeader` |
+
+## Tier (giữ convention portal)
+
+```
+pages/           → orchestration: layout, composable, testId, wire children
+organisms/       → section lớn (table shell, form wizard step)
+molecules/ (Mo*) → nhóm field, breadcrumb, filter bar
+components/ui/   → primitive shadcn — không business logic
+```
+
+## Page mẫu (mỏng)
+
+```vue
+<script setup lang="ts">
+const { items, loading, load, openCreate } = useHotelList()
+onMounted(load)
+</script>
+
+<template>
+  <HotelListPageShell
+    test-id="hotels-page"
+    :items="items"
+    :loading="loading"
+    @create="openCreate"
+  />
+</template>
+```
+
+Logic list/create/edit → **composable**; markup section → **component con**.
+
+## Tránh
+
+- ❌ 400+ dòng một `.vue` với mọi handler inline
+- ❌ Copy-paste markup giữa pages — extract molecule
+- ❌ Gọi `$apiFetch` trong component con — qua composable/service
+
+## Cùng với giới hạn dòng
+
+- Function ~20 dòng → helper/composable (xem `portal-code-size.mdc`)
+- File ~200 dòng → tách component + file `.ts` kèm theo

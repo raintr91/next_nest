@@ -14,7 +14,7 @@ Auth-first Nuxt 4 portal. Stack: Vue 3, Pinia, vee-validate + Zod, shadcn-vue, T
 
 **Docs in repo:** `docs/ARCHITECTURE.md`, `docs/E2E-TESTIDS.md`, `docs/RAPI-RECORDER-QA.md`, `README.md`
 
-**Cursor rules (fallback khi tool không load skill):** `.cursor/rules/portal-base-*.mdc`, `.cursor/rules/portal-rapi-playwright.mdc`
+**Cursor rules (fallback khi tool không load skill):** `.cursor/rules/portal-base-*.mdc`, `.cursor/rules/portal-rapi-playwright.mdc`, `.cursor/rules/portal-code-size.mdc`, `.cursor/rules/portal-component-split.mdc`
 
 **Rapi → Playwright (Dev/AI):** `.cursor/skills/portal-rapi-playwright/`
 
@@ -103,6 +103,17 @@ const { onSubmit, errors, apiError, isSubmitting } = useApiForm<LoginRequest>({
 ### Legacy (không dùng cho feature mới)
 
 `layouts/themes/*`, `dataTheme/*`, theme demo navbars — cleanup dần, không copy pattern.
+
+---
+
+## 2b. Kích thước code & tách component
+
+| Giới hạn | Ngưỡng | Vượt thì |
+|----------|--------|----------|
+| **File** | ~200 dòng | Tách composable, service, sub-component, Page Object |
+| **Function** | ~20 dòng | Extract helper / private function / computed |
+
+**Component:** không all-in-one page. Page mỏng → composable + `organisms/` / `molecules/`. Block lặp hoặc form nhiều section → tách component. Chi tiết: `portal-component-split.mdc`.
 
 ---
 
@@ -223,6 +234,7 @@ Phát hiện: `overflow` (tràn text), `collapsed` (shell rỗng/co), `overlap` 
 
 - [ ] Không `$apiFetch` trong page/component
 - [ ] `models/` không import ngược tầng trên
+- [ ] File ~≤200 dòng, function ~≤20 dòng; page không all-in-one
 - [ ] `testId` đủ cho E2E
 - [ ] Không selector `input#id` trong spec
 - [ ] `assertLayoutIntegrity` trong smoke/functional spec

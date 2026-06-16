@@ -25,6 +25,11 @@ Nuxt 4 auth-first portal. Chi tiết: `docs/ARCHITECTURE.md`, `docs/E2E-TESTIDS.
 
 Không copy legacy: `layouts/themes/*`, `dataTheme/*`.
 
+## Kích thước & component
+
+- File ~**200** dòng · function ~**20** dòng — vượt thì tách (`portal-code-size.mdc`)
+- Page/component: không all-in-one — tách organism/molecule (`portal-component-split.mdc`)
+
 ## E2E
 
 Playwright only (`tests/e2e/`). Gắn `data-testid` **trước** viết spec. `page.getByTestId()`.
