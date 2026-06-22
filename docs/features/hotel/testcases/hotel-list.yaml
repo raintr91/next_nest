@@ -1,0 +1,51 @@
+id: hotel-list
+feature: hotel
+title: View hotel list
+type: e2e
+priority: must
+requirementIds:
+  - REQ-HOTEL-001
+route:
+  path: /hotels
+  auth: required
+testIds:
+  required:
+    - hotels-page
+    - hotels-page-title
+    - hotels-table
+setup:
+  session: mockAuthenticatedSession
+  mocks:
+    - method: GET
+      path: /api/hotels
+      response: hotelListSuccess
+data: {}
+steps:
+  - action: goto
+    path: /hotels
+  - action: waitFor
+    testId: hotels-table
+assertions:
+  ui:
+    - testId: hotels-page-title
+      contains: Hotels
+  semantic:
+    ready:
+      rootTestId: hotels-page
+      waitForTestIds:
+        - hotels-table
+      waitForFonts: true
+      waitForImages: visible
+    level1:
+      - toHaveNoConsoleErrors
+      - toHaveNoHorizontalScroll
+      - toHaveNoBrokenImages
+      - toHaveNoTextOverflow
+    layout:
+      - toHaveValidTableLayout
+    accessibility:
+      - toHaveNoA11yViolations
+      - toHaveValidAccessibleNames
+expected:
+  - Hotel table is visible.
+  - Page has no semantic UI issues.

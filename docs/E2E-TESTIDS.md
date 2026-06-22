@@ -2,7 +2,7 @@
 
 Tài liệu quy ước gắn **`data-testid`** trên FE và viết Playwright E2E ổn định. Áp dụng **trước khi** QA record Rapi hoặc viết Playwright.
 
-> **Quick link:** [README — Playwright](../README.md#playwright-e2e) · [Rapi Recorder — QA](./RAPI-RECORDER-QA.md) · Helper: `utils/testId.ts`
+> **Quick link:** [Docs Home](./index.md) · [Rapi Recorder — QA](./RAPI-RECORDER-QA.md) · Helper: `utils/testId.ts`
 
 ---
 
@@ -222,7 +222,7 @@ File: `tests/e2e/helpers/layoutIntegrity.ts` · wrapper: `assertLayoutIntegrity.
 
 ## Tài liệu liên quan
 
-- [README.md](../README.md) — setup, Docker, Playwright
+- [Docs Home](./index.md) — setup docs entrypoint
 - [ARCHITECTURE.md](./ARCHITECTURE.md) — kiến trúc 4 tầng
 - `tests/e2e/login.spec.ts` — ví dụ spec dùng `getByTestId`
 - `utils/testId.ts` — helper map prop → attribute

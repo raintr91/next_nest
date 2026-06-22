@@ -1,0 +1,16 @@
+---
+description: /design UI prototype — mock data only, no real API
+globs: "{pages,components,composables,mocks}/**/*.{vue,ts}"
+alwaysApply: false
+---
+
+# /design — Prototype
+
+Skill: `.cursor/skills/team-phase2-ui-prototype/SKILL.md`
+
+- Mock: `mocks/*.mock.ts` + `useXxxMock` composable
+- Source requirement: `docs/features/{slug}/spec.yaml`
+- **Không** `$apiFetch`, **không** `services/*.service.ts` HTTP thật
+- Nếu mock đã mô phỏng API thì reuse contract như API thật: detail API dùng cho detail/edit/duplicate; block/tab entity độc lập thì tách API riêng theo block, không gom vào 1 payload lớn.
+- Gắn `data-testid` sớm (`docs/E2E-TESTIDS.md`)
+- Verify: `npm run dev`, `npx nuxi typecheck`

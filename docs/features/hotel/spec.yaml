@@ -1,0 +1,37 @@
+id: hotel
+title: Hotel Management
+status: draft
+owner: portal-team
+summary: Manage hotel records in the portal, including list, search, create, and validation behavior.
+requirements:
+  - id: REQ-HOTEL-001
+    title: View hotel list
+    description: User can view a paginated list of hotels.
+    priority: must
+  - id: REQ-HOTEL-002
+    title: Create hotel
+    description: User can create a hotel with required fields.
+    priority: must
+  - id: REQ-HOTEL-003
+    title: Validate create form
+    description: User sees validation errors when required fields are missing or invalid.
+    priority: must
+ui:
+  routes:
+    - path: /hotels
+      pageTestId: hotels-page
+    - path: /hotels/create
+      pageTestId: hotel-create-page
+api:
+  endpoints:
+    - method: GET
+      path: /api/hotels
+    - method: POST
+      path: /api/hotels
+acceptance:
+  - Hotel list page renders without semantic UI issues.
+  - Create form validates required fields.
+  - Successful create shows a success toast and returns to the hotel list.
+notes:
+  - YAML is the source of truth for AI/dev.
+  - Markdown in generated/ is for BA/QA review.

@@ -1,0 +1,15 @@
+---
+description: Unit Test — Vitest logic tests for Portal
+globs: "{composables,services,models,validations,utils,stores,tests/unit}/**/*.{ts,vue}"
+alwaysApply: false
+---
+
+# /unit — Vitest Unit Tests
+
+Skill: `.cursor/skills/team-unit-vitest/SKILL.md`
+
+- Use for logic tests: composables, services, stores, models, validations, utils.
+- Prefer pure helper extraction when logic is hard to test.
+- Mock `$apiFetch` for service/composable tests.
+- Do not use for browser layout, accessibility, visual, or Playwright flows.
+- Verify: `pnpm test:unit` or scoped `pnpm exec vitest run <path>`.

@@ -1,0 +1,50 @@
+{
+  "$schema": "feature list for team harness — copy to feature_list.json per feature",
+  "feature": "example-feature",
+  "slug": "example-feature",
+  "current_phase": 1,
+  "items": [
+    {
+      "id": "phase1-design",
+      "phase": 1,
+      "title": "Design doc complete",
+      "status": "pending",
+      "evidence": "docs/features/example-feature/01-design.md reviewed"
+    },
+    {
+      "id": "phase2-list-ui",
+      "phase": 2,
+      "title": "List screen with mock",
+      "status": "pending",
+      "depends_on": ["phase1-design"]
+    },
+    {
+      "id": "phase2-create-ui",
+      "phase": 2,
+      "title": "Create form with mock",
+      "status": "pending",
+      "depends_on": ["phase1-design"]
+    },
+    {
+      "id": "phase3a-e2e",
+      "phase": 3,
+      "title": "Playwright specs green",
+      "status": "pending",
+      "depends_on": ["phase2-list-ui", "phase2-create-ui"]
+    },
+    {
+      "id": "phase3b-api",
+      "phase": 3,
+      "title": "Backend module + tests",
+      "status": "pending",
+      "depends_on": ["phase1-design"]
+    },
+    {
+      "id": "phase4-integration",
+      "phase": 4,
+      "title": "Real API wired, E2E green",
+      "status": "pending",
+      "depends_on": ["phase3a-e2e", "phase3b-api"]
+    }
+  ]
+}

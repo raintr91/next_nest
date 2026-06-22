@@ -1,0 +1,14 @@
+---
+description: /test — Playwright E2E refinement
+globs: tests/e2e/**/*
+alwaysApply: false
+---
+
+# /test — E2E Refinement
+
+Skill: `.cursor/skills/team-phase3-e2e/SKILL.md`
+
+- `getByTestId()` only · Page Object · Faker
+- Testcase source: `docs/features/{slug}/testcases/*.yaml`
+- Render BA/QA review docs: `pnpm docs:render`
+- Verify: `npx playwright test` (scope feature) trước khi done

@@ -1,0 +1,43 @@
+id: hotel-create-validation
+feature: hotel
+title: Create hotel validation
+type: e2e
+priority: must
+requirementIds:
+  - REQ-HOTEL-003
+route:
+  path: /hotels/create
+  auth: required
+testIds:
+  required:
+    - hotel-create-page
+    - hotel-name-input
+    - hotel-save-btn
+    - hotel-name-error
+setup:
+  session: mockAuthenticatedSession
+  mocks: []
+data: {}
+steps:
+  - action: goto
+    path: /hotels/create
+  - action: click
+    testId: hotel-save-btn
+assertions:
+  ui:
+    - testId: hotel-name-error
+      visible: true
+  semantic:
+    ready:
+      rootTestId: hotel-create-page
+      waitForFonts: true
+    level1:
+      - toHaveNoConsoleErrors
+      - toHaveNoHorizontalScroll
+      - toHaveNoTextOverflow
+    accessibility:
+      - toHaveValidAccessibleNames
+      - toHaveValidAria
+expected:
+  - Required field validation error is visible.
+  - No create API request is sent.

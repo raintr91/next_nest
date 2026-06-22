@@ -1,0 +1,23 @@
+id: feature-slug
+title: Feature Title
+status: draft
+owner: portal-team
+summary: Short business summary for BA, QA, dev, and AI.
+requirements:
+  - id: REQ-FEATURE-001
+    title: Main behavior
+    description: User can complete the main behavior.
+    priority: must
+ui:
+  routes:
+    - path: /feature
+      pageTestId: feature-page
+api:
+  endpoints:
+    - method: GET
+      path: /api/feature
+acceptance:
+  - Feature page renders successfully.
+  - Main behavior works end to end.
+notes:
+  - YAML is the source of truth. Render Markdown for BA/QA review.

@@ -44,3 +44,4 @@ playwright/.cache/
 !.env.example
 !docker/.env.example
 node_modules
+docker/.env

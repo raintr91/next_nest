@@ -1,0 +1,35 @@
+id: feature-main-success
+feature: feature-slug
+title: Main flow succeeds
+type: e2e
+priority: must
+requirementIds:
+  - REQ-FEATURE-001
+route:
+  path: /feature
+  auth: required
+testIds:
+  required:
+    - feature-page
+    - feature-submit-btn
+setup:
+  session: mockAuthenticatedSession
+  mocks: []
+data: {}
+steps:
+  - action: goto
+    path: /feature
+  - action: click
+    testId: feature-submit-btn
+assertions:
+  semantic:
+    ready:
+      rootTestId: feature-page
+      waitForFonts: true
+      waitForImages: visible
+    level1:
+      - toHaveNoConsoleErrors
+      - toHaveNoHorizontalScroll
+      - toHaveNoBrokenImages
+expected:
+  - Main success state is visible.

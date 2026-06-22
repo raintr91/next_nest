@@ -1,0 +1,16 @@
+---
+description: /model — Portal entity models, Zod API schema, and TypeScript types only
+globs: "models/**/*.{ts}"
+alwaysApply: false
+---
+
+# /model — Entity Models
+
+Skill: `.cursor/skills/team-model/SKILL.md`
+
+- Scope only: `models/`.
+- Use during `/design` or before `/wire` when entity contracts need to be created/refined.
+- Create/update Zod API contract schemas and `z.infer` TypeScript types.
+- Do not edit pages, components, services, composables, stores, validations, or tests.
+- Do not call `$apiFetch`.
+- Keep API model schema looser than UI validation schema when appropriate.

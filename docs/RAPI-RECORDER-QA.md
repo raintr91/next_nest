@@ -1,6 +1,6 @@
 # Rapi Recorder — Hướng dẫn QA
 
-Tài liệu dành cho **QA không biết code**: cách đặt tên test case, record flow trên prototype, và thêm assertion bằng **Rapi Recorder**. Dev/AI sẽ chuyển script Rapi sang Playwright theo [skill convert](../.cursor/skills/portal-rapi-playwright/SKILL.md).
+Tài liệu dành cho **QA không biết code**: cách đặt tên test case, record flow trên prototype, và thêm assertion bằng **Rapi Recorder**. Dev/AI sẽ chuyển script Rapi sang Playwright theo skill `portal-rapi-playwright`.
 
 **Liên quan:** [E2E-TESTIDS.md](./E2E-TESTIDS.md) (FE phải có `data-testid` trước khi record) · [ARCHITECTURE.md](./ARCHITECTURE.md)
 

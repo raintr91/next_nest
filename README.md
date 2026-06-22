@@ -166,3 +166,13 @@ Một số theme demo cũ chưa được dùng trong flow auth tối giản:
 
 Các mục này không chặn flow auth hiện tại, có thể clean-up theo đợt để giảm nhiễu codebase.
 
+## Team AI workflow (4 phase)
+
+Hướng dẫn harness + rules/skills local: [`docs/TEAM-AI-WORKFLOW.md`](docs/TEAM-AI-WORKFLOW.md)
+
+Cài vendor (superpowers, karpathy, harness, matt pocock) — sync WSL + Windows:
+
+```bash
+bash scripts/install-ai-harness-vendor.sh
+```
+

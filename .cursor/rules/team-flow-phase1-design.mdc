@@ -1,0 +1,15 @@
+---
+description: /design discovery spec — YAML spec/testcase round 1
+globs: docs/features/**/*
+alwaysApply: false
+---
+
+# /design — Discovery Spec
+
+Skill: `~/.cursor/skills/team-phase1-brainstorm/SKILL.md`
+
+- Output: `docs/features/{slug}/spec.yaml` (requirement, UI route, API contract, acceptance)
+- Also draft testcase round 1: `docs/features/{slug}/testcases/*.yaml`
+- Render review docs: `pnpm docs:render` → `docs/features/{slug}/generated/spec.md`
+- Vendor (local): `skills-vendor/superpowers/skills/brainstorming/SKILL.md`
+- **Không** tạo `.vue`, migration, E2E

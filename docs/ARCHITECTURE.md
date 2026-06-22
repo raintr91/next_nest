@@ -330,7 +330,7 @@ pnpm ui:add button
 
 ## 8. Tài liệu liên quan
 
-- [README.md](../README.md) — setup, Docker, routes
+- [Docs Home](./index.md) — entrypoint docs local/VitePress
 - [E2E-TESTIDS.md](./E2E-TESTIDS.md) — quy ước `data-testid` + Cypress
-- [composables/forms/README.md](../composables/forms/README.md) — spec `useApiForm` (chưa implement)
+- `composables/forms/README.md` — spec `useApiForm` (chưa implement)
 - `plugins/fetch.ts` + `utils/fetchUtils.ts` — HTTP client

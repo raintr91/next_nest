@@ -1,0 +1,25 @@
+---
+description: Team command router for /design, /model, /test, /api, /wire, /unit — KHÔNG auto-load mặc định.
+alwaysApply: false
+---
+
+# Team AI Flow (router)
+
+**Opt-in** — user gọi command hoặc nói phase/harness/feature mới thì agent mới đọc skill.
+
+→ Router: `~/.cursor/skills/team-harness/SKILL.md`
+→ Doc: `docs/TEAM-AI-WORKFLOW.md`  
+→ Vendor local: `~/.cursor/skills-vendor/INDEX.md`
+
+Command map:
+
+| Command | Work |
+|---|---|
+| `/design` | discovery + mock UI + `spec.yaml` + testcase YAML round 1 |
+| `/model` | create/update entity Zod schemas and TS types in `models/` only |
+| `/test` | refine testcase YAML + Playwright E2E |
+| `/api` | backend API |
+| `/wire` | connect UI to real API |
+| `/unit` | Vitest unit tests for logic |
+
+Một session = **một** command/phase skill. State: `.harness/progress.md`.
