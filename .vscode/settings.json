@@ -1,3 +1,38 @@
 {
-    "git.ignoreLimitWarning": true
+  "git.ignoreLimitWarning": true,
+
+  "files.watcherExclude": {
+    "**/node_modules/**": true,
+    "**/.pnpm-store/**": true,
+    "**/.nuxt/**": true,
+    "**/.nuxt-e2e/**": true,
+    "**/.output/**": true,
+    "**/.git/objects/**": true,
+    "**/coverage/**": true,
+    "**/playwright-report/**": true,
+    "**/test-results/**": true,
+    "**/storybook-static/**": true,
+    "**/--host/**": true
+  },
+
+  "files.exclude": {
+    "**/.pnpm-store": true,
+    "**/--host": true
+  },
+
+  "search.exclude": {
+    "**/node_modules": true,
+    "**/.pnpm-store": true,
+    "**/.nuxt": true,
+    "**/.output": true,
+    "**/coverage": true,
+    "**/playwright-report": true,
+    "**/test-results": true,
+    "**/storybook-static": true,
+    "**/--host": true
+  },
+
+  "typescript.tsserver.maxTsServerMemory": 4096,
+
+  "cursor.general.enableShadowWorkspace": false
 }

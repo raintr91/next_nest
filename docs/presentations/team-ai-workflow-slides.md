@@ -6,21 +6,30 @@
 
 ## Agenda
 
-1. Vì sao cần workflow mới
-2. Ý tưởng cốt lõi: YAML backbone + early feedback
+0. Vì sao cần workflow mới
+   - vấn đề hiện tại
+   - ý tưởng cốt lõi
+   - tư duy tham khảo
+1. Ý tưởng mới & deliverable
+   - bóc tách tài liệu kỹ thuật và deliverable
+   - YAML backbone cho Dev/AI
+   - spec, testcase, generated Markdown
+   - automation testing: E2E + unit test
+2. Workflow phases
+   - Phase Design: `/design`, `/model`
+   - Phase Implement: `/test`, `/api`
+   - Phase Integration: `/wire`
+   - Phase Unit Test: `/unit`
 3. Tổng quan Portal Base
    - nền tảng kỹ thuật
    - cấu trúc tầng
    - cách chạy mock UI/docs local
-4. Workflow delivery resources
-   - `spec.yaml`
-   - `testcases/*.yaml`
-   - generated Markdown
-5. Commands: `/design`, `/test`, `/api`, `/wire`, `/unit`
+4. Rules & Skills
+5. Kết luận
 
 ---
 
-## Vấn Đề Hiện Tại
+## 0. Vấn Đề Hiện Tại
 
 - Dev/AI cần tài liệu kỹ thuật có cấu trúc, không phải mô tả tự do.
 - Chưa có đủ unit test cho logic quan trọng.
@@ -34,7 +43,7 @@ Mục tiêu: review sớm hơn, release ít rủi ro hơn, giảm manual regress
 
 ---
 
-## Ý Tưởng Cốt Lõi
+## 0.1 Ý Tưởng Cốt Lõi
 
 ```text
 Bullet yêu cầu
@@ -58,7 +67,7 @@ Automation test là safety net cho release.
 
 ---
 
-## Tham Khảo Tư Duy
+## 0.2 Tham Khảo Tư Duy
 
 - Harness workflow: chia phase/command rõ, session nào làm đúng việc session đó.
 - Progressive disclosure: chỉ load skill/rule cần cho command hiện tại.
@@ -69,300 +78,16 @@ Delivery ngoài phase như Excel/testcase export có thể làm task riêng: bui
 
 ---
 
-## 1. Tổng Quan Portal Base
+## 1. Ý Tưởng Mới & Deliverable
 
-Mục tiêu base:
+Bóc tách 2 nhóm tài liệu:
 
-- FE portal chạy nhanh bằng mock UI.
-- Component dùng lại qua shadcn + molecules + organisms.
-- YAML/spec/testcase làm xương sống cho AI/dev.
-- BA/QA review bằng mock UI + generated Markdown.
+- **Tài liệu kỹ thuật**: có cấu trúc để Dev/AI hiểu và giao tiếp tốt hơn.
+- **Deliverable**: Excel, Docx, testcase template cũ, spec cũ, user guide nếu cần.
 
----
+Tài liệu kỹ thuật dùng YAML làm lõi vận hành cho AI + tech. Deliverable có thể được convert riêng từ YAML hoặc generated Markdown bằng con người, AI, hoặc script.
 
-## 1.1 Portal Base Dựa Trên Gì
-
-| Nền tảng | Vai trò |
-|---|---|
-| [Nuxt 4](https://nuxt.com/) | App framework Vue, routing, SSR/SPA, module ecosystem |
-| [shadcn-vue](https://www.shadcn-vue.com/) | UI primitive, Tailwind token, component copy-in dễ custom |
-| Molecules/Organisms | Component tầng team dựng sẵn, tránh page all-in-one |
-| Vitest | Unit test logic |
-| Playwright | E2E browser automation |
-| Storybook | UI catalog/review component |
-| VitePress | Review docs local đẹp, link click được |
-
----
-
-## Nuxt 4 Trong Base
-
-Ưu điểm:
-
-- File-based routing, Vue 3, ecosystem mạnh.
-- Hợp với portal auth-first.
-- Dễ chia 4 tầng: page/component → composable → service/store → model/validation.
-
-Lưu ý:
-
-- Cần giữ page mỏng, không gọi API trực tiếp trong component.
-- Cần discipline về `data-testid` và E2E.
-
-Link: [Nuxt docs](https://nuxt.com/docs)
-
----
-
-## shadcn + Component Tiers
-
-```text
-components/ui/          primitive shadcn
-components/molecules/   Mo* field/group/navigation
-components/organisms/   Data*, OrGlobal*
-pages/                  orchestration only
-```
-
-Ưu điểm:
-
-- Token Tailwind/shadcn rõ: color, radius, border, ring.
-- Copy-in component, dễ customize theo design system.
-- E2E có thể assert design token Level 3.
-
-Lưu ý: không copy legacy theme demo vào feature mới.
-
----
-
-## Common Helpers Trong Base
-
-- `$apiFetch` wrapper: gọi API qua service, không gọi trong page/component.
-- `models/`: API contract + types.
-- `validations/`: form schema chặt hơn API.
-- `useApiForm`: map validation + API error.
-- `testId` helpers: chuẩn hóa `data-testid`.
-- Semantic UI E2E helpers:
-  - no console errors
-  - no horizontal scroll
-  - no broken images
-  - no text overflow
-  - layout/table/grid
-  - axe accessibility
-  - shadcn design token
-
----
-
-## 1.5 Cấu Trúc Base
-
-```text
-pages/components
-  ↓
-composables
-  ↓
-services + stores
-  ↓
-models + validations
-  ↓
-$apiFetch
-```
-
-UI tiers:
-
-```text
-components/ui        shadcn primitives
-components/molecules Mo*
-components/organisms Data*, OrGlobal*
-```
-
----
-
-## 1.6 Chạy Local Mock UI
-
-Mục tiêu: BA/QA xem màn hình prototype trên host, không cần Docker/domain.
-
-Dev chạy:
-
-```bash
-pnpm install
-pnpm dev
-```
-
-Sau đó mở URL local từ terminal để review mock UI.
-
----
-
-## 1.7 Xem Docs Đẹp Bằng VitePress
-
-YAML được render sang Markdown bằng script có sẵn:
-
-```bash
-pnpm docs:render
-pnpm docs:dev
-```
-
-Script: `scripts/docs/render-docs.mjs`
-
-Output:
-
-```text
-docs/features/{slug}/generated/
-├── README.md
-├── spec.md
-└── testcases/*.md
-```
-
-Build static:
-
-```bash
-pnpm docs:build
-pnpm docs:preview
-```
-
-VitePress giúp link click được, có sidebar/search, dễ review hơn IDE Markdown preview.
-
----
-
-## Testing Strategy
-
-| Loại test | Tool | Mục đích |
-|---|---|---|
-| Unit | Vitest | Logic nhỏ: validation, service parser, composable state |
-| UI catalog | Storybook | Review component, a11y addon, visual confidence |
-| E2E | Playwright | User flow thật trên browser |
-| Accessibility scan | axe + Playwright | WCAG/ARIA/label/contrast tự động |
-
-Không dùng E2E cho mọi edge nhỏ. Logic thuần nên có `/unit`.
-
----
-
-## E2E Test Là Gì
-
-E2E (End-to-End) test mô phỏng hành vi người dùng thật trên browser:
-
-- mở trang
-- login hoặc dùng session
-- click button
-- fill form
-- submit
-- chờ API/mock response
-- kiểm tra URL, text, table, toast, dialog
-
-Unit test kiểm tra logic nhỏ. E2E kiểm tra flow tích hợp từ UI đến behavior cuối.
-
----
-
-## Các Tool E2E Automation Phổ Biến
-
-| Tool | Điểm mạnh | Lưu ý |
-|---|---|---|
-| Playwright | Modern, multi-browser, auto-wait, trace/report tốt | Cần discipline selector/test data |
-| Cypress | DX tốt, debug trực quan, ecosystem mạnh | Một số scenario browser/context phức tạp kém linh hoạt hơn |
-| Selenium | Chuẩn lâu đời, nhiều ngôn ngữ/browser | Setup/debug thường nặng hơn |
-| WebdriverIO | Linh hoạt, WebDriver ecosystem | Config/tooling nhiều hơn |
-
-Base chọn Playwright để phù hợp E2E + CI + API mocking + trace debugging.
-
----
-
-## E2E Automation — Lợi Ích & Trade-off
-
-Lợi ích:
-
-- Giảm regression khi release.
-- Cover flow nghiệp vụ chính lặp lại được.
-- Tăng coverage IT/release bằng E2E automation chạy toàn project.
-- Giảm phụ thuộc vào việc chọn lọc case thủ công theo ảnh hưởng release.
-- Bắt lỗi tích hợp mà unit test không thấy.
-- Trace/screenshot/report giúp debug nhanh.
-- QA tập trung case mới/thông minh hơn thay vì retest lặp lại.
-
-Trade-off:
-
-- Chạy chậm hơn unit test.
-- Dễ flaky nếu selector/test data không chuẩn.
-- Không nên cover mọi edge nhỏ bằng E2E.
-
----
-
-## Quan Điểm Test Automation Của Base
-
-```text
-Vitest unit
-  → logic nhỏ, nhanh, nhiều edge cases
-
-Playwright E2E
-  → flow nghiệp vụ chính, regression release
-
-axe accessibility
-  → WCAG/ARIA/label/contrast phổ biến
-
-Semantic UI helpers
-  → layout, overflow, broken image, shadcn token
-```
-
-Mục tiêu:
-
-- Giảm effort regression test thủ công bằng con người.
-- Đưa regression quan trọng thành E2E automation chạy trong CI/CD.
-- Tăng coverage IT khi release bằng test toàn project, không chỉ chọn lọc case theo ảnh hưởng.
-- Chuyển effort QA từ “retest lặp lại” sang “thiết kế case tốt hơn”.
-
----
-
-## Vì Sao Playwright
-
-So với Cypress/Selenium:
-
-- Browser automation hiện đại, chạy Chromium/Firefox/WebKit.
-- Locator tốt, auto-wait tốt.
-- Trace viewer, HTML report, screenshot/video hữu ích khi debug.
-- Phù hợp E2E + API mocking + CI.
-- Tích hợp tốt với `@axe-core/playwright`.
-
-Link: [Playwright docs](https://playwright.dev/docs/intro)
-
----
-
-## Quan Điểm Accessibility
-
-Automated scan không chứng minh UI fully accessible, nhưng bắt được nhiều lỗi phổ biến:
-
-- button/link không có accessible name
-- form control thiếu label
-- ARIA sai role/attribute
-- duplicate id
-- color contrast
-- image thiếu alt
-
-Dùng 2 lớp:
-
-- `@axe-core/playwright`: WCAG/ARIA/accessibility tree.
-- custom semantic UI helpers: layout geometry như text overflow, overlap, table/grid layout, broken images.
-
-Links:
-
-- [Playwright accessibility testing](https://playwright.dev/docs/accessibility-testing)
-- [axe-core](https://github.com/dequelabs/axe-core)
-- [Cypress accessibility testing](https://docs.cypress.io/app/guides/accessibility-testing)
-
----
-
-## Storybook Trong Base
-
-Mục đích:
-
-- Xem component độc lập.
-- Review state: default, loading, error, disabled.
-- Dễ demo Molecules/Organisms cho team.
-- Có thể kết hợp addon a11y.
-
-Commands:
-
-```bash
-pnpm storybook
-pnpm storybook:build
-pnpm storybook:gen
-```
-
----
-
-## 2. Delivery Resources
+Chi tiết nền tảng kỹ thuật xem phần [3. Tổng Quan Portal Base](#_3-tổng-quan-portal-base).
 
 ```text
 docs/features/{slug}/
@@ -373,13 +98,39 @@ docs/features/{slug}/
     └── testcases/*.md         # BA/QA review
 ```
 
-Excel/testcase export nếu cần sẽ là task riêng, build từ YAML hoặc generated Markdown.
-
-Không để Excel là source of truth.
+Không để Excel/Docx là source of truth.
 
 ---
 
-## Spec YAML Là Gì
+## 1.1 YAML Là Gì?
+
+YAML là format dữ liệu có cấu trúc, dễ đọc hơn JSON cho tài liệu kỹ thuật.
+
+Vì sao dùng YAML:
+
+- Có tổ chức key/value rõ, AI dễ đọc và update đúng chỗ.
+- Dev/AI dùng cùng một source of truth để gen UI, model, API, test.
+- Tối ưu token hơn mô tả tự do dài vì context rõ field và scope.
+- Diff tốt trong Git, review thay đổi dễ hơn file binary.
+
+Để thân thiện cho member non-tech:
+
+- YAML được render sang Markdown bằng script, không cần dùng AI.
+- BA/QA đọc generated Markdown qua VitePress.
+- Deliverable khác như Excel/Docx có thể build riêng từ YAML hoặc Markdown.
+
+Commands:
+
+```bash
+pnpm docs:render
+pnpm docs:dev
+```
+
+Script: `scripts/docs/render-docs.mjs`
+
+---
+
+## 1.2 Spec Là Gì?
 
 Spec mô tả requirement ở mức feature:
 
@@ -404,9 +155,9 @@ requirements:
 
 ---
 
-## Testcase YAML Là Gì
+## 1.3 Testcase Là Gì?
 
-Testcase chi tiết hơn spec, vì bao gồm kỹ thuật E2E:
+Testcase chi tiết hơn spec, vì bao gồm kỹ thuật để sinh/cập nhật E2E:
 
 - route/auth
 - test ids
@@ -417,26 +168,157 @@ Testcase chi tiết hơn spec, vì bao gồm kỹ thuật E2E:
 - semantic/a11y/layout/design-token assertions
 - expected result
 
-Testcase sẽ được làm mịn qua `/test`.
+Testcase round 1 sinh từ `/design`, sau đó làm mịn qua `/test`. Chi tiết automation xem phần [1.4 Automation Testing](#_1-4-automation-testing).
 
 ---
 
-## Command Overview
+## 1.4 Automation Testing
 
-| Command | Ai làm | Output |
+Bổ sung E2E + unit test để giảm regression thủ công và tăng coverage IT/release.
+
+---
+
+## 1.4.1 Testing Strategy
+
+| Loại test | Tool | Mục đích |
 |---|---|---|
-| `/design` | BA/Dev/FE/AI | mock UI + `spec.yaml` + testcase YAML round 1 |
-| `/model` | Dev/AI | Zod schemas + TypeScript types in `models/` |
-| `/test` | QA/Dev/AI | refined testcase YAML + Playwright E2E |
-| `/api` | BE/AI | backend API |
-| `/wire` | FE/AI | UI dùng API thật, bỏ mock |
-| `/unit` | Dev/AI | Vitest unit tests |
+| Unit | Vitest | Logic nhỏ: validation, service parser, composable state |
+| UI catalog | Storybook | Review component, a11y addon, visual confidence |
+| E2E | Playwright | User flow thật trên browser |
+| Accessibility scan | axe + Playwright | WCAG/ARIA/label/contrast tự động |
+
+Không dùng E2E cho mọi edge nhỏ. Logic thuần nên có `/unit`.
+
+---
+
+## 1.4.2 E2E Test Là Gì
+
+E2E (End-to-End) test mô phỏng hành vi người dùng thật trên browser:
+
+- mở trang
+- login hoặc dùng session
+- click button
+- fill form
+- submit
+- chờ API/mock response
+- kiểm tra URL, text, table, toast, dialog
+
+Unit test kiểm tra logic nhỏ. E2E kiểm tra flow tích hợp từ UI đến behavior cuối.
+
+---
+
+## 1.4.3 Các Tool E2E Automation Phổ Biến
+
+| Tool | Điểm mạnh | Lưu ý |
+|---|---|---|
+| Playwright | Modern, multi-browser, auto-wait, trace/report tốt | Cần discipline selector/test data |
+| Cypress | DX tốt, debug trực quan, ecosystem mạnh | Một số scenario browser/context phức tạp kém linh hoạt hơn |
+| Selenium | Chuẩn lâu đời, nhiều ngôn ngữ/browser | Setup/debug thường nặng hơn |
+| WebdriverIO | Linh hoạt, WebDriver ecosystem | Config/tooling nhiều hơn |
+
+Base chọn Playwright để phù hợp E2E + CI + API mocking + trace debugging.
+
+---
+
+## 1.4.4 E2E Automation — Lợi Ích & Trade-off
+
+Lợi ích:
+
+- Giảm regression khi release.
+- Cover flow nghiệp vụ chính lặp lại được.
+- Tăng coverage IT/release bằng E2E automation chạy toàn project.
+- Giảm phụ thuộc vào việc chọn lọc case thủ công theo ảnh hưởng release.
+- Bắt lỗi tích hợp mà unit test không thấy.
+- Trace/screenshot/report giúp debug nhanh.
+- QA tập trung case mới/thông minh hơn thay vì retest lặp lại.
+
+Trade-off:
+
+- Chạy chậm hơn unit test.
+- Dễ flaky nếu selector/test data không chuẩn.
+- Không nên cover mọi edge nhỏ bằng E2E.
+
+---
+
+## 1.4.5 Quan Điểm Test Automation Của Base
+
+```text
+Vitest unit
+  → logic nhỏ, nhanh, nhiều edge cases
+
+Playwright E2E
+  → flow nghiệp vụ chính, regression release
+
+axe accessibility
+  → WCAG/ARIA/label/contrast phổ biến
+
+Semantic UI helpers
+  → layout, overflow, broken image, shadcn token
+```
+
+Mục tiêu:
+
+- Giảm effort regression test thủ công bằng con người.
+- Đưa regression quan trọng thành E2E automation chạy trong CI/CD.
+- Tăng coverage IT khi release bằng test toàn project, không chỉ chọn lọc case theo ảnh hưởng.
+- Chuyển effort QA từ “retest lặp lại” sang “thiết kế case tốt hơn”.
+
+---
+
+## 1.4.6 Vì Sao Playwright
+
+So với Cypress/Selenium:
+
+- Browser automation hiện đại, chạy Chromium/Firefox/WebKit.
+- Locator tốt, auto-wait tốt.
+- Trace viewer, HTML report, screenshot/video hữu ích khi debug.
+- Phù hợp E2E + API mocking + CI.
+- Tích hợp tốt với `@axe-core/playwright`.
+
+Link: [Playwright docs](https://playwright.dev/docs/intro)
+
+---
+
+## 1.4.7 Quan Điểm Accessibility
+
+Automated scan không chứng minh UI fully accessible, nhưng bắt được nhiều lỗi phổ biến:
+
+- button/link không có accessible name
+- form control thiếu label
+- ARIA sai role/attribute
+- duplicate id
+- color contrast
+- image thiếu alt
+
+Dùng 2 lớp:
+
+- `@axe-core/playwright`: WCAG/ARIA/accessibility tree.
+- custom semantic UI helpers: layout geometry như text overflow, overlap, table/grid layout, broken images.
+
+Links:
+
+- [Playwright accessibility testing](https://playwright.dev/docs/accessibility-testing)
+- [axe-core](https://github.com/dequelabs/axe-core)
+- [Cypress accessibility testing](https://docs.cypress.io/app/guides/accessibility-testing)
+
+---
+
+## 2. Workflow Phases
+
+| Phase | Command | Ai làm | Output |
+|---|---|---|---|
+| Design | `/design` | BA/Dev/FE/AI | mock UI + `spec.yaml` + testcase YAML round 1 |
+| Design | `/model` | Dev/AI | Zod schemas + TypeScript types in `models/` |
+| Implement Testcase/E2E | `/test` | QA/Dev/AI | refined testcase YAML + Playwright E2E |
+| Implement Backend | `/api` | BE/AI | backend API |
+| Integration | `/wire` | FE/AI | UI dùng API thật, bỏ mock |
+| Unit Test | `/unit` | Dev/AI | Vitest unit tests |
 
 Aliases: `/prototype`, `/e2e`, `/backend`, `/integrate`.
 
 ---
 
-## /design
+## 2.1 Phase Design — `/design` + `/model`
 
 Mục tiêu: early feedback.
 
@@ -444,6 +326,8 @@ Input:
 
 - mô tả chức năng dạng gạch đầu dòng
 - component base hiện có: shadcn + molecules + organisms
+
+Chi tiết component/base xem phần [3. Tổng Quan Portal Base](#_3-tổng-quan-portal-base).
 
 Output:
 
@@ -456,7 +340,30 @@ Testcase round 1: happy path, validation cơ bản, common Level 1.
 
 ---
 
-## /design — Bước Nhảy Vọt Prototype
+## 2.1.1 Phase Design — Thay Đổi, Trở Ngại, Lợi Ích
+
+Thay đổi:
+
+- Không còn flow cũ: Wireframe → viết document Excel/Google Sheet → dev đọc và tự hình dung UI.
+- Flow mới: AI gen prototype chạy được song song với `spec.yaml` và generated Markdown user story.
+- Mock UI, spec, testcase round 1 được sinh cùng lúc để feedback sớm.
+
+Trở ngại:
+
+- Cần prototype nhanh và gần đúng ngay từ đầu.
+- Khắc phục bằng AI, Storybook, component base có sẵn, shadcn/molecules/organisms và skill/rule theo phase.
+- Tài liệu thay đổi từ Excel/Google Sheet sang YAML/Markdown user story.
+- Đây là trở ngại lớn nhất: member cần nâng skill để làm việc với mẫu tài liệu mới.
+
+Lợi ích:
+
+- Tối ưu AI: YAML giúp AI đọc ít token hơn, hiểu cấu trúc rõ hơn, update đúng chỗ hơn.
+- Early feedback: khách hàng/team có thể trải nghiệm prototype chạy được và feedback trực tiếp.
+- Giảm việc đọc spec Excel rồi tự hình dung màn hình.
+
+---
+
+## 2.1.2 Phase Design — Bước Nhảy Vọt Prototype
 
 Trước đây flow thường là:
 
@@ -481,7 +388,7 @@ Requirement → AI-generated mock UI bằng code thật → BA/QA review trên m
 
 ---
 
-## /design — Không Cần Wireframe Cho Mọi Màn Portal
+## 2.1.3 Phase Design — Không Cần Wireframe Cho Mọi Màn Portal
 
 Không phủ nhận Figma/design tool.
 
@@ -497,7 +404,7 @@ Thông điệp: từ **review hình** sang **review màn hình chạy được**
 
 ---
 
-## /design — shadcn Ecosystem Giúp Prototype Nhanh
+## 2.1.4 Phase Design — shadcn Ecosystem Giúp Prototype Nhanh
 
 shadcn không chỉ có component lẻ.
 
@@ -513,9 +420,11 @@ Team có thể tham khảo block/template, ảnh, code sample, rồi AI map về
 - Tailwind/shadcn design token
 - mock data đủ state
 
+Chi tiết component tiers xem phần [3.3 shadcn + Component Tiers](#_3-3-shadcn-component-tiers).
+
 ---
 
-## /design — BA + Dev + QA + AI Cùng Làm
+## 2.1.5 Phase Design — BA + Dev + QA + AI Cùng Làm
 
 Không phải AI tự làm một mình.
 
@@ -543,7 +452,7 @@ AI:
 
 ---
 
-## /design — Mock Data Phải Đủ Case
+## 2.1.6 Phase Design — Mock Data Phải Đủ Case
 
 Mock UI không chỉ có happy data.
 
@@ -563,7 +472,7 @@ Round 1 testcase: happy path, validation cơ bản, smoke/list load, semantic Le
 
 ---
 
-## /design — Mock API Cần Gần API Thật
+## 2.1.7 Phase Design — Mock API Cần Gần API Thật
 
 Khi mock UI đã có API shape, thiết kế để sang `/wire` reuse được:
 
@@ -583,7 +492,7 @@ GET /dashboard/stats
 
 ---
 
-## /design Example Prompt
+## 2.1.8 Phase Design — Example Prompt
 
 ```text
 /design tạo chức năng blog quản lý bài viết:
@@ -608,7 +517,7 @@ AI sẽ:
 
 ---
 
-## /design Example `spec.yaml`
+## 2.1.9 Phase Design — Example `spec.yaml`
 
 ```yaml
 id: blog
@@ -639,7 +548,7 @@ api:
 
 ---
 
-## /design Example `testcase.yaml`
+## 2.1.10 Phase Design — Example `testcase.yaml`
 
 ```yaml
 id: blog-create-success
@@ -674,7 +583,7 @@ expected:
 
 ---
 
-## /model
+## 2.1.11 Phase Design — `/model`
 
 Mục tiêu: chỉ tạo/cập nhật entity models.
 
@@ -706,7 +615,7 @@ Example:
 
 ---
 
-## /test
+## 2.2 Phase Implement — Testcase/E2E + Backend
 
 Mục tiêu: làm mịn testcase và E2E.
 
@@ -727,7 +636,32 @@ Output:
 
 ---
 
-## /test Refinement
+## 2.2.1 Phase Implement — Testcase/E2E Refinement
+
+Thay đổi:
+
+- Testcase không còn là Excel/Google Sheet thủ công làm source of truth.
+- Testcase kỹ thuật dùng YAML làm source of truth.
+- Generated Markdown dùng để member/QA review dễ hơn.
+- Sau khi testcase đủ mịn, AI/dev dùng nó để tạo/cập nhật Playwright E2E.
+
+Trở ngại:
+
+- Member phải đọc/review spec user story Markdown thay vì Excel như cũ.
+- QA cần tạo/review testcase Markdown/YAML thay vì testcase Excel cũ.
+- Cần học cách mô tả testcase rõ: precondition, test data, steps, expected, testId, semantic assertions.
+
+Khắc phục:
+
+- AI hỗ trợ convert bullet requirement thành testcase YAML/Markdown.
+- AI hỗ trợ làm mịn edge cases, validation message, permission, empty/error state.
+- AI hỗ trợ sinh Playwright E2E từ testcase đã review.
+
+Lợi ích:
+
+- Testcase có cấu trúc, dễ trace với requirement.
+- E2E test có nguồn đầu vào rõ, giảm thiếu case do viết muộn.
+- Regression quan trọng được tự động hóa trong CI/CD thay vì retest thủ công toàn bộ.
 
 Thêm case biên:
 
@@ -747,7 +681,7 @@ Bổ sung assertions:
 
 ---
 
-## /test Example Prompt
+## 2.2.2 Phase Implement — Testcase/E2E Example Prompt
 
 ```text
 /test làm mịn testcase blog:
@@ -768,7 +702,7 @@ AI sẽ:
 
 ---
 
-## /api
+## 2.2.3 Phase Implement — Backend (`/api`)
 
 Mục tiêu: backend API theo `spec.yaml`, nhưng **không làm trong repo portal**.
 
@@ -791,7 +725,7 @@ Example:
 
 ---
 
-## /wire
+## 2.3 Phase Integration — `/wire`
 
 Mục tiêu: thay mock bằng API thật.
 
@@ -817,7 +751,7 @@ Example:
 
 ---
 
-## /unit
+## 2.4 Phase Unit Test — `/unit`
 
 Mục tiêu: unit test logic bằng Vitest.
 
@@ -844,7 +778,175 @@ pnpm test:unit
 
 ---
 
-## Rules & Skills
+## 3. Tổng Quan Portal Base
+
+Mục tiêu base:
+
+- FE portal chạy nhanh bằng mock UI.
+- Component dùng lại qua shadcn + molecules + organisms.
+- YAML/spec/testcase làm xương sống cho AI/dev.
+- BA/QA review bằng mock UI + generated Markdown.
+
+---
+
+## 3.1 Portal Base Dựa Trên Gì
+
+| Nền tảng | Vai trò |
+|---|---|
+| [Nuxt 4](https://nuxt.com/) | App framework Vue, routing, SSR/SPA, module ecosystem |
+| [shadcn-vue](https://www.shadcn-vue.com/) | UI primitive, Tailwind token, component copy-in dễ custom |
+| Molecules/Organisms | Component tầng team dựng sẵn, tránh page all-in-one |
+| Vitest | Unit test logic |
+| Playwright | E2E browser automation |
+| Storybook | UI catalog/review component |
+| VitePress | Review docs local đẹp, link click được |
+
+---
+
+## 3.2 Nuxt 4 Trong Base
+
+Ưu điểm:
+
+- File-based routing, Vue 3, ecosystem mạnh.
+- Hợp với portal auth-first.
+- Dễ chia 4 tầng: page/component → composable → service/store → model/validation.
+
+Lưu ý:
+
+- Cần giữ page mỏng, không gọi API trực tiếp trong component.
+- Cần discipline về `data-testid` và E2E.
+
+Link: [Nuxt docs](https://nuxt.com/docs)
+
+---
+
+## 3.3 shadcn + Component Tiers
+
+```text
+components/ui/          primitive shadcn
+components/molecules/   Mo* field/group/navigation
+components/organisms/   Data*, OrGlobal*
+pages/                  orchestration only
+```
+
+Ưu điểm:
+
+- Token Tailwind/shadcn rõ: color, radius, border, ring.
+- Copy-in component, dễ customize theo design system.
+- E2E có thể assert design token Level 3.
+
+Lưu ý: không copy legacy theme demo vào feature mới.
+
+---
+
+## 3.4 Common Helpers Trong Base
+
+- `$apiFetch` wrapper: gọi API qua service, không gọi trong page/component.
+- `models/`: API contract + types.
+- `validations/`: form schema chặt hơn API.
+- `useApiForm`: map validation + API error.
+- `testId` helpers: chuẩn hóa `data-testid`.
+- Semantic UI E2E helpers:
+  - no console errors
+  - no horizontal scroll
+  - no broken images
+  - no text overflow
+  - layout/table/grid
+  - axe accessibility
+  - shadcn design token
+
+---
+
+## 3.5 Cấu Trúc Base
+
+```text
+pages/components
+  ↓
+composables
+  ↓
+services + stores
+  ↓
+models + validations
+  ↓
+$apiFetch
+```
+
+UI tiers:
+
+```text
+components/ui        shadcn primitives
+components/molecules Mo*
+components/organisms Data*, OrGlobal*
+```
+
+---
+
+## 3.6 Chạy Local Mock UI
+
+Mục tiêu: BA/QA xem màn hình prototype trên host, không cần Docker/domain.
+
+Dev chạy:
+
+```bash
+pnpm install
+pnpm dev
+```
+
+Sau đó mở URL local từ terminal để review mock UI.
+
+---
+
+## 3.7 Xem Docs Đẹp Bằng VitePress
+
+YAML được render sang Markdown bằng script có sẵn:
+
+```bash
+pnpm docs:render
+pnpm docs:dev
+```
+
+Script: `scripts/docs/render-docs.mjs`
+
+Output:
+
+```text
+docs/features/{slug}/generated/
+├── README.md
+├── spec.md
+└── testcases/*.md
+```
+
+Build static:
+
+```bash
+pnpm docs:build
+pnpm docs:preview
+```
+
+VitePress giúp link click được, có sidebar/search, dễ review hơn IDE Markdown preview.
+
+---
+
+## 3.8 Storybook Trong Base
+
+Mục đích:
+
+- Xem component độc lập.
+- Review state: default, loading, error, disabled.
+- Dễ demo Molecules/Organisms cho team.
+- Có thể kết hợp addon a11y.
+
+Commands:
+
+```bash
+pnpm storybook
+pnpm storybook:build
+pnpm storybook:gen
+```
+
+---
+
+## 4. Rules & Skills
 
 | Command | Rule | Skill |
 |---|---|---|
@@ -859,7 +961,7 @@ Một session chỉ nên theo một command.
 
 ---
 
-## Kết Luận
+## 5. Kết Luận
 
 - `/design` cho early feedback: mock UI + YAML backbone.
 - `/test` làm testcase thật sự mịn và đáng tin.

@@ -3,6 +3,19 @@ const portEnv = process.env.NUXT_PORT?.trim()
 const devPort = portEnv ? parseInt(portEnv, 10) : 0
 const devServerPort = Number.isFinite(devPort) ? devPort : 3004
 
+/** Polling chỉ khi cần (Docker volume / project trên /mnt/c). WSL ext4 mặc định: inotify. */
+const watchPolling = process.env.NUXT_WATCH_POLLING === '1'
+const watchPollingOpts = watchPolling
+  ? {
+      usePolling: true as const,
+      interval: 300,
+      awaitWriteFinish: {
+        stabilityThreshold: 200,
+        pollInterval: 100
+      }
+    }
+  : { usePolling: false as const }
+
 function resolvePublicApiBase(): string {
   const raw = process.env.NUXT_PUBLIC_API_BASE?.trim()
   return raw || '/api'
@@ -11,16 +24,9 @@ function resolvePublicApiBase(): string {
 export default defineNuxtConfig({
   srcDir: '.',
   compatibilityDate: '2026-01-31',
-  devtools: { enabled: true },
+  devtools: { enabled: process.env.NUXT_DEVTOOLS === '1' },
   watchers: {
-    chokidar: {
-      usePolling: true,
-      interval: 300,
-      awaitWriteFinish: {
-        stabilityThreshold: 200,
-        pollInterval: 100
-      }
-    }
+    chokidar: watchPollingOpts
   },
   devServer: {
     host: '0.0.0.0',
@@ -28,14 +34,7 @@ export default defineNuxtConfig({
   },
   vite: {
     server: {
-      watch: {
-        usePolling: true,
-        interval: 300,
-        awaitWriteFinish: {
-          stabilityThreshold: 200,
-          pollInterval: 100
-        }
-      }
+      watch: watchPollingOpts
     }
   },
   runtimeConfig: {

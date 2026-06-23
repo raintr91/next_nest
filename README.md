@@ -11,7 +11,9 @@ pnpm install
 pnpm dev
 ```
 
-`nuxt.config`: `devServer` listen `0.0.0.0`; `vite.server.watch` bật polling (Docker/WSL). Gateway nginx gửi `Host` khi proxy tới cổng publish trên host.
+`nuxt.config`: `devServer` listen `0.0.0.0`; watch polling **tắt mặc định** trên WSL ext4 — bật `NUXT_WATCH_POLLING=1` khi Docker hoặc project trên `/mnt/c`.
+
+**Cursor/WSL treo:** xem [`docs/WSL-CURSOR-PERF.md`](docs/WSL-CURSOR-PERF.md) — xóa `.pnpm-store` local (~884MB), mở folder `portal/` không mở `workspace/`.
 
 ### Docker (tách stack — nhiều project song song)
 

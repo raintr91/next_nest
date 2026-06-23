@@ -14,6 +14,10 @@ dist
 node_modules
 .pnpm-store
 
+# Accidental Nuxt CLI output (wrong flags)
+--host/
+--port/
+
 # Logs
 logs
 *.log

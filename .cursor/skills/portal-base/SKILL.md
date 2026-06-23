@@ -6,6 +6,7 @@ description: >-
   layout integrity checks, or Rapi Recorder to Playwright conversion. Use when adding
   pages, forms, modules, shared UI, E2E specs, converting QA Rapi scripts, or when
   the user mentions portal base, testId, data-testid, Rapi, or portal conventions.
+disable-model-invocation: true
 ---
 
 # Portal Base (Nuxt 4)
