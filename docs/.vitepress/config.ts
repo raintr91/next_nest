@@ -31,7 +31,10 @@ export default defineConfig({
       {
         text: 'Presentations',
         items: [
-          { text: 'Team AI Workflow Slides', link: '/presentations/team-ai-workflow-slides' }
+          { text: 'Team AI Workflow Slides', link: '/presentations/team-ai-workflow-slides' },
+          { text: 'YAML/Markdown AI Workflow', link: '/presentations/yaml-markdown-ai-workflow' },
+          { text: 'E2E Automation Playwright', link: '/presentations/e2e-automation-playwright' },
+          { text: 'Portal Base Overview', link: '/presentations/portal-base-overview' }
         ]
       }
     ],
