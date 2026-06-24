@@ -67,6 +67,12 @@ const { onSubmit, errors, apiError, isSubmitting } = useApiForm<LoginRequest>({
 - `models/` — contract API (lỏng)
 - `validations/` — rule form UI (chặt, min length, email…)
 
+### Contract key naming (bắt buộc)
+
+FE `models`/types, service params, API request/response, BE DTO/model/database phải dùng cùng key cho cùng dữ liệu. Không đổi `content` thành `content_blog`; không flatten relationship như `auth_id`, `auth_name` nếu contract/model là `auth: { id, name }`. M-N/pivot giữ đúng tên relationship và cấu trúc nested. Chỉ mapping đổi tên ở adapter boundary khi gặp API third-party/legacy không kiểm soát được.
+
+Cross-check FE/BE chỉ được kết luận khi có `team-projects` config trỏ tới backend liên quan; nếu không có config thì phải báo chưa thể đối chiếu cross-repo.
+
 ---
 
 ## 2. UI layout & component tiers
@@ -101,9 +107,9 @@ const { onSubmit, errors, apiError, isSubmitting } = useApiForm<LoginRequest>({
 - `middleware/guest.ts` — chặn user đã login
 - Public: `/auth/login`, `/password/reset` · Protected: `/`
 
-### Legacy (không dùng cho feature mới)
+### UI dashboard
 
-`layouts/themes/*`, `dataTheme/*`, theme demo navbars — cleanup dần, không copy pattern.
+Dashboard dùng trực tiếp shadcn-vue admin primitives trong `layouts/dashboard.vue` (`SidebarProvider`, `Sidebar`, `SidebarInset`, `SidebarTrigger`) và data table components. Không thêm lại cấu trúc `layouts/themes/*`.
 
 ---
 

@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import type { HTMLAttributes } from 'vue'
+import type { DataTableColumn } from '~/components/molecules/layout/useDataTableLogic'
 import { cn } from '~/utils/cn'
 import { cellValue } from '~/components/molecules/layout/dataTableLogic'
 import { useDataTableLogic } from '~/components/molecules/layout/useDataTableLogic'
@@ -15,7 +16,7 @@ export type { DataTableColumn } from '~/components/molecules/layout/useDataTable
 
 const props = withDefaults(
   defineProps<{
-    columns: import('./useDataTableLogic').DataTableColumn[]
+    columns: DataTableColumn[]
     items: Record<string, unknown>[]
     searchPlaceholder?: string
     pageSize?: number

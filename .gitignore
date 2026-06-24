@@ -49,3 +49,7 @@ playwright/.cache/
 !docker/.env.example
 node_modules
 docker/.env
+
+# Local legacy source mappings for AI workflow
+.cursor/legacy-projects.local.json
+.cursor/team-projects.local.json

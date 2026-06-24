@@ -42,7 +42,7 @@ pnpm dev
 
 Trong **`portal/docker/.env`** đặt **`HOST_UID`** / **`HOST_GID`** trùng `id -u` và `id -g` trên máy host (mặc định `1000`). **Volume `node_modules`** lúc tạo thường là `root:root`; entrypoint chạy **root** một nhịp để `chown` volume rồi **`setpriv`** xuống UID đó — `pnpm`/`nuxt` ghi bind mount (vd. **`.nuxt`**) vẫn đúng user host, không còn file kiểu `root:root`. Compose gọi **`corepack pnpm`** (không `corepack enable` + `pnpm`) vì user đó không được tạo symlink trong `/usr/local/bin`.
 
-**`node_modules` tách biệt:** trong Docker, `node_modules` nằm trên **volume** có tên dạng `portal_<prefix>_nodemodules` (repo `portal_1`: `portal1_<prefix>_nodemodules`), không ghi đè thư mục `portal/node_modules` trên máy (với `portal_1` là `portal_1/node_modules`). Bạn có thể trên host: `rm -rf node_modules && pnpm install`, chạy `pnpm storybook` / script khác — không đụng bản cài trong container. Sau khi đổi dependency trong `package.json` / lockfile, chạy lại `pnpm install` **trong container** (restart stack hoặc `docker compose exec frontend-node …`) hoặc xóa volume rồi `up` lại: `docker compose … down -v` (chỉ khi muốn cài sạch volume).
+**`node_modules` tách biệt:** trong Docker, `node_modules` nằm trên **volume** có tên dạng `portal_<prefix>_nodemodules` (repo `portal_1`: `portal1_<prefix>_nodemodules`), không ghi đè thư mục `portal/node_modules` trên máy (với `portal_1` là `portal_1/node_modules`). Bạn có thể trên host: `rm -rf node_modules && pnpm install`, chạy test/script local — không đụng bản cài trong container. Sau khi đổi dependency trong `package.json` / lockfile, chạy lại `pnpm install` **trong container** (restart stack hoặc `docker compose exec frontend-node …`) hoặc xóa volume rồi `up` lại: `docker compose … down -v` (chỉ khi muốn cài sạch volume).
 
 Nếu trước đó đã có file root trong repo: `sudo chown -R "$(id -un):$(id -gn)" portal/.nuxt` (và thư mục tương tự).
 
@@ -56,18 +56,17 @@ API client (`stores/useAuth.ts`, `$apiFetch`) dùng prefix **`/api/auth/*`** (lo
 
 ## Storybook
 
-Chạy UI catalog (theme preview, atoms/molecules). Script gọi `nuxt prepare` trước để alias Nuxt hoạt động; nếu thư mục **`stories/auto/`** (story sinh từ component) trống — thường sau clone vì thư mục đó **gitignored** — sẽ tự chạy `generate-stories.mjs` một lần rồi mới mở Storybook.
+Chạy UI catalog cho shadcn primitives, molecules và organisms. Các story theme layout vendor đã bị gỡ cùng với theme layout rác; generator chỉ sinh story từ component còn tồn tại.
 
 ```bash
 pnpm install
 pnpm storybook
 ```
 
-- Mặc định mở **http://127.0.0.1:6006** (xem `package.json` nếu đổi port).
-- **Chỉ thấy vài story (vd. layout):** chạy tay `pnpm storybook:gen` (hoặc `pnpm storybook:gen:force` để ghi đè mọi file auto).
-- **Build tĩnh** (CI / kiểm tra build): `pnpm storybook:build`
-- **Cache lỗi / story cũ**: `pnpm storybook:fresh` (xóa cache rồi chạy lại dev server).
-- **Sinh story tự động** (tùy dự án): `pnpm storybook:gen` hoặc `pnpm storybook:gen:force` — chi tiết trong `scripts/generate-stories.mjs`.
+- Mặc định mở **http://127.0.0.1:6006**.
+- Build tĩnh: `pnpm storybook:build`
+- Sinh story tự động: `pnpm storybook:gen` hoặc `pnpm storybook:gen:force`
+- Xóa generated stories: `pnpm storybook:clean:gen`
 
 ---
 
@@ -160,13 +159,9 @@ Tóm tắt: 4 tầng `composables` → `services` → `stores` → `models/valid
   - `Data*` cho cụm list/table UI
   - `Common*` cho shared state/helper (ví dụ breadcrumb)
 
-## Tình trạng legacy (cần dọn dần)
+## UI Dashboard
 
-Một số theme demo cũ chưa được dùng trong flow auth tối giản:
-
-- `layouts/themes/*`, `dataTheme/*`, `stories/*`, `components/organisms/layout/*`
-
-Các mục này không chặn flow auth hiện tại, có thể clean-up theo đợt để giảm nhiễu codebase.
+Dashboard dùng trực tiếp shadcn-vue admin primitives trong `layouts/dashboard.vue` (`SidebarProvider`, `Sidebar`, `SidebarInset`, `SidebarTrigger`) và `DataTablePage`/`MoDataTable` cho bảng. Không dùng lại cấu trúc `layouts/themes/*`.
 
 ## Team AI workflow (4 phase)
 

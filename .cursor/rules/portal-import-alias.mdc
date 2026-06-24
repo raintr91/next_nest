@@ -1,0 +1,21 @@
+---
+description: Enforce absolute import aliases for hand-written Portal app code
+alwaysApply: true
+---
+
+# Import Alias
+
+- For hand-written app code, local imports must use absolute aliases: `@/`, `~/`, `#...`, or existing package aliases such as `#scripts/*`.
+- Apply this to `pages/`, `layouts/`, `composables/`, `services/`, `stores/`, `models/`, `validations/`, and custom `components/molecules` / `components/organisms`.
+- Do not apply this rule to library/generated code such as `components/ui/`, `.nuxt/`, `stories/auto/`, or files created by `shadcn-vue add`.
+- Do not add new relative local imports like `../foo` or `./foo` in hand-written app code.
+
+```ts
+// Good
+import { cn } from '@/lib/utils'
+import FormCard from '@/components/organisms/FormCard.vue'
+
+// Bad
+import { cn } from '../lib/utils'
+import FormCard from './FormCard.vue'
+```

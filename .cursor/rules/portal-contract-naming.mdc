@@ -1,0 +1,50 @@
+---
+description: Portal contract naming — FE schema/type, API params, BE request, and DB/model fields must keep the same keys and relationship shape.
+alwaysApply: true
+---
+
+# Contract Naming Is Source Of Truth
+
+Áp dụng cho FE schema/type, service params, API request/response, BE controller/service DTO, model field, database column, relationship, pivot payload.
+
+## Cross-Repo Check
+
+Rule này chỉ check FE ↔ BE đầy đủ khi có related project config:
+
+```text
+~/.cursor/team-projects.json
+{workspace}/.cursor/team-projects.local.json
+{workspace}/.cursor/team-projects.json
+```
+
+Config group phải khai báo `contract.frontend`, `contract.backend`, và `contract.sourceOfTruth`.
+Nếu không có config, chỉ được check trong workspace hiện tại và phải báo rõ: chưa thể đối chiếu FE/BE cross-repo.
+
+## Bắt buộc
+
+- Field/params key phải đồng nhất theo model/database field khi cùng một dữ liệu.
+- Khi có `team-projects` config, đối chiếu FE `models`/service params với BE request/model/database/relationship trước khi tạo hoặc sửa contract.
+- API create/update payload dùng đúng key model: `content`, không đổi thành `content_blog`.
+- Không tạo lớp mapping chỉ để đổi tên key giữa FE → API → BE → model.
+- Relationship phải giữ đúng key quan hệ theo model và giữ cấu trúc nested.
+- Không đập phẳng relationship thành các field giả như `auth_id`, `auth_name` nếu contract là `auth: { id, name }`.
+- Với M-N/pivot, giữ tên relationship và payload pivot dưới relationship đó; không đổi key tùy tiện ở FE rồi map lại ở BE.
+
+## Ví dụ
+
+```ts
+// Good
+type BlogPayload = {
+  content: string
+  auth: { id: number; name: string }
+}
+
+// Bad
+type BlogPayload = {
+  content_blog: string
+  auth_id: number
+  auth_name: string
+}
+```
+
+Chỉ được đổi tên khi tích hợp API bên thứ ba/legacy không kiểm soát được; khi đó phải cô lập mapping ở adapter/service boundary và ghi rõ lý do.

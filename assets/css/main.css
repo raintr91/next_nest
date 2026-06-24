@@ -4,34 +4,45 @@
 
 @layer base {
 	:root {
-		--background: 48 42% 97%;
+		--background: 210 40% 98%;
 		--foreground: 220 17% 12%;
 
 		--card: 0 0% 100%;
 		--card-foreground: 220 17% 12%;
 
-		--muted: 45 40% 93%;
-		--muted-foreground: 215 14% 35%;
+		--muted: 210 40% 96.1%;
+		--muted-foreground: 215.4 16.3% 46.9%;
 
-		--accent: 50 80% 90%;
+		--accent: 214 95% 93%;
 		--accent-foreground: 220 17% 12%;
 
-		--primary: 53 98% 45%;
-		--primary-foreground: 220 17% 10%;
+		--primary: 221.2 83.2% 53.3%;
+		--primary-foreground: 210 40% 98%;
 
-		--secondary: 220 8% 28%;
-		--secondary-foreground: 0 0% 100%;
+		--secondary: 210 40% 96.1%;
+		--secondary-foreground: 222.2 47.4% 11.2%;
 
-		--destructive: 0 84.2% 60.2%;
-		--destructive-foreground: 210 40% 98%;
+		--success: 142.1 70.6% 45.3%;
+		--success-foreground: 144.9 80.4% 10%;
 
-		--border: 45 28% 84%;
-		--input: 45 28% 84%;
-		--ring: 53 98% 45%;
+		--warning: 37.7 92.1% 50.2%;
+		--warning-foreground: 26 83.3% 14.1%;
+
+		--info: 199.4 95.5% 43.9%;
+		--info-foreground: 204 100% 97.1%;
+
+		--danger: 0 84.2% 60.2%;
+		--danger-foreground: 210 40% 98%;
+		--destructive: var(--danger);
+		--destructive-foreground: var(--danger-foreground);
+
+		--border: 214.3 31.8% 91.4%;
+		--input: 214.3 31.8% 91.4%;
+		--ring: 221.2 83.2% 53.3%;
 
 		--radius: 0.5rem;
 
-		--sidebar: 220 7% 20%;
+		--sidebar-background: 0 0% 98%;
 		--sidebar-foreground: 240 5.3% 26.1%;
 		--sidebar-primary: 240 5.9% 10%;
 		--sidebar-primary-foreground: 0 0% 98%;
@@ -39,7 +50,6 @@
 		--sidebar-accent-foreground: 240 5.9% 10%;
 		--sidebar-border: 220 13% 91%;
 		--sidebar-ring: 217.2 91.2% 59.8%;
-		--sidebar-background: 0 0% 98%;
 	}
 
 	.dark {
@@ -55,14 +65,25 @@
 		--accent: 217.2 32.6% 17.5%;
 		--accent-foreground: 210 40% 98%;
 
-		--primary: 210 40% 98%;
+		--primary: 217.2 91.2% 59.8%;
 		--primary-foreground: 222.2 47.4% 11.2%;
 
 		--secondary: 217.2 32.6% 17.5%;
 		--secondary-foreground: 210 40% 98%;
 
-		--destructive: 0 62.8% 30.6%;
-		--destructive-foreground: 210 40% 98%;
+		--success: 142.1 70.6% 45.3%;
+		--success-foreground: 144.9 80.4% 10%;
+
+		--warning: 37.7 92.1% 50.2%;
+		--warning-foreground: 26 83.3% 14.1%;
+
+		--info: 198.6 88.7% 48.4%;
+		--info-foreground: 204 100% 97.1%;
+
+		--danger: 0 72.2% 50.6%;
+		--danger-foreground: 210 40% 98%;
+		--destructive: var(--danger);
+		--destructive-foreground: var(--danger-foreground);
 
 		--border: 217.2 32.6% 17.5%;
 		--input: 217.2 32.6% 17.5%;
@@ -88,28 +109,6 @@
 		font-family: 'Hiragino Sans', 'Noto Sans JP', 'Segoe UI', sans-serif;
 	}
 
-	/* Tailwind Admin theme: sidebar trái, theme sáng, accent xanh (vue-demo.tailadmin.com) */
-	.tailwind-admin-theme {
-		--primary: 221.2 83.2% 53.3%;
-		--primary-foreground: 0 0% 100%;
-		--sidebar: 0 0% 97%;
-		--sidebar-foreground: 222.2 47.4% 11.2%;
-		--sidebar-primary: 221.2 83.2% 53.3%;
-		--sidebar-primary-foreground: 0 0% 100%;
-		--sidebar-accent: 220 14% 96%;
-		--sidebar-accent-foreground: 221.2 83.2% 53.3%;
-	}
-	.sb-dashboard-preview,
-	.sb-dashboard-preview .dashboard-theme-preview-container {
-		--primary: 221.2 83.2% 53.3%;
-		--primary-foreground: 0 0% 100%;
-		--sidebar: 0 0% 97%;
-		--sidebar-foreground: 222.2 47.4% 11.2%;
-		--sidebar-primary: 221.2 83.2% 53.3%;
-		--sidebar-primary-foreground: 0 0% 100%;
-		--sidebar-accent: 214.3 31.8% 91.4%;
-		--sidebar-accent-foreground: 222.2 47.4% 11.2%;
-	}
 }
 
 @layer components {

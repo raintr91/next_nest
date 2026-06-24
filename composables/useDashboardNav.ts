@@ -8,7 +8,7 @@ export interface DashboardNavItem {
   children?: DashboardNavItem[]
 }
 
-/** Default sidebar nav for auth-first portal (minimal). Pass customNav to override in theme layouts. */
+/** Default sidebar nav for auth-first portal (minimal). Pass customNav to override dashboard layout nav. */
 export function useDashboardNav(customNav?: DashboardNavItem[]) {
   if (customNav) return customNav
 

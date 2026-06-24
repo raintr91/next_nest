@@ -14,6 +14,7 @@ Nuxt 4 auth-first portal. Chi tiết: `docs/ARCHITECTURE.md`, `docs/E2E-TESTIDS.
 - **Không** gọi `$apiFetch` trong page/component
 - **Không** import ngược: `models/` → stores/services/composables
 - Form: `useApiForm` + `validations/` (chặt) + `models/` (API contract)
+- Contract keys đồng nhất FE/API/BE/DB; không đổi tên field hoặc flatten relationship (`portal-contract-naming.mdc`)
 
 ## Thêm feature (thứ tự)
 
@@ -23,7 +24,7 @@ Nuxt 4 auth-first portal. Chi tiết: `docs/ARCHITECTURE.md`, `docs/E2E-TESTIDS.
 
 `components/ui/` (shadcn) → `molecules/` (`Mo*`) → `organisms/` (`Data*`, `OrGlobal*`)
 
-Không copy legacy: `layouts/themes/*`, `dataTheme/*`.
+Không copy legacy theme demo/vendor. Dashboard chính dùng shadcn admin primitives trực tiếp trong `layouts/dashboard.vue`; không thêm lại `layouts/themes/*`, `dataTheme/*` hoặc theme switcher.
 
 ## Kích thước & component
 

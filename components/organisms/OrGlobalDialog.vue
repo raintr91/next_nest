@@ -18,10 +18,10 @@ const {
 
 const dialogColor = computed(() => {
   const map: Record<DialogType, string> = {
-    info: 'primary',
-    warning: 'amber',
+    info: 'info',
+    warning: 'warning',
     confirm: 'primary',
-    error: 'destructive'
+    error: 'danger'
   }
   return map[type.value] ?? 'primary'
 })
@@ -36,9 +36,9 @@ function onOpenChange(open: boolean) {
     <AlertDialogContent
       test-id="app-dialog-content"
       :class="{
-        'border-l-4 border-primary': type === 'info',
-        'border-l-4 border-amber-500': type === 'warning',
-        'border-l-4 border-destructive': type === 'error',
+        'border-l-4 border-info': type === 'info',
+        'border-l-4 border-warning': type === 'warning',
+        'border-l-4 border-danger': type === 'error',
         'border-l-4 border-primary': type === 'confirm'
       }"
     >
@@ -46,13 +46,13 @@ function onOpenChange(open: boolean) {
         <div class="flex items-center gap-3">
           <span
             v-if="type === 'info'"
-            class="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-primary/10 text-lg text-primary"
+            class="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-info/10 text-lg text-info"
           >
             ℹ
           </span>
           <span
             v-else-if="type === 'warning'"
-            class="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-amber-500/10 text-lg text-amber-600"
+            class="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-warning/10 text-lg text-warning"
           >
             ⚠
           </span>
@@ -64,7 +64,7 @@ function onOpenChange(open: boolean) {
           </span>
           <span
             v-else-if="type === 'error'"
-            class="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-destructive/10 text-lg text-destructive"
+            class="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-danger/10 text-lg text-danger"
           >
             ✕
           </span>
@@ -85,8 +85,9 @@ function onOpenChange(open: boolean) {
           data-testid="app-dialog-confirm-btn"
           :class="{
             'bg-primary text-primary-foreground hover:bg-primary/90': dialogColor === 'primary',
-            'bg-amber-500 text-white hover:bg-amber-600': dialogColor === 'amber',
-            'bg-destructive text-destructive-foreground hover:bg-destructive/90': dialogColor === 'destructive'
+            'bg-info text-info-foreground hover:bg-info/90': dialogColor === 'info',
+            'bg-warning text-warning-foreground hover:bg-warning/90': dialogColor === 'warning',
+            'bg-danger text-danger-foreground hover:bg-danger/90': dialogColor === 'danger'
           }"
           @click="dialogStore.confirm()"
         >

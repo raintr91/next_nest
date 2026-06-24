@@ -42,17 +42,13 @@ export default defineNuxtConfig({
       apiBase: resolvePublicApiBase(),
       portalKey: process.env.NUXT_PUBLIC_PORTAL_KEY || 'portal',
       serviceKey: process.env.NUXT_PUBLIC_SERVICE_KEY || 'PORTAL',
-      dashboardTheme: process.env.NUXT_PUBLIC_DASHBOARD_THEME || 'mairy',
       e2e: process.env.NUXT_PUBLIC_E2E || '0'
     }
   },
-  modules: ['@nuxt/eslint', '@pinia/nuxt', '@nuxtjs/tailwindcss', '@nuxtjs/i18n', 'shadcn-nuxt'],
+  modules: ['@nuxt/eslint', '@pinia/nuxt', '@nuxtjs/tailwindcss', '@nuxtjs/i18n'],
   css: ['~/assets/css/main.css'],
-  shadcn: {
-    prefix: '',
-    componentDir: './components/ui'
-  },
   components: [
+    { path: '~/components/ui', pathPrefix: false, pattern: '**/*.vue', extensions: ['vue'], ignore: ['**/index.ts'] },
     { path: '~/components/molecules', pathPrefix: false, prefix: 'Mo' },
     { path: '~/components/organisms', pathPrefix: false }
   ],

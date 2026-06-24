@@ -19,6 +19,7 @@ const service = createCustomerService($apiFetch)
 ## Services (`services/`)
 
 HTTP only. Factory `createXxxService(api)`. Parse response qua `parseApiData` / `parseSchemaOrThrow`.
+Payload params dùng đúng key model/API contract; không đổi `content` thành `content_blog`, không flatten relationship.
 
 ## Stores (`stores/`)
 
@@ -30,6 +31,8 @@ Client state (token, list cache, toast, dialog). Gọi service — không embed 
 |--|-----------|----------------|
 | Mục đích | API contract Zod | Form rules vee-validate |
 | Độ chặt | Lỏng (`password: string`) | Chặt (min 8, email…) |
+
+Field/type/schema keys trong `models/` là source of truth cho API contract và phải đồng nhất với BE/model/database (`portal-contract-naming.mdc`).
 
 ## Form base
 

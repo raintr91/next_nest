@@ -42,10 +42,10 @@ function typeIcon(type: ToastType): string {
             class="flex h-8 w-8 shrink-0 items-center justify-center rounded-full text-sm"
             data-testid="app-toast-icon"
             :class="{
-              'bg-primary/10 text-primary': t.type === 'info',
-              'bg-destructive/10 text-destructive': t.type === 'error',
-              'bg-amber-500/10 text-amber-600': t.type === 'warning',
-              'bg-green-500/10 text-green-600': t.type === 'success'
+              'bg-info/10 text-info': t.type === 'info',
+              'bg-danger/10 text-danger': t.type === 'error',
+              'bg-warning/10 text-warning': t.type === 'warning',
+              'bg-success/10 text-success': t.type === 'success'
             }"
           >
             {{ typeIcon(t.type) }}

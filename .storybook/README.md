@@ -1,33 +1,13 @@
-# Storybook scripts & manual stories
+# Storybook
 
-## Stories viết tay (không bị xóa)
+Storybook giữ lại để review component shadcn/molecule/organism.
 
-- **Vị trí:** `stories/*.stories.ts` (file trực tiếp trong `stories/`, không nằm trong `stories/auto/`).
-- **Ví dụ:** `DashboardThemePreviews.stories.ts`, `DashboardThemes.stories.ts`, theme Windster, v.v.
+Các story theme layout vendor đã bị gỡ cùng với theme layout tương ứng. Generator hiện tại chỉ sinh story từ component còn tồn tại trong `components/`.
 
-Các lệnh sau **không** xóa hay ghi đè stories viết tay:
-
-| Lệnh | Mô tả |
-|------|--------|
-| `pnpm storybook:clean` | Chỉ xóa cache Storybook (`node_modules/.cache/storybook`). **Không** xóa file stories. |
-| `pnpm storybook:fresh` | Clean cache rồi chạy Storybook. Stories viết tay giữ nguyên. |
-| `pnpm storybook` | `nuxt prepare` → nếu `stories/auto/` chưa có `*.stories.js` thì chạy `generate-stories.mjs` → mở Storybook. |
-| `pnpm storybook:gen` | Tạo stories auto vào `stories/auto/`; không ghi đè `stories/*.stories.ts`. |
-| `pnpm storybook:clean:gen` | Chỉ xóa thư mục `stories/auto/` (stories auto-generate). **Giữ nguyên** `stories/*.stories.ts`. |
-
-## Stories auto-generate
-
-- **Vị trí:** `stories/auto/*.stories.js` (tạo bởi `pnpm storybook:gen`).
-- Xóa riêng phần này: `pnpm storybook:clean:gen`.
-
-## Config trong package.json
-
-```json
-"storybook": {
-  "generatedDir": "stories/auto",
-  "manualStoriesGlob": "stories/*.stories.ts",
-  "preserveManual": true
-}
-```
-
-Scripts và tooling chỉ xóa/ghi đè trong `generatedDir`; không xóa file khớp `manualStoriesGlob`.
+| Command | Mục đích |
+| --- | --- |
+| `pnpm storybook` | `nuxt prepare` → sinh `stories/auto` nếu trống → mở Storybook. |
+| `pnpm storybook:build` | Build Storybook static. |
+| `pnpm storybook:gen` | Sinh story auto nếu file chưa tồn tại. |
+| `pnpm storybook:gen:force` | Ghi đè story auto. |
+| `pnpm storybook:clean:gen` | Xóa `stories/auto`. |

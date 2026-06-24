@@ -8,7 +8,7 @@ Mục tiêu: dev nhẹ, release khả thi, module/package **chỉ chứa source*
 
 | Thành phần | Vấn đề dev |
 |------------|------------|
-| `node_modules/` 779MB | Bình thường với Nuxt 4 + Storybook + Playwright |
+| `node_modules/` | Bình thường với Nuxt 4 + Storybook + Playwright/Vitest |
 | `.pnpm-store/` 884MB **trong repo** | **Bất thường** — đã fix `.npmrc` store global |
 | `components/ui/` (shadcn) | Source trong app — OK cho product, có thể tách package sau |
 
