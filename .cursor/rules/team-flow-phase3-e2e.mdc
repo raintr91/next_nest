@@ -6,7 +6,7 @@ alwaysApply: false
 
 # /test — E2E Refinement
 
-Skill: `.cursor/skills/team-phase3-e2e/SKILL.md`
+Skill: `.cursor/skills/test/SKILL.md`
 
 - `getByTestId()` only · Page Object · Faker
 - Testcase source: `docs/features/{slug}/testcases/*.yaml`

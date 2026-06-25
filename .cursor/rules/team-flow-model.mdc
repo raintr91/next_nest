@@ -6,7 +6,7 @@ alwaysApply: false
 
 # /model — Entity Models
 
-Skill: `.cursor/skills/team-model/SKILL.md`
+Skill: `.cursor/skills/model/SKILL.md`
 
 - Scope only: `models/`.
 - Use during `/design` or before `/wire` when entity contracts need to be created/refined.

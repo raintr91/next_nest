@@ -6,45 +6,48 @@ const docsDir = path.resolve('docs')
 const featuresDir = path.join(docsDir, 'features')
 
 async function main() {
-  const features = await listDirs(featuresDir)
+  const specs = await listSpecFiles(featuresDir)
 
-  for (const feature of features) {
-    await renderFeature(path.join(featuresDir, feature), feature)
+  for (const specFile of specs) {
+    await renderFeature(specFile)
   }
 
-  await renderFeatureIndex(features)
+  await renderFeatureIndex(specs)
 }
 
-async function renderFeature(featureDir, slug) {
-  const spec = await readYaml(path.join(featureDir, 'spec.yaml'))
-  const testcasesDir = path.join(featureDir, 'testcases')
+async function renderFeature(specFile) {
+  const featureDir = path.dirname(specFile)
+  const slug = path.basename(specFile).replace(/\.spec\.ya?ml$/, '')
+  const spec = await readYaml(specFile)
   const generatedDir = path.join(featureDir, 'generated')
-  const generatedTestcasesDir = path.join(generatedDir, 'testcases')
-  const testcaseFiles = await listYamlFiles(testcasesDir)
+  const generatedTestcasesDir = path.join(generatedDir, slug, 'testcases')
+  const testcaseFiles = await listTestcaseFiles(featureDir, slug)
   const testcases = []
 
   await mkdir(generatedTestcasesDir, { recursive: true })
 
   for (const file of testcaseFiles) {
-    const testcase = await readYaml(path.join(testcasesDir, file))
+    const testcase = await readYaml(path.join(featureDir, file))
     testcases.push({ file, data: testcase })
     await writeFile(
-      path.join(generatedTestcasesDir, file.replace(/\.ya?ml$/, '.md')),
+      path.join(generatedTestcasesDir, file.replace(/\.test\.ya?ml$/, '.test.md')),
       renderTestcaseMarkdown(testcase, spec),
       'utf8'
     )
   }
 
-  await writeFile(path.join(generatedDir, 'spec.md'), renderSpecMarkdown(spec), 'utf8')
-  await writeFile(path.join(generatedDir, 'README.md'), renderFeatureReadme(slug, spec, testcases), 'utf8')
+  await writeFile(path.join(generatedDir, `${slug}.spec.md`), renderSpecMarkdown(spec), 'utf8')
+  await writeFile(path.join(generatedDir, `${slug}.README.md`), renderFeatureReadme(slug, spec, testcases), 'utf8')
 }
 
-async function renderFeatureIndex(features) {
+async function renderFeatureIndex(specs) {
   const rows = []
 
-  for (const slug of features) {
-    const spec = await readYaml(path.join(featuresDir, slug, 'spec.yaml'))
-    rows.push(`- [${spec.title ?? slug}](./features/${slug}/generated/README.md)`)
+  for (const specFile of specs) {
+    const slug = path.basename(specFile).replace(/\.spec\.ya?ml$/, '')
+    const spec = await readYaml(specFile)
+    const relativeDir = path.relative(docsDir, path.dirname(specFile))
+    rows.push(`- [${spec.title ?? slug}](./${relativeDir}/generated/${slug}.README.md)`)
   }
 
   await writeFile(
@@ -59,15 +62,15 @@ function renderSpecMarkdown(spec) {
 }
 
 function renderTestcaseMarkdown(testcase, spec) {
-  return `# ${testcase.title ?? testcase.id}\n\nFeature: [${spec.title ?? testcase.feature}](../spec.md)\n\n## Requirement IDs\n\n${renderBullets(testcase.requirementIds)}\n\n## Route\n\n- Path: \`${testcase.route?.path ?? ''}\`\n- Auth: \`${testcase.route?.auth ?? 'unknown'}\`\n\n## Test IDs\n\n${renderBullets(testcase.testIds?.required)}\n\n## Setup\n\n${renderCode(testcase.setup)}\n\n## Data\n\n${renderCode(testcase.data)}\n\n## Steps\n\n${renderList(testcase.steps, renderStep)}\n\n## Assertions\n\n${renderCode(testcase.assertions)}\n\n## Expected\n\n${renderBullets(testcase.expected)}\n`
+  return `# ${testcase.title ?? testcase.id}\n\nFeature: ${spec.title ?? testcase.feature}\n\n## Requirement IDs\n\n${renderBullets(testcase.requirementIds)}\n\n## Route\n\n- Path: \`${testcase.route?.path ?? ''}\`\n- Auth: \`${testcase.route?.auth ?? 'unknown'}\`\n\n## Test IDs\n\n${renderBullets(testcase.testIds?.required)}\n\n## Setup\n\n${renderCode(testcase.setup)}\n\n## Data\n\n${renderCode(testcase.data)}\n\n## Mock Cases\n\n${renderMockCases(testcase.mockCases)}\n\n## Steps\n\n${renderList(testcase.steps, renderStep)}\n\n## Assertions\n\n${renderCode(testcase.assertions)}\n\n## Expected\n\n${renderBullets(testcase.expected)}\n`
 }
 
 function renderFeatureReadme(slug, spec, testcases) {
   const links = testcases
-    .map(({ file, data }) => `- [${data.title ?? data.id}](./testcases/${file.replace(/\.ya?ml$/, '.md')})`)
+    .map(({ file, data }) => `- [${data.title ?? data.id}](./${slug}/testcases/${file.replace(/\.test\.ya?ml$/, '.test.md')})`)
     .join('\n')
 
-  return `# ${spec.title ?? slug}\n\n${spec.summary ?? ''}\n\n## Spec\n\n- [Spec](./spec.md)\n\n## Testcases\n\n${links || '_No testcases yet._'}\n`
+  return `# ${spec.title ?? slug}\n\n${spec.summary ?? ''}\n\n## Spec\n\n- [Spec](./${slug}.spec.md)\n\n## Testcases\n\n${links || '_No testcases yet._'}\n`
 }
 
 function renderRequirement(req) {
@@ -93,6 +96,12 @@ function renderBullets(items = []) {
   return items.length ? items.map((item) => `- ${formatInline(item)}`).join('\n') : '_None_'
 }
 
+function renderMockCases(cases = []) {
+  return cases.length
+    ? cases.map((item) => `- **${item.id}** — ${item.title}: ${item.expected}`).join('\n')
+    : '_None_'
+}
+
 function renderList(items = [], renderer) {
   return items.length ? items.map(renderer).join('\n') : '_None_'
 }
@@ -110,22 +119,36 @@ async function readYaml(file) {
   return parse(await readFile(file, 'utf8')) ?? {}
 }
 
-async function listDirs(dir) {
-  try {
-    const entries = await readdir(dir, { withFileTypes: true })
-    return entries.filter((entry) => entry.isDirectory()).map((entry) => entry.name).sort()
-  } catch {
-    return []
+async function listSpecFiles(dir) {
+  const files = []
+
+  for (const entry of await listEntries(dir)) {
+    const entryPath = path.join(dir, entry.name)
+
+    if (entry.isDirectory()) {
+      files.push(...await listSpecFiles(entryPath))
+      continue
+    }
+
+    if (entry.isFile() && /\.spec\.ya?ml$/.test(entry.name)) {
+      files.push(entryPath)
+    }
   }
+
+  return files.sort()
 }
 
-async function listYamlFiles(dir) {
+async function listTestcaseFiles(dir, slug) {
+  const entries = await listEntries(dir)
+  return entries
+    .filter((entry) => entry.isFile() && entry.name.startsWith(`${slug}.`) && /\.test\.ya?ml$/.test(entry.name))
+    .map((entry) => entry.name)
+    .sort()
+}
+
+async function listEntries(dir) {
   try {
-    const entries = await readdir(dir, { withFileTypes: true })
-    return entries
-      .filter((entry) => entry.isFile() && /\.ya?ml$/.test(entry.name))
-      .map((entry) => entry.name)
-      .sort()
+    return await readdir(dir, { withFileTypes: true })
   } catch {
     return []
   }

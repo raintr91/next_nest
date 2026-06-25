@@ -2,12 +2,10 @@
 # Cài snapshot rules/skills tham khảo vào local — không cần agent đọc GitHub mỗi session.
 # Chạy: bash scripts/install-ai-harness-vendor.sh
 set -euo pipefail
-WSL_SKILLS="${HOME}/.cursor/skills"
 WSL_VENDOR="${HOME}/.cursor/skills-vendor"
 WSL_RULES_VENDOR="${HOME}/.cursor/rules-vendor"
 WIN_USER="${WIN_USER:-tvvu1}"
 WIN_BASE="/mnt/c/Users/${WIN_USER}/.cursor"
-WIN_SKILLS="${WIN_BASE}/skills"
 WIN_VENDOR="${WIN_BASE}/skills-vendor"
 WIN_RULES_VENDOR="${WIN_BASE}/rules-vendor"
 
@@ -35,27 +33,6 @@ install_vendor() {
   for entry in "${REPOS[@]}"; do
     IFS='|' read -r url name <<< "${entry}"
     clone_or_pull "${url}" "${name}" "${vendor_root}/${name}"
-  done
-}
-
-copy_team_skills() {
-  local dest_skills="$1"
-  local portal_root
-  portal_root="$(cd "$(dirname "$0")/.." && pwd)"
-  mkdir -p "${dest_skills}"
-  for d in "${portal_root}/.cursor/skills"/team-*; do
-    [[ -d "$d" ]] || continue
-    name="$(basename "$d")"
-    rm -rf "${dest_skills}/${name}"
-    cp -a "$d" "${dest_skills}/${name}"
-  done
-  # Global team skills (WSL home)
-  for d in "${HOME}/.cursor/skills"/team-*; do
-    [[ -d "$d" ]] || continue
-    name="$(basename "$d")"
-    if [[ ! -d "${dest_skills}/${name}" ]]; then
-      cp -a "$d" "${dest_skills}/${name}"
-    fi
   done
 }
 
@@ -124,16 +101,19 @@ Path: \`${display_root}\\mattpocock-skills\\skills\\\`
 | codebase-design | \`engineering/codebase-design/SKILL.md\` |
 | writing-great-skills | \`productivity/writing-great-skills/SKILL.md\` |
 
-## Team 4-phase workflow
+## Portal public commands
 
-| Phase | Skill |
-|-------|-------|
-| Router | \`~/.cursor/skills/team-harness/SKILL.md\` |
-| 1 Design | \`~/.cursor/skills/team-phase1-brainstorm/SKILL.md\` |
-| 2 UI mock | \`portal/.cursor/skills/team-phase2-ui-prototype/SKILL.md\` |
-| 3a E2E | \`portal/.cursor/skills/team-phase3-e2e/SKILL.md\` |
-| 3b API | \`api/.cursor/skills/team-phase3-backend/SKILL.md\` |
-| 4 Integrate | \`portal/.cursor/skills/team-phase4-api-integration/SKILL.md\` |
+Team workflow skills are project-local, not global:
+
+| Command | Skill |
+|---------|-------|
+| /design | \`portal/.cursor/skills/design/SKILL.md\` |
+| /legacy-spec | \`portal/.cursor/skills/legacy-spec/SKILL.md\` |
+| /model | \`portal/.cursor/skills/model/SKILL.md\` |
+| /test | \`portal/.cursor/skills/test/SKILL.md\` |
+| /api | \`portal/.cursor/skills/api/SKILL.md\` |
+| /wire | \`portal/.cursor/skills/wire/SKILL.md\` |
+| /unit | \`portal/.cursor/skills/unit/SKILL.md\` |
 
 Cập nhật vendor: \`bash portal/scripts/install-ai-harness-vendor.sh\`
 EOF
@@ -141,14 +121,12 @@ EOF
 
 echo "==> WSL: ${WSL_VENDOR}"
 install_vendor "${WSL_VENDOR}"
-copy_team_skills "${WSL_SKILLS}"
 copy_karpathy_rule "${WSL_RULES_VENDOR}" "${WSL_VENDOR}"
 write_index "${WSL_VENDOR}"
 
 if [[ -d "/mnt/c/Users/${WIN_USER}" ]]; then
   echo "==> Windows: ${WIN_VENDOR}"
   install_vendor "${WIN_VENDOR}"
-  copy_team_skills "${WIN_SKILLS}"
   copy_karpathy_rule "${WIN_RULES_VENDOR}" "${WIN_VENDOR}"
   write_index "${WIN_VENDOR}"
   echo "Windows Cursor path: C:\\Users\\${WIN_USER}\\.cursor\\skills-vendor"

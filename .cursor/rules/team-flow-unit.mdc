@@ -6,7 +6,7 @@ alwaysApply: false
 
 # /unit — Vitest Unit Tests
 
-Skill: `.cursor/skills/team-unit-vitest/SKILL.md`
+Skill: `.cursor/skills/unit/SKILL.md`
 
 - Use for logic tests: composables, services, stores, models, validations, utils.
 - Prefer pure helper extraction when logic is hard to test.

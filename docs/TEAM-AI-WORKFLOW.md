@@ -21,18 +21,17 @@ cd ~/workspace/portal
 bash scripts/install-ai-harness-vendor.sh
 ```
 
-Script sẽ:
+Script vendor chỉ dùng cho tài liệu tham khảo:
 1. Clone shallow 4 repo vào `~/.cursor/skills-vendor/` (WSL)
 2. Mirror sang `C:\Users\tvvu1\.cursor\skills-vendor\` (Windows Cursor)
-3. Copy team skills + Karpathy rule
-4. Tạo `INDEX.md` — bản đồ file local cho agent
+3. Tạo `INDEX.md` — bản đồ file local cho agent
 
-**WSL vs Windows:** Cursor trên Windows đọc `C:\Users\<user>\.cursor\`, Cursor trong WSL đọc `~/.cursor/`. Hai path **khác nhau** — chạy script để sync cả hai.
+**Team workflow không dùng global skills nữa.** Public commands nằm trong `portal/.cursor/skills/` để member mở đúng repo là thấy đúng `/design`, `/legacy-spec`, `/model`, `/test`, `/api`, `/wire`, `/unit`.
 
 | Môi trường | Vendor INDEX | Team skills |
 |------------|--------------|-------------|
-| WSL | `~/.cursor/skills-vendor/INDEX.md` | `~/.cursor/skills/team-*` |
-| Windows native | `C:\Users\tvvu1\.cursor\skills-vendor\INDEX.md` | `C:\Users\tvvu1\.cursor\skills\team-*` |
+| WSL | `~/.cursor/skills-vendor/INDEX.md` | `portal/.cursor/skills/*` |
+| Windows native | `C:\Users\tvvu1\.cursor\skills-vendor\INDEX.md` | `portal/.cursor/skills/*` |
 
 Karpathy rule (optional global): `~/.cursor/rules-vendor/karpathy-guidelines.mdc` — copy vào project `.cursor/rules/` nếu muốn `alwaysApply`.
 
@@ -52,14 +51,15 @@ Karpathy rule (optional global): `~/.cursor/rules-vendor/karpathy-guidelines.mdc
 
 | Command | Ai | Output | Skill (local) |
 |-------|-----|--------|---------------|
-| `/design` | BA/Dev/FE | Discovery + mock UI + `spec.yaml` + testcase YAML round 1 + generated Markdown | `team-phase1-brainstorm` + `team-phase2-ui-prototype` |
-| `/model` | Dev | Zod API schemas + TypeScript types trong `models/` | `portal/.cursor/skills/team-model/` |
-| `/test` | QA/Dev | Refined `testcases/*.yaml` + Playwright E2E | `portal/.cursor/skills/team-phase3-e2e/` |
-| `/api` | Dev BE | Laravel API | `api/.cursor/skills/team-phase3-backend/` |
-| `/wire` | Dev FE | Service/composable thật, bỏ mock | `portal/.cursor/skills/team-phase4-api-integration/` |
-| `/unit` | Dev | Vitest unit tests cho logic | `portal/.cursor/skills/team-unit-vitest/` |
+| `/design` | BA/Dev/FE | Verify/update `spec.yaml`, optional legacy evidence, testcase round 1, generated Markdown, real prototype with mocked API responses only | `portal/.cursor/skills/design/` |
+| `/legacy-spec` | BA/Dev | Analyze existing/legacy code into `spec.yaml` + testcase round 1, no production edits | `portal/.cursor/skills/legacy-spec/` |
+| `/model` | Dev | Zod API schemas + TypeScript types trong `models/` | `portal/.cursor/skills/model/` |
+| `/test` | QA/Dev | Refined `testcases/*.yaml` + Playwright E2E | `portal/.cursor/skills/test/` |
+| `/api` | Dev BE | Backend API in configured backend project | `portal/.cursor/skills/api/` |
+| `/wire` | Dev FE | Replace mocked API boundary with real API services/composables | `portal/.cursor/skills/wire/` |
+| `/unit` | Dev | Vitest unit tests cho logic | `portal/.cursor/skills/unit/` |
 
-**Router:** gõ `/design`, `/model`, `/test`, `/api`, `/wire`, `/unit`, hoặc `@team-harness` → agent đọc `~/.cursor/skills/team-harness/SKILL.md`
+**Router:** gõ `/design`, `/legacy-spec`, `/model`, `/test`, `/api`, `/wire`, `/unit` → Cursor load skill public trong `portal/.cursor/skills/`.
 
 Aliases (không dùng trong docs chính nếu không cần): `/prototype` → `/design`, `/e2e` → `/test`, `/backend` → `/api`, `/integrate` → `/wire`.
 
@@ -81,7 +81,7 @@ Trong `portal/.harness/` (copy từ `*.example.*` khi bắt đầu feature):
 | `feature_list.json` | Scope machine-readable |
 | `progress.md` | Handoff giữa session |
 
-Session lifecycle: `~/.cursor/skills/team-session-lifecycle/SKILL.md`
+Session lifecycle: cập nhật `.harness/progress.md` và `.harness/feature_list.json` theo command đang chạy.
 
 ---
 
@@ -93,7 +93,7 @@ Session lifecycle: `~/.cursor/skills/team-session-lifecycle/SKILL.md`
 |------|---------------------|---------------|-------|
 | **A — alwaysApply** | Mọi chat | ~40–80 dòng | `portal-base-core`, `api-base-core` |
 | **B — globs** | Mở/sửa file match | ~10–15 dòng/rule | `team-flow-phase2-prototype` khi sửa `pages/**` |
-| **C — opt-in skill** | User `@skill` hoặc nói phase | 30–90 dòng / 1 skill | `team-harness`, `team-phase1-brainstorm` |
+| **C — opt-in skill** | User gõ command ngắn hoặc nói phase | 30–120 dòng / 1 skill | `design`, `legacy-spec`, `test` |
 
 **Team workflow = tầng B + C** — **không** alwaysApply (tránh ~13 dòng/router mỗi session khi sửa bug nhỏ).
 
@@ -167,10 +167,13 @@ Phase 3 verify:
 /design tạo chức năng hotel booking gồm list, search, create, validate required.
 ```
 
-Mock API rule trong `/design`:
+Prototype rule trong `/design`:
 
+- UI thật bằng shadcn-ui + component sẵn có.
+- Actions thật qua composable/service-like boundary.
+- Logic thật: loading, validation, error, empty state.
+- Chỉ mock response data ở API boundary; không làm màn hình fake rời rạc.
 - Detail API/mock dùng lại cho detail, edit initial form, duplicate initial form.
-- Block/tab entity độc lập thì tách API/mock composable riêng, không gom vào một payload lớn.
 
 **Refine E2E:**
 ```
@@ -193,10 +196,7 @@ Mock API rule trong `/design`:
 /unit bổ sung Vitest cho validation schema và service parser của Hotel
 ```
 
-**Kết session:**
-```
-@team-session-lifecycle Cập nhật progress.md và feature_list.json
-```
+**Kết session:** cập nhật `.harness/progress.md` và `feature_list.json` nếu tồn tại.
 
 ---
 
@@ -226,7 +226,6 @@ Chạy lại sau khi upstream đổi hoặc ~1 tháng.
 
 ```
 ~/.cursor/
-  skills/team-harness/          # router + phase1 + session + karpathy (tóm tắt)
   skills-vendor/                # snapshot upstream
   rules-vendor/karpathy-guidelines.mdc
 
@@ -237,12 +236,10 @@ portal/
   docs/schemas/                 # schema cho spec/testcase YAML
   docs/.vitepress/              # local review site
   .harness/                     # state
-  .cursor/skills/team-phase*    # /design, /test, /wire portal
-  .cursor/skills/team-model/
-  .cursor/skills/team-unit-vitest/
+  .cursor/skills/{design,legacy-spec,model,test,api,wire,unit}/
   .cursor/rules/team-flow-*.mdc
 
 api/
-  .cursor/skills/team-phase3-backend/
+  .cursor/skills/api/
   .cursor/rules/team-flow-router.mdc
 ```

@@ -477,18 +477,21 @@ Xem thêm: [Portal Base overview](./portal-base-overview.md).
 
 ---
 
-## 4.1 Rules & Skills
+## 4.1 Lệnh Làm Việc Với AI
 
-Command nào load context đó:
+Member chỉ cần nhớ các lệnh ngắn:
 
-- `/design`: mock UI + spec/testcase round 1
-- `/model`: model schemas/types only
+- `/design`: kiểm tra/cập nhật spec, testcase nháp, docs, dựng prototype thật
+- `/legacy-spec`: đọc code cũ để viết lại spec/testcase
+- `/model`: model schemas/types trong `models/`
 - `/test`: testcase/E2E
 - `/api`: backend repo
-- `/wire`: API integration
+- `/wire`: nối API thật, bỏ mock
 - `/unit`: Vitest
 
-Mục tiêu: giảm token, giảm lạc phase, tăng độ ổn định.
+Trong `/design`: UI thật, actions thật, logic thật; chỉ mock response data ở API boundary.
+
+Mục tiêu: gõ đúng lệnh → load đúng context, giảm token, giảm lạc phase.
 
 ---
 

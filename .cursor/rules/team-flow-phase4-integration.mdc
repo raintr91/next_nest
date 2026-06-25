@@ -6,7 +6,7 @@ alwaysApply: false
 
 # /wire — Integration
 
-Skill: `.cursor/skills/team-phase4-api-integration/SKILL.md`
+Skill: `.cursor/skills/wire/SKILL.md`
 
 - 4 tầng: models → services → composables → pages (`portal-base`)
 - Source requirement: `docs/features/{slug}/spec.yaml`
