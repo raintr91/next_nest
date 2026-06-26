@@ -12,7 +12,7 @@ const props = withDefaults(
     cancelLabel?: string
     variant?: 'default' | 'destructive'
     loading?: boolean
-    /** Root id; title/content/buttons use suffixes — see docs/E2E-TESTIDS.md */
+    /** Root id; title/content/buttons use suffixes — see docs/operational/E2E-TESTIDS.md */
     testId?: string
   }>(),
   {

@@ -1,24 +1,39 @@
 # Portal Docs
 
-Portal docs dùng hai dạng:
+Hai lớp tài liệu feature:
 
-- YAML là source of truth cho AI/dev.
-- Markdown trong `generated/` là bản review cho BA/QA trên VitePress.
-
-## Quick Links
-
-- [Generated Feature Docs](./generated.md)
-- [Team AI Workflow Slides](./presentations/team-ai-workflow-slides.md)
-- [Team AI Workflow](./TEAM-AI-WORKFLOW.md)
-- [Architecture](./ARCHITECTURE.md)
-- [E2E Test IDs](./E2E-TESTIDS.md)
-- [Semantic UI Assertions](./E2E-SEMANTIC-UI-ASSERTIONS.md)
-
-## Commands
+- **YAML** — source of truth (`features/{slug}/`)
+- **Markdown generated** — review BA/QA (`features/{slug}/generated/`)
 
 ```bash
 pnpm docs:render
 pnpm docs:dev
 ```
 
-Mở VitePress local để review link và generated docs giống web hơn Markdown preview trong IDE.
+## Operational
+
+- [Team AI Workflow](./operational/TEAM-AI-WORKFLOW.md)
+- [Architecture](./operational/ARCHITECTURE.md)
+- [E2E Test IDs](./operational/E2E-TESTIDS.md)
+- [Rapi Recorder — QA](./operational/RAPI-RECORDER-QA.md)
+- [Semantic UI Assertions](./operational/E2E-SEMANTIC-UI-ASSERTIONS.md)
+
+## Onboarding (slides)
+
+- [Team AI Workflow Slides](./onboarding/team-ai-workflow-slides.md) — training; giữ `/design`
+- [YAML/Markdown workflow](./onboarding/yaml-markdown-ai-workflow.md)
+- [Portal Base overview](./onboarding/portal-base-overview.md)
+- [E2E automation (QA)](./onboarding/e2e-automation-playwright.md)
+
+## Common UI
+
+- [Common UI patterns](./common-ui/index.md)
+- [Generated feature docs](./common-ui/generated.md) → `features/common/`, `features/hotel/`, …
+
+## Dev environment
+
+- [Docker dev nhẹ](./dev-environment/DOCKER-DEV-LIGHT.md)
+- [WSL + Cursor perf](./dev-environment/WSL-CURSOR-PERF.md)
+- [Monorepo strategy](./dev-environment/MONOREPO-STRATEGY.md)
+
+Backend: repo `api/` → `src/docs/TEAM-AI-BACKEND-WORKFLOW.md`

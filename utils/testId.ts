@@ -1,6 +1,6 @@
 /**
  * Map prop `testId` → HTML attribute `data-testid` for E2E selectors.
- * Use in shared UI primitives; pages pass stable kebab-case ids (see docs/E2E-TESTIDS.md).
+ * Use in shared UI primitives; pages pass stable kebab-case ids (see docs/operational/E2E-TESTIDS.md).
  */
 export function testIdAttr(testId?: string): { 'data-testid'?: string } {
   if (!testId) return {}

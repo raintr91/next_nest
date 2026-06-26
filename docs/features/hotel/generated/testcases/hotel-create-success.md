@@ -1,8 +1,8 @@
 # Create hotel successfully
 
-Feature: [Hotel Management](../spec.md)
+Tính năng: Hotel Management
 
-## Requirement IDs
+## Mã yêu cầu
 
 - REQ-HOTEL-002
 
@@ -11,14 +11,14 @@ Feature: [Hotel Management](../spec.md)
 - Path: `/hotels/create`
 - Auth: `required`
 
-## Test IDs
+## Test ID
 
 - hotel-create-page
 - hotel-name-input
 - hotel-save-btn
 - app-toast-message
 
-## Setup
+## Thiết lập
 
 ```yaml
 session: mockAuthenticatedSession
@@ -28,19 +28,23 @@ mocks:
     response: hotelCreateSuccess
 ```
 
-## Data
+## Dữ liệu
 
 ```yaml
 hotelName: Hotel Sakura
 ```
 
-## Steps
+## Kịch bản mock
+
+_Không có._
+
+## Các bước
 
 1. action: goto, path: /hotels/create
 2. action: fill, testId: hotel-name-input, valueFrom: data.hotelName
 3. action: click, testId: hotel-save-btn
 
-## Assertions
+## Assertion
 
 ```yaml
 ui:
@@ -62,7 +66,7 @@ semantic:
     - toHaveValidAccessibleNames
 ```
 
-## Expected
+## Kết quả mong đợi
 
 - Success toast is visible.
 - User returns to hotel list.

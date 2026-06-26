@@ -9,38 +9,23 @@ disable-model-invocation: true
 
 # /legacy-spec — Code To Design Spec
 
+Shared extracts: `.cursor/extracts/legacy-config.md`, `legacy-blade-to-api.md`, `spec-split-by-function.md`, `agent-discipline.md`
+
 ## Scope
 
 Read/analyze code only. Do not change production code.
 
-## Inputs
-
-Use `/legacy-spec <module-or-feature>` when the source of truth is existing code
-instead of a new requirement.
-
-Resolve legacy/project root from the first available config:
-
-```text
-~/.cursor/team-projects.json
-{workspace}/.cursor/team-projects.local.json
-{workspace}/.cursor/team-projects.json
-~/.cursor/legacy-projects.json
-{workspace}/.cursor/legacy-projects.local.json
-{workspace}/.cursor/legacy-projects.json
-```
-
-If multiple projects match and none is default, ask which one.
+Input: `/legacy-spec <module-or-feature>` when source of truth is existing code.
 
 ## Workflow
 
 1. Build a compact inventory first; do not read the whole repo.
 2. Trace behavior from routes/pages/controllers/jobs/forms/services/models.
-3. Extract fields, validations, permissions, UI screens, API contracts, side effects, and edge cases.
+3. Extract fields, validations, permissions, UI screens, API contracts, side effects, edge cases.
 4. Mark evidence as `inferredFromCode` or `openQuestion`.
-5. Write/update `docs/features/{slug}/spec.yaml`.
-6. Draft testcase YAML round 1.
-7. Render docs when supported.
-8. Update harness notes when present.
+5. Write/update `docs/features/{slug}/spec.yaml` per spec-split extract.
+6. Draft testcase YAML round 1; run `pnpm docs:render` when supported.
+7. Update `.harness/progress.md` when present.
 
 ## Evidence Rules
 
@@ -49,3 +34,8 @@ If multiple projects match and none is default, ask which one.
 - Do not invent business intent.
 - Put runtime/config/data gaps in `openQuestions`.
 
+## Handoff
+
+- Refine or split specs → `/spec`
+- Close gaps with user → `/grill-with-docs`
+- UI after spec approved → `/prototype`

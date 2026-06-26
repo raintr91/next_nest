@@ -4,12 +4,10 @@ globs: "{composables,services,models,validations,utils,stores,tests/unit}/**/*.{
 alwaysApply: false
 ---
 
-# /unit — Vitest Unit Tests
+# /unit — Vitest
 
-Skill: `.cursor/skills/unit/SKILL.md`
+Skill: `.cursor/skills/unit/SKILL.md` · Grill: `.cursor/skills/grill-unit/SKILL.md`
 
-- Use for logic tests: composables, services, stores, models, validations, utils.
-- Prefer pure helper extraction when logic is hard to test.
-- Mock `$apiFetch` for service/composable tests.
-- Do not use for browser layout, accessibility, visual, or Playwright flows.
-- Verify: `pnpm test:unit` or scoped `pnpm exec vitest run <path>`.
+- Logic only: composables, services, stores, models, validations, utils
+- Mock `$apiFetch` at boundary; scoped `pnpm exec vitest run <path>`
+- Extracts: `.cursor/extracts/verify-gate.md`

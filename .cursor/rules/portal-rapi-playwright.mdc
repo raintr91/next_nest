@@ -6,7 +6,7 @@ alwaysApply: false
 
 # Rapi → Playwright (Dev / AI)
 
-QA rules: `docs/RAPI-RECORDER-QA.md` · Skill: `.cursor/skills/portal-rapi-playwright/`
+QA rules: `docs/operational/RAPI-RECORDER-QA.md` · Skill: `.cursor/skills/portal-rapi-playwright/`
 
 ## Convert checklist
 

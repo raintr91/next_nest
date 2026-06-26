@@ -9,7 +9,7 @@ alwaysApply: false
 Skill: `.cursor/skills/model/SKILL.md`
 
 - Scope only: `models/`.
-- Use during `/design` or before `/wire` when entity contracts need to be created/refined.
+- Use during `/spec`, `/prototype`, or before `/wire` when entity contracts need creation/refinement.
 - Create/update Zod API contract schemas and `z.infer` TypeScript types.
 - Keys must match model/API/database fields and relationship names; do not rename params or flatten nested relationships.
 - Do not edit pages, components, services, composables, stores, validations, or tests.

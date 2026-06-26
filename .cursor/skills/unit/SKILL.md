@@ -9,35 +9,23 @@ disable-model-invocation: true
 
 # /unit — Portal Vitest
 
+Shared extracts: `.cursor/extracts/agent-discipline.md`, `verify-gate.md`
+
 ## Scope
 
-Write unit tests for logic, not browser behavior.
+Logic tests only — not browser layout, a11y, or Playwright.
 
-Good targets:
-
-- validation schemas
-- payload builders and mappers
-- service response parsing
-- composable state transitions
-- store actions
-- pure helpers and edge cases
-
-Not targets:
-
-- Playwright flows
-- layout/visual/a11y checks
-- full page rendering
+Good: validations, payload builders, parsers, composable state, store actions, pure helpers.
 
 ## Rules
 
-1. Test behavior, not implementation details.
-2. Use small fake data builders.
-3. Mock `$apiFetch` at service boundaries.
-4. Extract pure helpers when logic is hard to test.
-5. Keep tests under `tests/unit/`.
+1. Behavior over implementation details; public interface only.
+2. Small fake data builders; mock `$apiFetch` at service boundaries.
+3. Tests under `tests/unit/`.
+4. Vertical slice: one behavior → one test → minimal fix → green → next.
+5. Mock at system boundary only; no internal call-count mocks.
+6. Refactor only after green.
 
 ## Done
 
-- Scoped Vitest run passes or failure is reported.
-- No broad snapshots or unrelated mocks.
-
+Scoped Vitest pass or reported failure. Then `/grill-unit` for coverage audit.

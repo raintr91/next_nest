@@ -9,6 +9,8 @@ disable-model-invocation: true
 
 # /model — Portal Models Only
 
+Shared extract: `.cursor/extracts/legacy-config.md`
+
 ## Scope
 
 Only edit `models/`.

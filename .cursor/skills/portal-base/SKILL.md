@@ -13,9 +13,13 @@ disable-model-invocation: true
 
 Auth-first Nuxt 4 portal. Stack: Vue 3, Pinia, vee-validate + Zod, shadcn-vue, Tailwind, Playwright E2E.
 
-**Docs in repo:** `docs/ARCHITECTURE.md`, `docs/E2E-TESTIDS.md`, `docs/RAPI-RECORDER-QA.md`, `README.md`
+**Ngôn ngữ:** docs/spec/testcase/handoff sinh ra bằng tiếng Việt; giữ nguyên schema key, route, API field, model/code identifier, `data-testid`.
 
-**Cursor rules (fallback khi tool không load skill):** `.cursor/rules/portal-base-*.mdc`, `.cursor/rules/portal-rapi-playwright.mdc`, `.cursor/rules/portal-code-size.mdc`, `.cursor/rules/portal-component-split.mdc`
+**Legacy:** khi user nhắc `legacy`, resolve qua `team-projects` hoặc `legacy-projects` JSON trước; không tự đoán path.
+
+**Docs in repo:** `docs/operational/ARCHITECTURE.md`, `docs/operational/E2E-TESTIDS.md`, `docs/operational/RAPI-RECORDER-QA.md`, `README.md`
+
+**Cursor rules (fallback):** `portal-invariants.mdc`, `portal-contract-naming.mdc`, `portal-base-*.mdc`, `portal-code-size.mdc`, `portal-component-split.mdc`
 
 **Rapi → Playwright (Dev/AI):** `.cursor/skills/portal-rapi-playwright/`
 
@@ -188,7 +192,8 @@ Hoặc dùng `utils/testId.ts` → `testIdAttr(testId)`, `testIdSuffix(testId, '
 - [ ] inputs/selects/buttons có test id
 - [ ] alert/dialog/toast ids
 - [ ] nav items: nav-{id}
-- [ ] Playwright spec + assertLayoutIntegrity sau goto
+- [ ] Phase `/prototype`: chỉ smoke skeleton nếu cần, không chạy E2E/unit
+- [ ] Phase `/test`: Playwright spec + assertLayoutIntegrity sau goto
 ```
 
 **Reference:** chi tiết bảng + ví dụ → [reference.md](reference.md)
@@ -197,7 +202,9 @@ Hoặc dùng `utils/testId.ts` → `testIdAttr(testId)`, `testIdSuffix(testId, '
 
 ## 4. Playwright E2E
 
-Quy trình: **prototype mock (phase 1)** → QA record Rapi (phase 1.5) → Dev convert Playwright (phase 2.5~3). Xem `docs/RAPI-RECORDER-QA.md` (QA) và skill `portal-rapi-playwright` (convert).
+Quy trình: **prototype mock (phase 1)** → QA record Rapi (phase 1.5) → Dev convert Playwright (phase 2.5~3). Xem `docs/operational/RAPI-RECORDER-QA.md` (QA) và skill `portal-rapi-playwright` (convert).
+
+Trong `/prototype`, không chạy full E2E/unit. Nếu cần, chỉ tạo smoke skeleton cho happy path, luồng chính hoặc validation message và handoff sang `/test`/`/unit`.
 
 ```bash
 pnpm test:e2e          # port 3005, .nuxt-e2e
@@ -229,13 +236,14 @@ Phát hiện: `overflow` (tràn text), `collapsed` (shell rỗng/co), `overlap` 
 1. Scaffold 4 tầng (models → service → composable → page)
 2. Gắn `testId` theo checklist §3
 3. Dùng shared components (`DataPageHeader`, `FormField`, `Button`…) — không duplicate markup
-4. Thêm `tests/e2e/{module}.spec.ts` + `assertLayoutIntegrity`
-5. Không import legacy theme layouts
+4. Phase `/prototype`: prototype chạy được; smoke test skeleton là optional và không chạy
+5. Phase `/test`: thêm `tests/e2e/{module}.spec.ts` + `assertLayoutIntegrity`
+6. Không import legacy theme layouts
 
 ### B. Sửa shared UI component
 
 1. Thêm/duy trì prop `testId` nếu component tương tác hoặc mang nội dung assert được
-2. Document suffix con (label, error, title…) trong component hoặc `docs/E2E-TESTIDS.md` nếu pattern mới
+2. Document suffix con (label, error, title…) trong component hoặc `docs/operational/E2E-TESTIDS.md` nếu pattern mới
 
 ### C. Review PR portal
 

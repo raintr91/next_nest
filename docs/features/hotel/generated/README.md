@@ -2,11 +2,11 @@
 
 Manage hotel records in the portal, including list, search, create, and validation behavior.
 
-## Spec
+## Đặc tả
 
-- [Spec](./spec.md)
+- [Đặc tả](./spec.md)
 
-## Testcases
+## Testcase
 
 - [Create hotel successfully](./testcases/hotel-create-success.md)
 - [Create hotel validation](./testcases/hotel-create-validation.md)

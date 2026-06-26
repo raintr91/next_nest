@@ -5,46 +5,46 @@
   "current_phase": 1,
   "items": [
     {
-      "id": "phase1-design",
+      "id": "phase-spec",
       "phase": 1,
-      "title": "Design doc complete",
+      "title": "Spec + testcase round 1",
       "status": "pending",
-      "evidence": "docs/features/example-feature/01-design.md reviewed"
+      "evidence": "docs/features/example-feature/*.spec.yaml reviewed"
     },
     {
-      "id": "phase2-list-ui",
+      "id": "phase-prototype-list",
       "phase": 2,
-      "title": "List screen with mock",
+      "title": "List prototype with mock API",
       "status": "pending",
-      "depends_on": ["phase1-design"]
+      "depends_on": ["phase-spec"]
     },
     {
-      "id": "phase2-create-ui",
+      "id": "phase-prototype-create",
       "phase": 2,
-      "title": "Create form with mock",
+      "title": "Create form prototype with mock API",
       "status": "pending",
-      "depends_on": ["phase1-design"]
+      "depends_on": ["phase-spec"]
     },
     {
-      "id": "phase3a-e2e",
+      "id": "phase-e2e",
       "phase": 3,
       "title": "Playwright specs green",
       "status": "pending",
-      "depends_on": ["phase2-list-ui", "phase2-create-ui"]
+      "depends_on": ["phase-prototype-list", "phase-prototype-create"]
     },
     {
-      "id": "phase3b-api",
+      "id": "phase-api",
       "phase": 3,
       "title": "Backend module + tests",
       "status": "pending",
-      "depends_on": ["phase1-design"]
+      "depends_on": ["phase-spec"]
     },
     {
-      "id": "phase4-integration",
+      "id": "phase-wire",
       "phase": 4,
       "title": "Real API wired, E2E green",
       "status": "pending",
-      "depends_on": ["phase3a-e2e", "phase3b-api"]
+      "depends_on": ["phase-e2e", "phase-api"]
     }
   ]
 }

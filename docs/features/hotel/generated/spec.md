@@ -2,7 +2,7 @@
 
 Manage hotel records in the portal, including list, search, create, and validation behavior.
 
-## Requirements
+## Yêu cầu
 
 - **REQ-HOTEL-001** — View hotel list
   User can view a paginated list of hotels.
@@ -11,7 +11,7 @@ Manage hotel records in the portal, including list, search, create, and validati
 - **REQ-HOTEL-003** — Validate create form
   User sees validation errors when required fields are missing or invalid.
 
-## UI
+## Giao diện
 
 - `/hotels` — `hotels-page`
 - `/hotels/create` — `hotel-create-page`
@@ -21,13 +21,13 @@ Manage hotel records in the portal, including list, search, create, and validati
 - `GET /api/hotels`
 - `POST /api/hotels`
 
-## Acceptance
+## Tiêu chí nghiệm thu
 
 - Hotel list page renders without semantic UI issues.
 - Create form validates required fields.
 - Successful create shows a success toast and returns to the hotel list.
 
-## Notes
+## Ghi chú
 
 - YAML is the source of truth for AI/dev.
 - Markdown in generated/ is for BA/QA review.

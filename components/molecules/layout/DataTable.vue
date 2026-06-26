@@ -18,12 +18,21 @@ const props = withDefaults(
   defineProps<{
     columns: DataTableColumn[]
     items: Record<string, unknown>[]
-    searchPlaceholder?: string
+    searchPlaceholder?: string | false
     pageSize?: number
     searchKeys?: string[]
+    rowTestId?: string
+    paginationTestId?: string
     class?: HTMLAttributes['class']
   }>(),
-  { searchPlaceholder: 'Search...', pageSize: 10 }
+  {
+    searchPlaceholder: '検索...',
+    pageSize: 10,
+    searchKeys: undefined,
+    rowTestId: undefined,
+    paginationTestId: undefined,
+    class: undefined
+  }
 )
 
 const {
@@ -32,12 +41,31 @@ const {
   sortOrder,
   page,
   totalPages,
-  sortedItems,
   paginatedItems,
-  toggleSort,
-  goPrev,
-  goNext
+  toggleSort
 } = useDataTableLogic(props)
+
+function alignClass(align?: DataTableColumn['align']) {
+  if (align === 'center') return 'text-center'
+  if (align === 'right') return 'text-right'
+  return 'text-left'
+}
+
+function overflowClass(overflow: DataTableColumn['overflow'] = 'truncate-tooltip') {
+  if (overflow === 'nowrap') return 'whitespace-nowrap'
+  if (overflow === 'wrap-2-lines') return 'line-clamp-2 whitespace-normal'
+  if (overflow === 'wrap-free') return 'whitespace-normal'
+  return 'max-w-[220px] truncate whitespace-nowrap'
+}
+
+function cellTitle(value: unknown, overflow: DataTableColumn['overflow'] = 'truncate-tooltip') {
+  if (overflow === 'truncate-tooltip' || overflow === 'nowrap') return String(value ?? '')
+  return undefined
+}
+
+function cellStyle(col: DataTableColumn) {
+  return col.maxWidth ? { maxWidth: col.maxWidth } : undefined
+}
 </script>
 
 <template>
@@ -50,61 +78,60 @@ const {
         class="max-w-xs"
       />
     </div>
-    <Table>
-      <TableHeader>
-        <TableRow>
-          <TableHead
-            v-for="col in props.columns"
-            :key="col.key"
-            :class="col.sortable ? 'cursor-pointer select-none hover:bg-muted/50' : ''"
-            @click="col.sortable ? toggleSort(col.key) : undefined"
+    <div class="overflow-x-auto rounded-md border bg-white">
+      <Table>
+        <TableHeader>
+          <TableRow>
+            <TableHead
+              v-for="col in props.columns"
+              :key="col.key"
+              :class="[
+                'whitespace-nowrap bg-muted/40 px-3 py-2 text-xs font-semibold text-foreground',
+                alignClass(col.align),
+                col.sortable ? 'cursor-pointer select-none hover:bg-muted/60' : ''
+              ]"
+              @click="col.sortable ? toggleSort(col.key) : undefined"
+            >
+              <span class="flex items-center gap-1">
+                {{ col.title }}
+                <template v-if="col.sortable && sortKey === col.key">
+                  <span v-if="sortOrder === 'asc'">↑</span>
+                  <span v-else>↓</span>
+                </template>
+              </span>
+            </TableHead>
+          </TableRow>
+        </TableHeader>
+        <TableBody>
+          <TableRow
+            v-for="(row, i) in paginatedItems"
+            :key="i"
+            class="hover:bg-muted/30"
+            :data-testid="props.rowTestId"
           >
-            <span class="flex items-center gap-1">
-              {{ col.title }}
-              <template v-if="col.sortable && sortKey === col.key">
-                <span v-if="sortOrder === 'asc'">↑</span>
-                <span v-else>↓</span>
-              </template>
-            </span>
-          </TableHead>
-        </TableRow>
-      </TableHeader>
-      <TableBody>
-        <TableRow v-for="(row, i) in paginatedItems" :key="i">
-          <TableCell v-for="col in props.columns" :key="col.key">
-            <slot :name="`cell-${col.key}`" :row="row" :value="cellValue(row, col.key)">
-              {{ cellValue(row, col.key) }}
-            </slot>
-          </TableCell>
-        </TableRow>
-      </TableBody>
-    </Table>
-    <div
-      v-if="totalPages > 1"
-      class="flex items-center justify-between px-2 py-1 text-sm text-muted-foreground"
-    >
-      <span>
-        Page {{ page }} of {{ totalPages }} ({{ sortedItems.length }} items)
-      </span>
-      <div class="flex gap-2">
-        <Button
-          variant="outline"
-          size="sm"
-          :disabled="page <= 1"
-          @click="goPrev"
-        >
-          Prev
-        </Button>
-        <Button
-          variant="outline"
-          size="sm"
-          :disabled="page >= totalPages"
-          @click="goNext"
-        >
-          Next
-        </Button>
-      </div>
+            <TableCell
+              v-for="col in props.columns"
+              :key="col.key"
+              class="px-3 py-2 align-middle text-sm"
+              :class="[alignClass(col.align), overflowClass(col.overflow)]"
+              :style="cellStyle(col)"
+              :title="cellTitle(cellValue(row, col.key), col.overflow)"
+            >
+              <slot :name="`cell-${col.key}`" :row="row" :value="cellValue(row, col.key)">
+                {{ cellValue(row, col.key) }}
+              </slot>
+            </TableCell>
+          </TableRow>
+        </TableBody>
+      </Table>
     </div>
+    <MoPaginationBar
+      v-if="totalPages > 1"
+      :page="page"
+      :total-pages="totalPages"
+      :test-id="props.paginationTestId"
+      @update:page="page = $event"
+    />
     <slot name="below" />
   </div>
 </template>

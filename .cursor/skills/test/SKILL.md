@@ -9,31 +9,28 @@ disable-model-invocation: true
 
 # /test — Portal E2E
 
+Shared extracts: `.cursor/extracts/legacy-config.md`, `agent-discipline.md`, `verify-gate.md`
+
 ## Inputs
 
 - `docs/features/{slug}/spec.yaml`
 - `docs/features/{slug}/testcases/*.yaml`
-- working prototype or wired UI with `data-testid`
+- Prototype or wired UI with `data-testid`
 
 ## Rules
 
-1. Testcases YAML is the source of truth.
-2. Use Playwright only under `tests/e2e/`.
-3. Use `page.getByTestId()` only for selectors.
-4. Add missing testId before writing the spec.
-5. Use Page Objects and focused specs.
-6. Mock network only when testing prototype UI behavior before `/wire`.
+1. Testcases YAML is source of truth.
+2. Playwright only under `tests/e2e/`; `page.getByTestId()` only.
+3. Add missing testId before writing specs; Page Objects + focused specs.
+4. Mock network only for prototype UI before `/wire`.
+5. Vertical slice: one scenario → minimal spec/PO → scoped run → next scenario.
+6. Test observable UI behavior, not composable/store internals.
+7. Reuse `/prototype` smoke skeleton as draft; this phase completes assertions and runs Playwright.
 
 ## Minimum Scenarios
 
-- List load and empty state.
-- Create success.
-- Validation errors.
-- Edit/delete when design includes them.
-- Permission denied when guards exist.
+List/empty, create success, validation errors, edit/delete when in design, permission denied when guarded.
 
 ## Done
 
-- Scoped Playwright run passes or failure is reported with root cause.
-- Testcase YAML links to the implemented spec.
-
+Scoped Playwright pass or failure with root cause. Then `/grill-test` for coverage audit.

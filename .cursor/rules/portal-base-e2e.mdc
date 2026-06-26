@@ -6,7 +6,7 @@ alwaysApply: false
 
 # Playwright E2E
 
-**QA record:** `docs/RAPI-RECORDER-QA.md` · **Convert Rapi:** `.cursor/skills/portal-rapi-playwright/`
+**QA record:** `docs/operational/RAPI-RECORDER-QA.md` · **Convert Rapi:** `.cursor/skills/portal-rapi-playwright/`
 
 ```bash
 pnpm test:e2e          # .nuxt-e2e, port NUXT_E2E_PORT (3005)
@@ -39,6 +39,6 @@ Fail khi: `overflow` (tràn), `collapsed` (shell rỗng/co), `overlap` (chồng 
 
 ## Thêm spec mới
 
-1. Page đã có `data-testid` (xem `docs/E2E-TESTIDS.md`)
+1. Page đã có `data-testid` (xem `docs/operational/E2E-TESTIDS.md`)
 2. `assertLayoutIntegrity` trong smoke test
 3. `getByTestId` cho mọi interaction

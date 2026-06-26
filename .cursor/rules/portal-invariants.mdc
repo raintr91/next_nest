@@ -1,0 +1,39 @@
+---
+description: Portal Base (Nuxt 4) — core invariants. Details in docs and glob rules.
+alwaysApply: true
+---
+
+# Portal Invariants
+
+Nuxt 4 auth-first portal. Details: `docs/operational/ARCHITECTURE.md`, `docs/operational/E2E-TESTIDS.md`, `.cursor/skills/portal-base/`.
+
+## 4 tầng (bắt buộc)
+
+`pages/components` → `composables` → `services` + `stores` → `models` + `validations` → `$apiFetch`
+
+- **Không** gọi `$apiFetch` trong page/component
+- **Không** import ngược: `models/` → stores/services/composables
+- Form: `useApiForm` + `validations/` + `models/` (contract)
+- Contract naming: `portal-contract-naming.mdc`
+
+## Thêm feature (thứ tự)
+
+`models/` → `services/` → `stores` (optional) → `composables/` → `validations/` → `pages/` + `testId`
+
+## UI tiers
+
+`components/ui/` (shadcn) → `molecules/` (`Mo*`) → `organisms/` (`Data*`, `OrGlobal*`)
+
+Dashboard dùng shadcn admin primitives trong `layouts/dashboard.vue`; không thêm `layouts/themes/*` hoặc theme switcher.
+
+## Kích thước (ngưỡng mềm)
+
+File ~**200** dòng · function ~**20** dòng — vượt thì tách. Chi tiết: `portal-code-size.mdc` (glob).
+
+## E2E
+
+Playwright (`tests/e2e/`). Gắn `data-testid` trước spec. `page.getByTestId()`.
+
+## Import alias
+
+Hand-written app code: `@/`, `~/`, `#...` — không relative `../` / `./`. Chi tiết: `portal-import-alias.mdc` (glob).

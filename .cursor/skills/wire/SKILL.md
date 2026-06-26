@@ -9,6 +9,12 @@ disable-model-invocation: true
 
 # /wire — Portal API Integration
 
+## Ngôn ngữ & Legacy Config
+
+- Viết docs, integration note và handoff bằng tiếng Việt.
+- Giữ nguyên contract key, route path, API field, model name và code identifier.
+- Nếu nhắc `legacy`, resolve qua JSON `team-projects` hoặc `legacy-projects` trước khi dùng để align integration behavior.
+
 ## Inputs
 
 - approved `spec.yaml`

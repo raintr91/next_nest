@@ -16,7 +16,7 @@ alwaysApply: false
 | Block lặp ≥ 2 lần | Component dùng chung |
 | Form nhiều section | `MoXxxSection.vue` hoặc field group |
 | Dialog/modal riêng flow | `MoXxxDialog.vue` / `ConfirmDialog` + composable |
-| Table + toolbar + pagination | `DataResourceTable` + `DataPageHeader` |
+| Table + search/filter/pagination | Ưu tiên `DataListPage` organism |
 
 ## Tier (giữ convention portal)
 
@@ -47,11 +47,27 @@ onMounted(load)
 
 Logic list/create/edit → **composable**; markup section → **component con**.
 
+## Data list/table page
+
+- Page dạng list + search/filter + table phải check `components/organisms/DataListPage.vue` trước.
+- Dùng `DataListPage` khi map được qua `filters`, `columns`, `items`, `query`, `pending`, `pageSize`, `searchKeys`, `search/reset`.
+- Dùng slots của `DataListPage` cho action/custom cell; không copy lại `MoAppBar` + `MoSearchForm` + `MoDataTable` shell.
+- Chỉ tách organism riêng khi layout/table đặc thù thật sự không tương thích; ghi rõ lý do.
+
+## Dynamic route mở rộng
+
+- Detail dynamic route: dùng `pages/{module}/[id]/index.vue`.
+- Edit dynamic route: dùng `pages/{module}/[id]/edit.vue`.
+- Copy/history/logs/tab riêng: thêm file con trong `pages/{module}/[id]/`.
+- Tránh tạo `pages/{module}/[id].vue` vì đóng đường phát triển route con sau này.
+
 ## Tránh
 
 - ❌ 400+ dòng một `.vue` với mọi handler inline
 - ❌ Copy-paste markup giữa pages — extract molecule
 - ❌ Gọi `$apiFetch` trong component con — qua composable/service
+- ❌ Tạo dynamic detail bằng `pages/{module}/[id].vue`
+- ❌ Tự dựng lại shell list/search/table khi `DataListPage` đã phù hợp
 
 ## Cùng với giới hạn dòng
 

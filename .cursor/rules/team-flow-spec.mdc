@@ -1,0 +1,21 @@
+---
+description: /spec, /legacy-spec, /grill-with-docs — docs/features only
+globs: docs/features/**/*
+alwaysApply: false
+---
+
+# Team Flow — Spec
+
+Active commands: `/spec`, `/legacy-spec`, `/grill-with-docs` — one per session.
+
+| Command | Skill |
+|---------|-------|
+| `/spec` | `.cursor/skills/spec/SKILL.md` |
+| `/legacy-spec` | `.cursor/skills/legacy-spec/SKILL.md` |
+| `/grill-with-docs` | `.cursor/skills/grill-with-docs/SKILL.md` |
+
+Shared: `.cursor/extracts/` — read `legacy-config.md`, `legacy-blade-to-api.md`, `common-ui-spec.md`, `spec-split-by-function.md` when relevant.
+
+- Output: `docs/features/{role}/{page}/{role}-{page}-{function}.spec.yaml` + round-1 `.test.yaml`
+- Render: `pnpm docs:render`
+- **Không** prototype UI, backend, real API, full E2E/unit trong phase spec.

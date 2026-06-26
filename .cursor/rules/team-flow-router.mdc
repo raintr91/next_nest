@@ -1,29 +1,45 @@
 ---
-description: Portal command router for /design, /legacy-spec, /model, /test, /api, /wire, /unit — KHÔNG auto-load mặc định.
+description: Portal command router — opt-in team workflow commands
 alwaysApply: false
 ---
 
 # Team AI Flow (router)
 
-**Opt-in** — user gọi command hoặc nói phase/harness/feature mới thì agent mới đọc skill.
+**Opt-in** — user gọi command hoặc nói phase/feature thì agent đọc **một** skill tương ứng.
 
-→ Public skills: `.cursor/skills/{design,legacy-spec,model,test,api,wire,unit}/SKILL.md`
-→ Doc: `docs/TEAM-AI-WORKFLOW.md`  
-→ Vendor local: `~/.cursor/skills-vendor/INDEX.md`
-→ Related projects example: `.cursor/team-projects.example.json`
+→ Doc: `docs/operational/TEAM-AI-WORKFLOW.md`  
+→ Shared snippets: `.cursor/extracts/`  
+→ Related projects: `.cursor/team-projects.example.json`
 
-Command map:
+Extracts: `.cursor/extracts/legacy-config.md` (legacy paths, output language).
 
-| Command | Work |
-|---|---|
-| `/design` | `.cursor/skills/design/SKILL.md` — verify/update spec, optional legacy evidence, docs, real prototype with mocked API responses only |
-| `/legacy-spec` | `.cursor/skills/legacy-spec/SKILL.md` — analyze code into design spec/testcase, no production edits |
-| `/model` | `.cursor/skills/model/SKILL.md` — Zod schemas and TS types in `models/` only |
-| `/test` | `.cursor/skills/test/SKILL.md` — testcase YAML + Playwright E2E |
-| `/api` | `.cursor/skills/api/SKILL.md` — backend API in configured backend project |
-| `/wire` | `.cursor/skills/wire/SKILL.md` — replace mocked API boundary with real API |
-| `/unit` | `.cursor/skills/unit/SKILL.md` — Vitest logic tests |
+Một session = **một** command. State: `.harness/progress.md`.
 
-Một session = **một** command/phase skill. State: `.harness/progress.md`.
+## Design lane
 
-Related repos: dùng `~/.cursor/team-projects.json` hoặc `.cursor/team-projects.local.json` để map FE/API/worker/legacy liên quan; không cần mở tất cả repo trong cùng workspace.
+| Command | Skill |
+|---------|-------|
+| `/spec` | `.cursor/skills/spec/SKILL.md` |
+| `/legacy-spec` | `.cursor/skills/legacy-spec/SKILL.md` |
+| `/grill-with-docs` | `.cursor/skills/grill-with-docs/SKILL.md` |
+| `/prototype` | `.cursor/skills/prototype/SKILL.md` |
+| `/grill-prototype` | `.cursor/skills/grill-prototype/SKILL.md` |
+
+Typical order: `/legacy-spec` or `/spec` → `/grill-with-docs` → `/prototype` → `/grill-prototype`
+
+`/design` is deprecated — use `/spec` or `/prototype`.
+
+## Implementation lane
+
+| Command | Skill |
+|---------|-------|
+| `/model` | `.cursor/skills/model/SKILL.md` |
+| `/api` | `.cursor/skills/api/SKILL.md` |
+| `/grill-api` | `.cursor/skills/grill-api/SKILL.md` |
+| `/wire` | `.cursor/skills/wire/SKILL.md` |
+| `/test` | `.cursor/skills/test/SKILL.md` |
+| `/grill-test` | `.cursor/skills/grill-test/SKILL.md` |
+| `/unit` | `.cursor/skills/unit/SKILL.md` |
+| `/grill-unit` | `.cursor/skills/grill-unit/SKILL.md` |
+
+Aliases: `/e2e` → `/test`, `/backend` → `/api`, `/integrate` → `/wire`.

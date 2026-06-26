@@ -1,0 +1,21 @@
+---
+description: /prototype, /grill-prototype — UI prototype with mock API boundary
+globs: "{pages,components,composables,mocks}/**/*.{vue,ts}"
+alwaysApply: false
+---
+
+# Team Flow — Prototype
+
+Active commands: `/prototype`, `/grill-prototype` — one per session.
+
+| Command | Skill |
+|---------|-------|
+| `/prototype` | `.cursor/skills/prototype/SKILL.md` |
+| `/grill-prototype` | `.cursor/skills/grill-prototype/SKILL.md` |
+
+Shared: `.cursor/extracts/common-ui-spec.md`, `legacy-blade-to-api.md` when relevant.
+
+- Source: approved `docs/features/{slug}/spec.yaml`
+- Real UI/actions; mock only API response boundary
+- **Không** real backend; `/wire` replaces mocks
+- Gắn `data-testid` sớm (`docs/operational/E2E-TESTIDS.md`)

@@ -1,0 +1,17 @@
+# Tài liệu tính năng đã render
+
+- [Common buttons](../features/common/generated/common-buttons.README.md)
+- [Common confirm dialog](../features/common/generated/common-confirm-dialog.README.md)
+- [Common data table](../features/common/generated/common-data-table.README.md)
+- [Common feedback and alerts](../features/common/generated/common-feedback.README.md)
+- [Common flat design foundation](../features/common/generated/common-flat-design.README.md)
+- [Common form validation](../features/common/generated/common-form-validation.README.md)
+- [Common CSV import flow](../features/common/generated/common-import-csv.README.md)
+- [Common list page shell](../features/common/generated/common-list-page.README.md)
+- [Common list toolbar](../features/common/generated/common-list-toolbar.README.md)
+- [Common navigation and page header](../features/common/generated/common-navigation.README.md)
+- [Common pagination](../features/common/generated/common-pagination.README.md)
+- [Common search filter](../features/common/generated/common-search-filter.README.md)
+- [Common status chip](../features/common/generated/common-status-chip.README.md)
+- [Common table action column](../features/common/generated/common-table-action-column.README.md)
+- [Hotel Management](../features/hotel/generated/README.md)

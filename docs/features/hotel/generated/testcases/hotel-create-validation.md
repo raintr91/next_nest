@@ -1,8 +1,8 @@
 # Create hotel validation
 
-Feature: [Hotel Management](../spec.md)
+Tính năng: Hotel Management
 
-## Requirement IDs
+## Mã yêu cầu
 
 - REQ-HOTEL-003
 
@@ -11,32 +11,36 @@ Feature: [Hotel Management](../spec.md)
 - Path: `/hotels/create`
 - Auth: `required`
 
-## Test IDs
+## Test ID
 
 - hotel-create-page
 - hotel-name-input
 - hotel-save-btn
 - hotel-name-error
 
-## Setup
+## Thiết lập
 
 ```yaml
 session: mockAuthenticatedSession
 mocks: []
 ```
 
-## Data
+## Dữ liệu
 
 ```yaml
 {}
 ```
 
-## Steps
+## Kịch bản mock
+
+_Không có._
+
+## Các bước
 
 1. action: goto, path: /hotels/create
 2. action: click, testId: hotel-save-btn
 
-## Assertions
+## Assertion
 
 ```yaml
 ui:
@@ -55,7 +59,7 @@ semantic:
     - toHaveValidAria
 ```
 
-## Expected
+## Kết quả mong đợi
 
 - Required field validation error is visible.
 - No create API request is sent.

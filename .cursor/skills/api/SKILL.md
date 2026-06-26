@@ -9,26 +9,40 @@ disable-model-invocation: true
 
 # /api — Backend API
 
+Shared extracts: `.cursor/extracts/legacy-config.md`, `agent-discipline.md`, `verify-gate.md`
+
 ## Scope
 
-Backend work belongs in the configured backend project, not in Portal frontend
-files.
+Backend work in the configured backend project (`api/`) only — not Portal frontend files.
 
-## Before Work
+## Backend repo commands
 
-1. Resolve backend project from `team-projects` config.
-2. If no backend project is configured, stop and report that cross-repo backend work cannot be performed.
-3. Read the feature `spec.yaml` and testcase YAML.
-4. Keep API contract field names aligned with Portal `models/`.
+In `api/` workspace (see `api/.cursor/skills/api/SKILL.md`):
+
+| Command | Step |
+|---------|------|
+| `/api-spec` | Portal spec → backend spec + OpenAPI + mock YAML |
+| `/grill-api-spec` | Audit backend contract before code (run in `api/` repo) |
+| `/api-code` | Approved backend spec → Laravel implementation |
+| `/api` | Router — defaults to spec if no approved backend spec |
+
+Hashtags: `#call-external`, `#cross-entity-service` → `api/.cursor/extracts/`
+
+## Before Work (from Portal)
+
+1. Resolve backend from `team-projects` config; stop if missing.
+2. Read feature `spec.yaml` and testcase YAML.
+3. Align contract keys with Portal `models/`.
 
 ## Rules
 
-- Do not implement backend code in the portal workspace.
-- Do not modify Portal UI during `/api` unless explicitly requested.
-- Produce/update backend endpoints, DTO/request validation, resources, permissions, and backend tests according to the backend repo conventions.
+- Do not implement backend in the portal workspace.
+- Do not modify Portal UI unless explicitly requested.
+- Endpoints, validation, resources, permissions, backend tests per backend repo conventions.
 - Report every project read or changed.
 
 ## Handoff
 
-Document endpoint paths, payloads, validation errors, permissions, and any contract changes for `/wire`.
+Document paths, payloads, validation errors, permissions for `/wire`.
 
+**Backend repo pipeline:** `/api-spec` → `/grill-api-spec` → `/api-code` in `api/`. Portal `/grill-api` runs after implementation, before `/wire`.

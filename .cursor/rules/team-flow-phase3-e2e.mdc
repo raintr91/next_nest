@@ -4,11 +4,10 @@ globs: tests/e2e/**/*
 alwaysApply: false
 ---
 
-# /test — E2E Refinement
+# /test — E2E
 
-Skill: `.cursor/skills/test/SKILL.md`
+Skill: `.cursor/skills/test/SKILL.md` · Grill: `.cursor/skills/grill-test/SKILL.md`
 
-- `getByTestId()` only · Page Object · Faker
-- Testcase source: `docs/features/{slug}/testcases/*.yaml`
-- Render BA/QA review docs: `pnpm docs:render`
-- Verify: `npx playwright test` (scope feature) trước khi done
+- `getByTestId()` only · Page Object · testcase YAML source of truth
+- Vertical slice; scoped `npx playwright test` before done
+- Extracts: `.cursor/extracts/verify-gate.md`

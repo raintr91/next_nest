@@ -1,8 +1,8 @@
 # View hotel list
 
-Feature: [Hotel Management](../spec.md)
+Tính năng: Hotel Management
 
-## Requirement IDs
+## Mã yêu cầu
 
 - REQ-HOTEL-001
 
@@ -11,13 +11,13 @@ Feature: [Hotel Management](../spec.md)
 - Path: `/hotels`
 - Auth: `required`
 
-## Test IDs
+## Test ID
 
 - hotels-page
 - hotels-page-title
 - hotels-table
 
-## Setup
+## Thiết lập
 
 ```yaml
 session: mockAuthenticatedSession
@@ -27,18 +27,22 @@ mocks:
     response: hotelListSuccess
 ```
 
-## Data
+## Dữ liệu
 
 ```yaml
 {}
 ```
 
-## Steps
+## Kịch bản mock
+
+_Không có._
+
+## Các bước
 
 1. action: goto, path: /hotels
 2. action: waitFor, testId: hotels-table
 
-## Assertions
+## Assertion
 
 ```yaml
 ui:
@@ -63,7 +67,7 @@ semantic:
     - toHaveValidAccessibleNames
 ```
 
-## Expected
+## Kết quả mong đợi
 
 - Hotel table is visible.
 - Page has no semantic UI issues.

@@ -14,8 +14,8 @@ async function walk(dir) {
   const entries = await readdir(dir, { withFileTypes: true })
   const files = []
 
-  for (const entry of entries) {
-    if (entry.isDirectory()) {
+    for (const entry of entries) {
+      if (entry.isDirectory()) {
       if (ignoredDirNames.has(entry.name)) continue
       files.push(...await walk(join(dir, entry.name)))
       continue
@@ -308,7 +308,7 @@ await mkdir(outputDir, { recursive: true })
 const files = (await Promise.all(storyRoots.map((dir) => walk(dir)))).flat()
 let written = 0
 
-for (const filePath of files) {
+    for (const filePath of files) {
   const outPath = join(outputDir, `${storyName(filePath)}.stories.js`)
   if (!force) {
     const exists = await access(outPath).then(() => true, () => false)

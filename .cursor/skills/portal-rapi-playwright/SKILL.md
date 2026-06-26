@@ -9,7 +9,11 @@ description: >-
 
 # Rapi Recorder → Playwright
 
-**QA rules:** `docs/RAPI-RECORDER-QA.md` · **testId:** `docs/E2E-TESTIDS.md`
+**QA rules:** `docs/operational/RAPI-RECORDER-QA.md` · **testId:** `docs/operational/E2E-TESTIDS.md`
+
+**Ngôn ngữ:** testcase prose, notes, and handoff sinh ra bằng tiếng Việt; giữ nguyên code identifier, route, API field, selector/testId.
+
+**Legacy:** nếu QA flow cần đối chiếu legacy, resolve qua `team-projects` hoặc `legacy-projects` JSON trước; không tự đoán path.
 
 **Rule fallback:** `.cursor/rules/portal-rapi-playwright.mdc`
 
@@ -76,7 +80,7 @@ page.locator('//button')
 page.locator('div:nth-child(3)')
 ```
 
-Map Rapi target → `data-testid` theo `docs/E2E-TESTIDS.md`. Thiếu testId → **bổ sung FE trước**, không workaround css.
+Map Rapi target → `data-testid` theo `docs/operational/E2E-TESTIDS.md`. Thiếu testId → **bổ sung FE trước**, không workaround css.
 
 ---
 
