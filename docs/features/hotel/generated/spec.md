@@ -1,33 +1,58 @@
 # Hotel Management
 
+- **Testcase:** [Create hotel successfully](./testcases/hotel-create-success.md) · [Create hotel validation](./testcases/hotel-create-validation.md) · [View hotel list](./testcases/hotel-list.md)
+- **Screen:** `# /hotels` · `hotels-page`
+
 Manage hotel records in the portal, including list, search, create, and validation behavior.
 
-## Yêu cầu
+## status
 
-- **REQ-HOTEL-001** — View hotel list
-  User can view a paginated list of hotels.
-- **REQ-HOTEL-002** — Create hotel
-  User can create a hotel with required fields.
-- **REQ-HOTEL-003** — Validate create form
-  User sees validation errors when required fields are missing or invalid.
+draft
 
-## Giao diện
+## owner
 
-- `/hotels` — `hotels-page`
-- `/hotels/create` — `hotel-create-page`
+portal-team
 
-## API
+## requirements
 
-- `GET /api/hotels`
-- `POST /api/hotels`
+```yaml
+- id: REQ-HOTEL-001
+  title: View hotel list
+  description: User can view a paginated list of hotels.
+  priority: must
+- id: REQ-HOTEL-002
+  title: Create hotel
+  description: User can create a hotel with required fields.
+  priority: must
+- id: REQ-HOTEL-003
+  title: Validate create form
+  description: User sees validation errors when required fields are missing or invalid.
+  priority: must
+```
 
-## Tiêu chí nghiệm thu
+## ui
 
-- Hotel list page renders without semantic UI issues.
-- Create form validates required fields.
-- Successful create shows a success toast and returns to the hotel list.
+```yaml
+routes:
+  - path: /hotels
+    pageTestId: hotels-page
+  - path: /hotels/create
+    pageTestId: hotel-create-page
+```
 
-## Ghi chú
+## api
 
+```yaml
+endpoints:
+  - method: GET
+    path: /api/hotels
+  - method: POST
+    path: /api/hotels
+```
+
+## notes
+
+```yaml
 - YAML is the source of truth for AI/dev.
 - Markdown in generated/ is for BA/QA review.
+```

@@ -8,6 +8,7 @@ alwaysApply: false
 **Opt-in** — user gọi command hoặc nói phase/feature thì agent đọc **một** skill tương ứng.
 
 → Doc: `docs/operational/TEAM-AI-WORKFLOW.md`  
+→ Prompt templates: `docs/operational/PROMPT-TEMPLATES.md`  
 → Shared snippets: `.cursor/extracts/`  
 → Related projects: `.cursor/team-projects.example.json`
 

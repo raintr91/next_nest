@@ -33,7 +33,7 @@ mocks: []
 
 ## Kịch bản mock
 
-_Không có._
+`#`
 
 ## Các bước
 

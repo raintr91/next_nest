@@ -1,20 +1,47 @@
 import { mkdir, readdir, readFile, rm, writeFile } from 'node:fs/promises'
 import path from 'node:path'
 import { parse, stringify } from 'yaml'
+import { resolveDevAppBaseUrl } from './lib/load-dev-base-url.mjs'
+import { MD_NONE } from './lib/markdown-table.mjs'
+import { renderSpecMarkdown } from './lib/render-spec-markdown.mjs'
 
+const projectRoot = process.cwd()
 const docsDir = path.resolve('docs')
 const featuresDir = path.join(docsDir, 'features')
+const devAppBaseUrl = resolveDevAppBaseUrl(projectRoot)
 
 async function main() {
+  const started = Date.now()
   const specs = await listSpecFiles(featuresDir)
 
-  await cleanGeneratedDirs(featuresDir)
+  if (!specs.length) {
+    console.error('docs:render: no *.spec.yaml under docs/features/')
+    process.exit(1)
+  }
+
+  let testcaseCount = 0
+  let failed = 0
 
   for (const specFile of specs) {
-    await renderFeature(specFile)
+    try {
+      testcaseCount += await renderFeature(specFile)
+    } catch (error) {
+      failed++
+      console.error(`docs:render: FAIL ${path.relative(projectRoot, specFile)}: ${error.message ?? error}`)
+    }
+  }
+
+  if (failed > 0) {
+    console.error(`docs:render: aborted index — ${failed} spec(s) failed`)
+    process.exit(1)
   }
 
   await renderFeatureIndex(specs)
+
+  const elapsed = ((Date.now() - started) / 1000).toFixed(1)
+  console.log(
+    `docs:render: ${specs.length} spec(s) → ${specs.length} *.md, ${testcaseCount} testcase(s) [${elapsed}s]`
+  )
 }
 
 async function renderFeature(specFile) {
@@ -27,6 +54,10 @@ async function renderFeature(specFile) {
   const testcaseFiles = await listTestcaseFiles(featureDir, slug)
   const testcases = []
 
+  await rm(path.join(generatedDir, output.specFile), { force: true })
+  await rm(path.join(generatedDir, `${slug}.spec.md`), { force: true })
+  await rm(path.join(generatedDir, `${slug}.README.md`), { force: true })
+  await rm(generatedTestcasesDir, { recursive: true, force: true })
   await mkdir(generatedTestcasesDir, { recursive: true })
 
   for (const file of testcaseFiles) {
@@ -39,8 +70,13 @@ async function renderFeature(specFile) {
     )
   }
 
-  await writeFile(path.join(generatedDir, output.specFile), renderSpecMarkdown(spec), 'utf8')
-  await writeFile(path.join(generatedDir, output.readmeFile), renderFeatureReadme(spec, testcases, output), 'utf8')
+  await writeFile(
+    path.join(generatedDir, output.specFile),
+    renderSpecMarkdown(spec, { testcases, output, devAppBaseUrl, projectRoot }),
+    'utf8'
+  )
+
+  return testcaseFiles.length
 }
 
 async function renderFeatureIndex(specs) {
@@ -48,36 +84,19 @@ async function renderFeatureIndex(specs) {
 
   for (const specFile of specs) {
     const spec = await readYaml(specFile)
-    const relativeDir = path.relative(docsDir, path.dirname(specFile))
     const output = featureOutputPaths(specFile, featureSlug(specFile))
-    rows.push(`- [${spec.title ?? featureSlug(specFile)}](../${relativeDir}/generated/${output.readmeFile})`)
+    rows.push(`- [${spec.title ?? featureSlug(specFile)}](${vitepressDocLink(specFile, output)})`)
   }
 
   await writeFile(
     path.join(docsDir, 'common-ui', 'generated.md'),
-    `# Tài liệu tính năng đã render\n\n${rows.join('\n') || '_Chưa có tài liệu tính năng._'}\n`,
+    `# Tài liệu tính năng đã render\n\n${rows.join('\n') || MD_NONE}\n`,
     'utf8'
   )
 }
 
-function renderSpecMarkdown(spec) {
-  return `# ${spec.title ?? spec.id}\n\n${spec.summary ?? ''}\n\n## Yêu cầu\n\n${renderList(spec.requirements, renderRequirement)}\n\n## Giao diện\n\n${renderRoutes(spec.ui?.routes)}\n\n## API\n\n${renderEndpoints(spec.api?.endpoints)}\n\n## Tiêu chí nghiệm thu\n\n${renderBullets(spec.acceptance)}\n\n## Ghi chú\n\n${renderBullets(spec.notes)}\n`
-}
-
 function renderTestcaseMarkdown(testcase, spec) {
   return `# ${testcase.title ?? testcase.id}\n\nTính năng: ${spec.title ?? testcase.feature}\n\n## Mã yêu cầu\n\n${renderBullets(testcase.requirementIds)}\n\n## Route\n\n- Path: \`${testcase.route?.path ?? ''}\`\n- Auth: \`${testcase.route?.auth ?? 'unknown'}\`\n\n## Test ID\n\n${renderBullets(testcase.testIds?.required)}\n\n## Thiết lập\n\n${renderCode(testcase.setup)}\n\n## Dữ liệu\n\n${renderCode(testcase.data)}\n\n## Kịch bản mock\n\n${renderMockCases(testcase.mockCases)}\n\n## Các bước\n\n${renderList(testcase.steps, renderStep)}\n\n## Assertion\n\n${renderCode(testcase.assertions)}\n\n## Kết quả mong đợi\n\n${renderBullets(testcase.expected)}\n`
-}
-
-function renderFeatureReadme(spec, testcases, output) {
-  const links = testcases
-    .map(({ file, data }) => `- [${data.title ?? data.id}](./${output.testcasesDir}/${testcaseMarkdownName(file)})`)
-    .join('\n')
-
-  return `# ${spec.title ?? spec.id}\n\n${spec.summary ?? ''}\n\n## Đặc tả\n\n- [Đặc tả](./${output.specFile})\n\n## Testcase\n\n${links || '_Chưa có testcase._'}\n`
-}
-
-function renderRequirement(req) {
-  return `- **${req.id}** — ${req.title}\n  ${req.description ?? ''}`
 }
 
 function renderStep(step, index) {
@@ -87,26 +106,18 @@ function renderStep(step, index) {
   return `${index + 1}. ${parts}`
 }
 
-function renderRoutes(routes = []) {
-  return renderList(routes, (route) => `- \`${route.path}\` — \`${route.pageTestId ?? ''}\``)
-}
-
-function renderEndpoints(endpoints = []) {
-  return renderList(endpoints, (endpoint) => `- \`${endpoint.method} ${endpoint.path}\``)
-}
-
 function renderBullets(items = []) {
-  return items.length ? items.map((item) => `- ${formatInline(item)}`).join('\n') : '_Không có._'
+  return items.length ? items.map((item) => `- ${formatInline(item)}`).join('\n') : MD_NONE
 }
 
 function renderMockCases(cases = []) {
   return cases.length
     ? cases.map((item) => `- **${item.id}** — ${item.title}: ${item.expected}`).join('\n')
-    : '_Không có._'
+    : MD_NONE
 }
 
 function renderList(items = [], renderer) {
-  return items.length ? items.map(renderer).join('\n') : '_Không có._'
+  return items.length ? items.map(renderer).join('\n') : MD_NONE
 }
 
 function renderCode(value) {
@@ -156,6 +167,12 @@ async function listTestcaseFiles(dir, slug) {
   return [...rootFiles, ...testcaseFiles].sort()
 }
 
+function vitepressDocLink(specFile, output) {
+  const relativeDir = path.relative(docsDir, path.dirname(specFile)).split(path.sep).join('/')
+  const pagePath = output.specFile.replace(/\.md$/, '')
+  return `/${relativeDir}/generated/${pagePath}`
+}
+
 function featureSlug(specFile) {
   const basename = path.basename(specFile)
   if (basename === 'spec.yaml' || basename === 'spec.yml') return path.basename(path.dirname(specFile))
@@ -166,15 +183,13 @@ function featureOutputPaths(specFile, slug) {
   const basename = path.basename(specFile)
   if (basename === 'spec.yaml' || basename === 'spec.yml') {
     return {
-      readmeFile: 'README.md',
       specFile: 'spec.md',
       testcasesDir: 'testcases'
     }
   }
 
   return {
-    readmeFile: `${slug}.README.md`,
-    specFile: `${slug}.spec.md`,
+    specFile: `${slug}.md`,
     testcasesDir: `${slug}/testcases`
   }
 }
@@ -188,20 +203,6 @@ async function listEntries(dir) {
     return await readdir(dir, { withFileTypes: true })
   } catch {
     return []
-  }
-}
-
-async function cleanGeneratedDirs(dir) {
-  for (const entry of await listEntries(dir)) {
-    const entryPath = path.join(dir, entry.name)
-
-    if (!entry.isDirectory()) continue
-    if (entry.name === 'generated') {
-      await rm(entryPath, { recursive: true, force: true })
-      continue
-    }
-
-    await cleanGeneratedDirs(entryPath)
   }
 }
 

@@ -11,6 +11,7 @@ export default defineConfig({
   title: 'Portal Docs',
   description: 'Portal feature specs, testcases, and team workflow',
   cleanUrls: true,
+  ignoreDeadLinks: [/^https?:\/\/localhost(:\d+)?/],
   themeConfig: {
     nav: [
       { text: 'Home', link: '/' },
@@ -83,28 +84,28 @@ function listFeatureGroups(dir: string): DefaultTheme.SidebarItem[] {
     .filter((entry) => entry.isDirectory())
     .map((entry) => {
       const entryPath = join(dir, entry.name)
-      const readmeItems = listDirectGeneratedReadmes(entryPath).map((file) => ({
+      const specItems = listDirectGeneratedSpecs(entryPath).map((file) => ({
         text: readTitle(file),
-        link: readmeLink(file)
+        link: specLink(file)
       }))
       const childGroups = listFeatureGroups(entryPath)
 
       return {
         text: titleCase(entry.name),
         collapsed: true,
-        items: [...readmeItems, ...childGroups]
+        items: [...specItems, ...childGroups]
       }
     })
     .filter((group) => group.items.length > 0)
     .sort((a, b) => a.text.localeCompare(b.text))
 }
 
-function listDirectGeneratedReadmes(dir: string): string[] {
+function listDirectGeneratedSpecs(dir: string): string[] {
   const generatedDir = join(dir, 'generated')
   if (!existsSync(generatedDir)) return []
 
   return readdirSync(generatedDir, { withFileTypes: true })
-    .filter((item) => item.isFile() && (item.name === 'README.md' || item.name.endsWith('.README.md')))
+    .filter((item) => item.isFile() && item.name.endsWith('.md'))
     .map((item) => join(generatedDir, item.name))
     .sort()
 }
@@ -114,12 +115,8 @@ function readTitle(file: string) {
   return firstHeading ?? relative(docsRoot, dirname(file))
 }
 
-function readmeLink(file: string) {
+function specLink(file: string) {
   const relativePath = relative(docsRoot, file).split('/').join('/')
-  if (relativePath.endsWith('/README.md')) {
-    return `/${relativePath.replace(/\/README\.md$/, '/')}`
-  }
-
   return `/${relativePath.replace(/\.md$/, '')}`
 }
 

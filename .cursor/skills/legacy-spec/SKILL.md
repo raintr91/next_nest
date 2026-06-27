@@ -23,9 +23,14 @@ Input: `/legacy-spec <module-or-feature>` when source of truth is existing code.
 2. Trace behavior from routes/pages/controllers/jobs/forms/services/models.
 3. Extract fields, validations, permissions, UI screens, API contracts, side effects, edge cases.
 4. Mark evidence as `inferredFromCode` or `openQuestion`.
-5. Write/update `docs/features/{slug}/spec.yaml` per spec-split extract.
+5. Write/update `docs/features/{slug}/*.spec.yaml` per spec-split extract — **design v1** shape (`docs/templates/design-spec.yaml`).
 6. Draft testcase YAML round 1; run `pnpm docs:render` when supported.
 7. Update `.harness/progress.md` when present.
+
+## Design v1 output (do not add yet)
+
+- **In:** `actors`, `entities`, `requirements`, `ui.routes`, `ui.screens`, `api` (query/response), `acceptance`, `notes`, `openQuestions`.
+- **Out:** `codegen`, `ui.filters`, `ui.columns`, `ui.composition`, `tags` for portal-gen — `/grill-with-docs` adds these.
 
 ## Evidence Rules
 
@@ -37,5 +42,5 @@ Input: `/legacy-spec <module-or-feature>` when source of truth is existing code.
 ## Handoff
 
 - Refine or split specs → `/spec`
-- Close gaps with user → `/grill-with-docs`
-- UI after spec approved → `/prototype`
+- **Required before UI:** `/grill-with-docs` (codegen readiness)
+- UI after grill exit → `/prototype`

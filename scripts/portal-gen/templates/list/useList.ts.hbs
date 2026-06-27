@@ -1,0 +1,84 @@
+import type { SearchFilterConfig } from '~/components/molecules/form/searchFilterTypes'
+import type { DataTableColumn } from '~/components/molecules/layout/useDataTableLogic'
+import { create{{entityPascal}}Service } from '~/services/{{entity}}.service'
+import { {{entityCamel}}MockSearch } from '~/mocks/{{entity}}.mock'
+
+/**
+ * {{title}} — list composable (portal-gen).
+ * Mock boundary: replace {{entityCamel}}MockSearch with service.search on /wire.
+ */
+export function use{{entityPascal}}List() {
+  const { $apiFetch } = useNuxtApp()
+  const service = create{{entityPascal}}Service($apiFetch)
+
+  const pending = ref(false)
+  const errorMsg = ref<string | null>(null)
+  const items = ref<Record<string, unknown>[]>([])
+  const total = ref<number | null>(null)
+  const query = ref<Record<string, unknown>>({})
+
+  const filters = computed<SearchFilterConfig[]>(() => [
+{{#each filters}}
+    {
+      name: '{{name}}',
+      label: '{{label}}',
+      type: '{{type}}'{{#if placeholder}},
+      placeholder: '{{placeholder}}'{{/if}}
+    }{{#unless @last}},{{/unless}}
+{{/each}}
+  ])
+
+  const columns = computed<DataTableColumn[]>(() => [
+{{#each columns}}
+    {
+      key: '{{key}}',
+      title: '{{title}}'{{#if sortable}},
+      sortable: true{{/if}}{{#if align}},
+      align: '{{align}}'{{/if}}
+    }{{#unless @last}},{{/unless}}
+{{/each}}
+  ])
+
+  const searchKeys = computed(() => columns.value.map((column) => column.key))
+
+  async function load() {
+    pending.value = true
+    errorMsg.value = null
+    try {
+      // Prototype: mock at boundary — swap to service.search on /wire
+      const result = await {{entityCamel}}MockSearch(query.value)
+      items.value = result.items
+      total.value = result.total ?? result.items.length
+    } catch (error: unknown) {
+      errorMsg.value = (error as Error)?.message ?? 'Cannot load {{title}}'
+      items.value = []
+      total.value = null
+    } finally {
+      pending.value = false
+    }
+  }
+
+  function onSearch() {
+    return load()
+  }
+
+  function onReset() {
+    query.value = {}
+    return load()
+  }
+
+  return {
+    pending,
+    errorMsg,
+    items,
+    total,
+    query,
+    filters,
+    columns,
+    searchKeys,
+    load,
+    onSearch,
+    onReset,
+    service
+  }
+}

@@ -1,0 +1,20 @@
+<script setup lang="ts">
+/**
+ * portal-gen stub — replace or move to the right molecules/ folder.
+ * Wired from spec tag #needs-component.
+ */
+const props = defineProps<{
+  value?: unknown
+  row?: Record<string, unknown>
+  testId?: string
+}>()
+</script>
+
+<template>
+  <span
+    class="inline-flex items-center rounded-full border px-2 py-0.5 text-xs"
+    :data-testid="props.testId"
+  >
+    {{ String(props.value ?? '') }}
+  </span>
+</template>

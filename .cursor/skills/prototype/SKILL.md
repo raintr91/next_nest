@@ -9,45 +9,47 @@ disable-model-invocation: true
 
 # /prototype — UI Prototype (Mock API Boundary)
 
-Shared extracts: `.cursor/extracts/legacy-config.md`, `legacy-blade-to-api.md`, `common-ui-spec.md`, `agent-discipline.md`
+Shared extracts: `.cursor/extracts/legacy-config.md`, `legacy-blade-to-api.md`, `common-ui-spec.md`, `agent-discipline.md`, `portal-codegen-tags.md`
 
-Prerequisite: approved `docs/features/{slug}/spec.yaml` (from `/spec`, `/legacy-spec`, or `/grill-with-docs`).
+Prerequisite: `docs/features/{slug}/*.spec.yaml` **portal-gen-ready** from `/grill-with-docs` (`codegen.profile` present; `pnpm portal:gen:dry` passed).
+
+## Workflow
+
+1. **Quét hashtag component** — đọc `tags:` và `ui.columns` (`render: custom`); chỉ xử lý `#needs-component` / `#custom-slot` / component `Mo*` chưa có trong codebase.
+2. **Tạo component nhỏ** — implement **chỉ** molecule/organism thiếu (`components/molecules/` …); **không** hand-write models/service/composable/page (để `portal:gen`).
+3. **`pnpm portal:gen --spec docs/features/.../<slug>.spec.yaml`** (`--force` nếu chạy lại). Gen tự gọi `pnpm docs:render` (script local) — Screen trong **generated `.md`** đổi từ `# /path` sang dev URL khi `pages/` đã có.
+4. **Sau gen** — auth bypass route; sửa gap trong `generated/HANDOFF.md`; `#wire-only` để `/wire`; scoped lint/typecheck.
+
+Nếu thiếu `codegen.profile` → quay lại `/grill-with-docs`, **không** sửa spec tay lúc gen.
+
+Nếu `docs:render` lỗi sau gen, member chạy: `pnpm docs:render`.
+
+## Spec edits in prototype phase
+
+- **Không** sửa nghiệp vụ / contract trong `spec.yaml`.
+- Chỉ thay đổi phản ánh qua `docs:render` (Screen link, generated markdown) sau khi có page prototype.
 
 ## Scope
 
-**In:** `pages/`, `components/`, `composables/`, `mocks/`, `models/` when needed for contract, early `data-testid`.
+**In:** `pages/`, `components/`, `composables/`, `mocks/`, `models/` khi cần contract, `data-testid` sớm.
 
-**Out:** new spec writing (only fix gaps as `openQuestions` in YAML) → `/spec`; spec interview → `/grill-with-docs`; pre-demo audit → `/grill-prototype`; real API → `/wire`.
+**Out:** viết spec mới → `/spec`; codegen blocks → `/grill-with-docs`; audit demo → `/grill-prototype`; API thật → `/wire`; E2E đầy đủ → `/test`.
 
 ## Core Rules
 
-1. Real UI, real actions, real frontend logic; mock **only** API response data at service/composable boundary.
-2. Layers: `models/` → mock service boundary → composables → pages/components.
-3. Reuse shadcn-ui, existing `molecules/` / `organisms/`; inspect nearby pages for density and patterns.
-4. Prefer real target route; throwaway prototype route only when no host page exists.
-5. List/table pages: check `components/organisms/DataListPage.vue` first; mock ≥2 pages when pagination exists.
-6. Dynamic routes: `pages/{module}/[id]/index.vue` (detail), `[id]/edit.vue` (edit) — not `pages/{module}/[id].vue`.
+0. **portal:gen cho scaffold** — sau bước component nhỏ; không viết lại layer gen đã emit trừ `codegen.skip` / HANDOFF.
+1. Real UI, real actions; mock **chỉ** API response tại service/composable.
+2. Layers: `models/` → mock service → composables → pages/components.
+3. Reuse shadcn, `Mo*`, `DataListPage`; list: mock ≥2 pages khi có pagination.
+4. Dynamic routes: `pages/{module}/[id]/index.vue`, `[id]/edit.vue`.
 
 ## Prototype Auth & Routing
 
-- Bypass auth/guest/rbac middleware on prototype routes; no redirect to `/auth/login?redirect=...`.
-- No real login/logout/me/backend; mock session/permission when UI needs context.
-- Document bypassed routes in handoff for `/wire` to restore guards.
-
-## Codebase Design
-
-- Page orchestration only; logic behind composable/service-like interfaces deep enough for `/unit` and `/test`.
-- Avoid pass-through composables; add adapter/seam only when mock + production API both exist.
-
-## Smoke Test Policy
-
-- No full E2E/unit in this phase; optional smoke skeleton (happy path, key validation) left unrun for `/test` or `/unit`.
-- Fix render/runtime errors before expanding tests.
-- Scoped lint/typecheck when cheap.
+- Bypass auth/guest/rbac trên route prototype; không redirect login thật.
+- Ghi bypass trong handoff cho `/wire`.
 
 ## Handoff
 
-- Add `data-testid` per `docs/operational/E2E-TESTIDS.md`.
-- Keep files near Portal size rules.
-- Before demo of complex flows, use `/grill-prototype`.
-- Update `.harness/progress.md` when present.
+- `data-testid` theo `docs/operational/E2E-TESTIDS.md`.
+- Hashtag `#wire-only`, `#manual-composable` → HANDOFF / phase sau.
+- Cập nhật `.harness/progress.md` khi có.

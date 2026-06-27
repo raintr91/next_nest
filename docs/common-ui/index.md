@@ -6,24 +6,24 @@ Agent đọc thêm `.cursor/extracts/common-ui-spec.md`. Trước khi copy UI le
 
 ## Review (BA/QA)
 
-Sau `pnpm docs:render`, xem bản Markdown: [generated.md](./generated.md).
+Sau `pnpm docs:render`, xem bản Markdown: [generated.md](/common-ui/generated).
 
 | Pattern | YAML | Generated review |
 |---------|------|------------------|
-| List page shell | `common-list-page.spec.yaml` | [README](../features/common/generated/common-list-page.README.md) |
-| List toolbar | `common-list-toolbar.spec.yaml` | [README](../features/common/generated/common-list-toolbar.README.md) |
-| Search filter | `common-search-filter.spec.yaml` | [README](../features/common/generated/common-search-filter.README.md) |
-| Data table | `common-data-table.spec.yaml` | [README](../features/common/generated/common-data-table.README.md) |
-| Table actions | `common-table-action-column.spec.yaml` | [README](../features/common/generated/common-table-action-column.README.md) |
-| Pagination | `common-pagination.spec.yaml` | [README](../features/common/generated/common-pagination.README.md) |
-| Buttons | `common-buttons.spec.yaml` | [README](../features/common/generated/common-buttons.README.md) |
-| Status chip | `common-status-chip.spec.yaml` | [README](../features/common/generated/common-status-chip.README.md) |
-| Form validation | `common-form-validation.spec.yaml` | [README](../features/common/generated/common-form-validation.README.md) |
-| Feedback / alerts | `common-feedback.spec.yaml` | [README](../features/common/generated/common-feedback.README.md) |
-| Confirm dialog | `common-confirm-dialog.spec.yaml` | [README](../features/common/generated/common-confirm-dialog.README.md) |
-| CSV import | `common-import-csv.spec.yaml` | [README](../features/common/generated/common-import-csv.README.md) |
-| Navigation / header | `common-navigation.spec.yaml` | [README](../features/common/generated/common-navigation.README.md) |
-| Flat design | `common-flat-design.spec.yaml` | [README](../features/common/generated/common-flat-design.README.md) |
+| List page shell | `common-list-page.spec.yaml` | [spec](/features/common/generated/common-list-page) |
+| List toolbar | `common-list-toolbar.spec.yaml` | [spec](/features/common/generated/common-list-toolbar) |
+| Search filter | `common-search-filter.spec.yaml` | [spec](/features/common/generated/common-search-filter) |
+| Data table | `common-data-table.spec.yaml` | [spec](/features/common/generated/common-data-table) |
+| Table actions | `common-table-action-column.spec.yaml` | [spec](/features/common/generated/common-table-action-column) |
+| Pagination | `common-pagination.spec.yaml` | [spec](/features/common/generated/common-pagination) |
+| Buttons | `common-buttons.spec.yaml` | [spec](/features/common/generated/common-buttons) |
+| Status chip | `common-status-chip.spec.yaml` | [spec](/features/common/generated/common-status-chip) |
+| Form validation | `common-form-validation.spec.yaml` | [spec](/features/common/generated/common-form-validation) |
+| Feedback / alerts | `common-feedback.spec.yaml` | [spec](/features/common/generated/common-feedback) |
+| Confirm dialog | `common-confirm-dialog.spec.yaml` | [spec](/features/common/generated/common-confirm-dialog) |
+| CSV import | `common-import-csv.spec.yaml` | [spec](/features/common/generated/common-import-csv) |
+| Navigation / header | `common-navigation.spec.yaml` | [spec](/features/common/generated/common-navigation) |
+| Flat design | `common-flat-design.spec.yaml` | [spec](/features/common/generated/common-flat-design) |
 
 ## Code conventions
 

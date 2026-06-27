@@ -1,0 +1,57 @@
+# Design spec v1 — /legacy-spec and /spec (round 1)
+# Do NOT add codegen, ui.filters, ui.columns, or portal-gen tags here.
+# After /grill-with-docs → see docs/templates/spec.yaml (portal-gen-ready).
+
+id: role-page-function
+title: Feature title
+status: draft
+owner: portal-team
+summary: Short business summary for BA, QA, dev, and AI.
+
+actors: []
+# - id: admin
+#   legacyRoleCode: master
+
+entities: []
+# - name: Entity
+#   table: entities
+#   importantFields: [id, name, created_at]
+
+relationships: []
+
+requirements:
+  - id: REQ-FEATURE-001
+    title: Main behavior
+    description: User can complete the main behavior.
+    priority: must
+
+ui:
+  routes:
+    - path: /feature-path
+      legacyPath: /legacy/path
+      pageTestId: feature-page
+  screens:
+    - name: Screen name
+      layout:
+        - Describe search, toolbar, table, dialogs in prose or bullets.
+      actions:
+        - id: create
+          text: Label
+          testId: feature-create-btn
+
+api:
+  endpoints:
+    - method: GET
+      path: /api/feature
+      legacyPath: /legacy/path
+      query: {}
+      response: {}
+
+acceptance:
+  - Main behavior is testable end to end.
+
+openQuestions: []
+
+notes:
+  - YAML is source of truth. Render with pnpm docs:render.
+  - Portal-gen blocks added in /grill-with-docs — see .cursor/extracts/portal-codegen-readiness.md

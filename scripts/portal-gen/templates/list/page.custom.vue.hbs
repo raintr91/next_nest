@@ -1,0 +1,17 @@
+<script setup lang="ts">
+import { use{{entityPascal}}List } from '~/composables/{{entity}}/use{{entityPascal}}List'
+
+const { filters, columns, items, query, pending, total, load, onSearch, onReset } = use{{entityPascal}}List()
+
+onMounted(load)
+</script>
+
+<template>
+  <!-- MANUAL: overrideCommonPattern — implement custom list shell (see HANDOFF.md) -->
+  <div :data-testid="'{{testIdModule}}-page'">
+    <DataPageHeader test-id="{{testIdModule}}-page-header" :title="'{{title}}'" />
+    <p class="text-sm text-muted-foreground">
+      Custom shell required — DataListPage not used (overrideCommonPattern).
+    </p>
+  </div>
+</template>

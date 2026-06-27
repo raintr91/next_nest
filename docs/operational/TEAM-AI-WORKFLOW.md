@@ -23,7 +23,7 @@ Shared snippets (committed, không clone vendor): `.cursor/extracts/`
 |---------|--------|-------|
 | `/spec` | `spec.yaml`, testcase round 1, `pnpm docs:render` | `.cursor/skills/spec/` |
 | `/legacy-spec` | Spec từ code legacy (read-only) | `.cursor/skills/legacy-spec/` |
-| `/grill-with-docs` | Hỏi sâu, update YAML/docs/ADR | `.cursor/skills/grill-with-docs/` |
+| `/grill-with-docs` | Hỏi sâu, portal-gen-ready YAML, `portal:gen:dry` gate | `.cursor/skills/grill-with-docs/` |
 | `/prototype` | UI thật, mock API boundary | `.cursor/skills/prototype/` |
 | `/grill-prototype` | Audit prototype trước demo | `.cursor/skills/grill-prototype/` |
 
@@ -58,6 +58,15 @@ pnpm docs:render
 pnpm docs:dev
 ```
 
+Codegen from spec (Handlebars stubs):
+
+```bash
+pnpm portal:gen --spec docs/features/admin/hotel/admin-hotel-list.spec.yaml
+pnpm portal:gen:dry --spec docs/features/.../feature.spec.yaml
+```
+
+See `.cursor/extracts/portal-codegen-tags.md` and `docs/templates/spec.yaml` (`codegen`, `tags`).
+
 ---
 
 ## Extracts (`.cursor/extracts/`)
@@ -70,6 +79,7 @@ pnpm docs:dev
 | `spec-split-by-function.md` | Một spec = một child function |
 | `agent-discipline.md` | Scope, simplicity, surgical edits |
 | `verify-gate.md` | Verify trước khi claim done |
+| `portal-codegen-tags.md` | Spec hashtags + `pnpm portal:gen` |
 
 Không cài Superpowers/Karpathy/Matt Pocock/Learn Harness clone — nội dung đã rút gọn trong extracts + team skills.
 
@@ -115,63 +125,23 @@ Glob rules chỉ **pointer** tới skill — chi tiết nằm trong skill + extr
 
 ## Prompt mẫu
 
-**Spec mới:**
+Bộ template đầy đủ (mọi command, block chung, lộ trình session, token tips): **[`PROMPT-TEMPLATES.md`](PROMPT-TEMPLATES.md)**
+
+Ví dụ nhanh:
 
 ```
 /spec tạo spec hotel list gồm search, pagination, row actions theo common UI.
-```
-
-**Legacy → spec:**
-
-```
 /legacy-spec admin hotel module từ legacy config.
-```
-
-**Grill spec:**
-
-```
 /grill-with-docs soi spec admin-hotel-list, hỏi gap permission và empty state.
-```
-
-**Prototype:**
-
-```
 /prototype dựng page hotel list theo spec admin-hotel-list, mock API 2 page.
-```
-
-**Grill prototype:**
-
-```
 /grill-prototype check hotel list trước demo cho team.
-```
-
-**Backend (trong repo `api/`):** `/api-spec` → `/grill-api-spec` → `/api-code` — xem `api/src/docs/TEAM-AI-BACKEND-WORKFLOW.md`
-
-**Portal:** `/grill-api` sau khi BE code xong, trước `/wire`.
-
-**Model:**
-
-```
 /model bổ sung Zod schema + types cho hotel list theo spec admin-hotel-list.
-```
-
-**Test / E2E:**
-
-```
-/test làm mịn testcase hotel-create-success, sinh Playwright spec scoped.
-```
-
-**Wire:**
-
-```
 /wire hotel list thay mock bằng API thật, giữ E2E green.
-```
-
-**Unit:**
-
-```
+/test làm mịn testcase hotel-create-success, sinh Playwright spec scoped.
 /unit Vitest cho hotel validation schema và service parser.
 ```
+
+Backend (repo `api/`): `/api-spec` → `/grill-api-spec` → `/api-code` — xem `api/src/docs/TEAM-AI-BACKEND-WORKFLOW.md`. Portal: `/grill-api` sau `/api-code`, trước `/wire`.
 
 ---
 
@@ -193,4 +163,5 @@ Glob rules chỉ **pointer** tới skill — chi tiết nằm trong skill + extr
 .harness/
 docs/features/{slug}/
 docs/operational/TEAM-AI-WORKFLOW.md
+docs/operational/PROMPT-TEMPLATES.md
 ```

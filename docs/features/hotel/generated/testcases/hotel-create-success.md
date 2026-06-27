@@ -36,7 +36,7 @@ hotelName: Hotel Sakura
 
 ## Kịch bản mock
 
-_Không có._
+`#`
 
 ## Các bước
 

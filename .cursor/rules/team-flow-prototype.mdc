@@ -13,9 +13,18 @@ Active commands: `/prototype`, `/grill-prototype` — one per session.
 | `/prototype` | `.cursor/skills/prototype/SKILL.md` |
 | `/grill-prototype` | `.cursor/skills/grill-prototype/SKILL.md` |
 
-Shared: `.cursor/extracts/common-ui-spec.md`, `legacy-blade-to-api.md` when relevant.
+Shared: `.cursor/extracts/common-ui-spec.md`, `legacy-blade-to-api.md`, `portal-codegen-tags.md` when relevant.
 
-- Source: approved `docs/features/{slug}/spec.yaml`
+Prerequisite: spec đã qua `/grill-with-docs` — `pnpm portal:gen:dry` passed.
+
+## Thứ tự
+
+1. **Quét `#needs-component`** — `tags:`, columns `render: custom`; chỉ tạo `Mo*` / slot UI còn thiếu.
+2. **`pnpm portal:gen --spec <spec.yaml>`** — scaffold 4 tầng; đọc `generated/HANDOFF.md`. Gen tự chạy `docs:render` (local, không AI token).
+3. **Sau gen** — slot → component, auth bypass, gap; `docs:render` cập nhật Screen link trong `.md` (không sửa YAML spec).
+
+- Source: grill-approved `docs/features/{slug}/*.spec.yaml`
 - Real UI/actions; mock only API response boundary
 - **Không** real backend; `/wire` replaces mocks
 - Gắn `data-testid` sớm (`docs/operational/E2E-TESTIDS.md`)
+- **Không** duplicate scaffold đã gen — agent review + HANDOFF + component nhỏ

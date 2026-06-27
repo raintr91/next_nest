@@ -14,8 +14,13 @@ Active commands: `/spec`, `/legacy-spec`, `/grill-with-docs` — one per session
 | `/legacy-spec` | `.cursor/skills/legacy-spec/SKILL.md` |
 | `/grill-with-docs` | `.cursor/skills/grill-with-docs/SKILL.md` |
 
-Shared: `.cursor/extracts/` — read `legacy-config.md`, `legacy-blade-to-api.md`, `common-ui-spec.md`, `spec-split-by-function.md` when relevant.
+Shared: `.cursor/extracts/` — `legacy-config.md`, `legacy-blade-to-api.md`, `common-ui-spec.md`, `spec-split-by-function.md`, `portal-codegen-readiness.md` when relevant.
 
-- Output: `docs/features/{role}/{page}/{role}-{page}-{function}.spec.yaml` + round-1 `.test.yaml`
+## Pipeline
+
+1. **`/legacy-spec` or `/spec`** — design v1 `*.spec.yaml` + testcase round 1 (`docs/templates/design-spec.yaml`). No `codegen`.
+2. **`/grill-with-docs`** — portal-gen-ready spec (`docs/templates/spec.yaml`) + `tags`. Gate: `pnpm portal:gen:dry --spec <file>`.
+3. **`/prototype`** — only after grill exit passes dry-run.
+
 - Render: `pnpm docs:render`
-- **Không** prototype UI, backend, real API, full E2E/unit trong phase spec.
+- **Không** prototype UI, backend, real API, full E2E/unit trong phase spec/grill.

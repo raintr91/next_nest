@@ -1,23 +1,77 @@
+# Portal-gen-ready spec — output of /grill-with-docs (not round-1 /legacy-spec or /spec).
+# Design v1 template: docs/templates/design-spec.yaml
+# Enrichment rules: .cursor/extracts/portal-codegen-readiness.md
+
 id: feature-slug
 title: Feature Title
 status: draft
 owner: portal-team
 summary: Short business summary for BA, QA, dev, and AI.
+
+# pnpm portal:gen:dry --spec <this-file>  (must pass before /prototype)
+# Tags: .cursor/extracts/portal-codegen-tags.md
+codegen:
+  profile: list # list | create | edit | detail
+  entity: entitySingular # hotel
+  module: modulePlural # hotels — testId prefix, mock id
+  skip: [] # models | service | composable | page | mock | validation
+
+tags: []
+# - "#needs-component: MoHotelStatusChip"
+# - "#custom-slot: cell-status"
+# - "#manual-composable: export-csv"
+# - "#skip-codegen: page"
+
 requirements:
   - id: REQ-FEATURE-001
     title: Main behavior
     description: User can complete the main behavior.
     priority: must
+
 ui:
+  composition:
+    pattern: DataListPage # DataListPage | custom
+    overrideCommonPattern: false
   routes:
     - path: /feature
       pageTestId: feature-page
+  filters: []
+  # - name: name
+  #   label: Name
+  #   type: text_field # text_field | select | number_field | date | ...
+  #   placeholder: Optional
+  columns: []
+  # - key: name
+  #   title: Name
+  #   sortable: true
+  #   render: default # default | custom
+  #   component: MoStatusChip # optional — auto-wires cell slot (Nuxt auto-import)
+  #   componentProp: label # prop bound from slot `value` (default: value)
+  testIds:
+    module: feature # kebab-case prefix for data-testid
+  form: {}
+  # create profile only:
+  #   fields:
+  #     - key: name
+  #       label: Name
+  #       type: text
+  #       required: true
+
 api:
   endpoints:
     - method: GET
       path: /api/feature
+      action: list # list | show | create | update | delete
+    # - method: POST
+    #   path: /api/feature
+    #   action: create
+
 acceptance:
   - Feature page renders successfully.
   - Main behavior works end to end.
+
 notes:
-  - YAML is the source of truth. Render Markdown for BA/QA review.
+  - YAML is the source of truth. Render Markdown with pnpm docs:render.
+  - Generate code with pnpm portal:gen --spec <path>.
+
+openQuestions: []
