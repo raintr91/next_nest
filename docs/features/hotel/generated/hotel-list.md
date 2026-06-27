@@ -1,7 +1,7 @@
 # Danh sách hotel admin
 
 - **Testcase:** [View hotel list](./hotel-list/testcases/hotel-list.md)
-- **Screen:** `/admin/hotels` (dev `http://localhost:3000/admin/hotels`) · `hotels-page`
+- **Screen:** `# /admin/hotels` · `hotels-page`
 
 Admin xem, tìm kiếm, sort và phân trang metadata hotel theo legacy `/admin/hotel/list`.
 

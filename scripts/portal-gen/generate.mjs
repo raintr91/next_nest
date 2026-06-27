@@ -2,7 +2,9 @@ import { spawnSync } from 'node:child_process'
 import path from 'node:path'
 import { fileURLToPath } from 'node:url'
 
-import { buildCodegenContext, buildFilePlan, enrichCodegenContext } from './lib/plan.mjs'
+import { buildCodegenContext, buildFilePlan, enrichCodegenContext, applyRegistryToContext } from './lib/plan.mjs'
+import { loadDesignRegistry } from './lib/design-registry.mjs'
+import { upsertPageLifecycle, syncPageLifecycleFromManifests } from './lib/page-lifecycle.mjs'
 import { readSpecFile } from './lib/read-spec.mjs'
 import { renderTemplate } from './lib/render.mjs'
 import { renderHandoffMarkdown, writeGeneratedMeta, writeOutputs } from './lib/write-files.mjs'
@@ -29,8 +31,10 @@ function parseArgs(argv) {
 
 async function main() {
   const options = parseArgs(process.argv.slice(2))
+  const registry = await loadDesignRegistry(root)
   const { spec, specFile, featureDir } = await readSpecFile(options.spec)
   let ctx = buildCodegenContext(spec, specFile)
+  ctx = applyRegistryToContext(ctx, registry, { validate: true })
   ctx = await enrichCodegenContext(ctx, root)
   const plan = buildFilePlan(ctx)
 
@@ -55,6 +59,10 @@ async function main() {
     profile: ctx.profile,
     entity: ctx.entity,
     module: ctx.module,
+    shell: ctx.shell,
+    shellVariant: ctx.shellVariant,
+    commonSpecRef: ctx.commonSpecRef,
+    designRegistry: registry.registryPath,
     slotBindings: ctx.slotBindings,
     componentFiles: ctx.componentFiles,
     files: plan.map((f) => ({ layer: f.layer, path: f.relativePath, template: f.template })),
@@ -65,9 +73,13 @@ async function main() {
   const handoff = renderHandoffMarkdown(ctx, written, skipped)
   const meta = await writeGeneratedMeta(featureDir, manifest, handoff, { dryRun: options.dryRun })
 
-  console.log(`portal-gen: profile=${ctx.profile} entity=${ctx.entity}`)
+  console.log(`portal-gen: profile=${ctx.profile} entity=${ctx.entity} shell=${ctx.shell} (${ctx.shellVariant})`)
   console.log(`  spec: ${specFile}`)
   if (options.dryRun) console.log('  mode: dry-run')
+
+  for (const warning of ctx.designValidation?.warnings ?? []) {
+    console.log(`  design warn: ${warning}`)
+  }
 
   for (const binding of ctx.slotBindings) {
     if (binding.wired) {
@@ -82,6 +94,19 @@ async function main() {
     console.log(`  skip: ${s.relativePath} (${s.reason})`)
   }
   if (!options.dryRun) {
+    const pageWritten = written.find((w) => w.relativePath?.startsWith('pages/') && w.relativePath.endsWith('.vue'))
+    if (pageWritten) {
+      const lifecycle = await upsertPageLifecycle(root, {
+        routePath: ctx.route.path,
+        specFile: specFile,
+        title: ctx.title,
+        stage: 'prototype'
+      })
+      console.log(`  lifecycle: ${lifecycle.routePath} → stage=${lifecycle.stage} (${lifecycle.registryPath})`)
+    }
+
+    await syncPageLifecycleFromManifests(root)
+
     console.log(`  handoff: ${path.relative(root, meta.handoffPath)}`)
     runDocsRender()
   }

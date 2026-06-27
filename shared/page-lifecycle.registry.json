@@ -1,0 +1,18 @@
+{
+  "$schema": "./page-lifecycle.registry.schema.json",
+  "routes": {
+    "/hotels": {
+      "stage": "prototype",
+      "spec": "docs/features/chain/hotel/chain-hotel-list.spec.yaml",
+      "title": "Chain — danh sách hotel (施設一覧)",
+      "updatedAt": "2026-06-27T07:16:11.871Z"
+    },
+    "/admin/hotels": {
+      "stage": "design-spec",
+      "spec": "docs/features/admin/hotel/admin-hotel-list.spec.yaml",
+      "title": "Admin hotel list",
+      "updatedAt": "2026-06-27T07:11:05.638Z",
+      "note": "Prototype page removed — sync demoted to design-spec."
+    }
+  }
+}

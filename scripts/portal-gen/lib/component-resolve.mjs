@@ -41,8 +41,7 @@ export async function findMoleculeComponent(root, moName) {
  * @param {string} moName
  */
 export function defaultComponentStubPath(moName) {
-  const base = moName.replace(/^Mo/, '')
-  return `components/molecules/custom/${base}.vue`
+  return `components/molecules/custom/${moName}.vue`
 }
 
 /**

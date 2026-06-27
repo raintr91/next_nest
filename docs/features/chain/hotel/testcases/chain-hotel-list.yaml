@@ -1,0 +1,51 @@
+id: chain-hotel-list
+feature: chain-hotel
+title: Chain xem danh sách hotel
+type: e2e
+priority: must
+requirementIds:
+  - REQ-CHAIN-HOTEL-LIST-001
+  - REQ-CHAIN-HOTEL-LIST-002
+  - REQ-CHAIN-HOTEL-LIST-003
+route:
+  path: /hotels
+  auth: chain
+testIds:
+  required:
+    - chain-hotels-page
+    - chain-hotels-table
+    - chain-hotels-total-btn
+    - chain-hotels-per-page-select
+    - chain-hotels-export-month-input
+    - chain-hotels-export-report-btn
+setup:
+  session: mockChainAuthenticatedSession
+  mocks:
+    - method: GET
+      path: /api/hotels
+      response: chainHotelListSuccess
+data: {}
+steps:
+  - action: goto
+    path: /hotels
+  - action: waitFor
+    testId: chain-hotels-table
+assertions:
+  ui:
+    - testId: chain-hotels-total-btn
+      visible: true
+    - testId: chain-hotels-per-page-select
+      visible: true
+    - testId: chain-hotels-export-month-input
+      visible: true
+    - testId: chain-hotels-search-form
+      visible: false
+  semantic:
+    ready:
+      rootTestId: chain-hotels-page
+      waitForTestIds:
+        - chain-hotels-table
+expected:
+  - Bảng 3 cột ID, name, managers; không có search form.
+  - Không có nút create/bulk delete admin.
+  - Toolbar phải có 表示件数 + select mặc định 100 + 件 bên phải trên table.

@@ -8,6 +8,6 @@ alwaysApply: false
 
 Skill: `.cursor/skills/test/SKILL.md` · Grill: `.cursor/skills/grill-test/SKILL.md`
 
-- `getByTestId()` only · Page Object · testcase YAML source of truth
-- Vertical slice; scoped `npx playwright test` before done
-- Extracts: `.cursor/extracts/verify-gate.md`
+- `getByTestId()` only · Page Object · testcase YAML = E2E only (no legacy inputs)
+- Vertical slice; scoped `pnpm test:e2e` before done
+- Extracts: `.cursor/extracts/portal-test-readiness.md`, `verify-gate.md`

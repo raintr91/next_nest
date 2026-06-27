@@ -1,6 +1,8 @@
 # Tài liệu tính năng đã render
 
-- [Admin hotel list](/features/admin/hotel/generated/admin-hotel-list)
+- [Chain — tải báo cáo 開封率データ](/features/chain/hotel/generated/chain-hotel-export-report)
+- [Chain — danh sách hotel (施設一覧)](/features/chain/hotel/generated/chain-hotel-list)
+- [Chain — login as manager (store handoff)](/features/chain/hotel/generated/chain-hotel-login-as-manager)
 - [Common buttons](/features/common/generated/common-buttons)
 - [Common confirm dialog](/features/common/generated/common-confirm-dialog)
 - [Common data table](/features/common/generated/common-data-table)

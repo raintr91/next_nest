@@ -25,6 +25,8 @@ export default defineConfig({
         items: [
           { text: 'Team AI Workflow', link: '/operational/TEAM-AI-WORKFLOW' },
           { text: 'Architecture', link: '/operational/ARCHITECTURE' },
+          { text: 'Design Registry Promotion', link: '/operational/DESIGN-REGISTRY-PROMOTION' },
+          { text: 'Page Lifecycle', link: '/operational/PAGE-LIFECYCLE' },
           { text: 'E2E Test IDs', link: '/operational/E2E-TESTIDS' },
           { text: 'Semantic UI Assertions', link: '/operational/E2E-SEMANTIC-UI-ASSERTIONS' },
           { text: 'Rapi Recorder QA', link: '/operational/RAPI-RECORDER-QA' }

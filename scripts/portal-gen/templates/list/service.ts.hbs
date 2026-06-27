@@ -23,7 +23,14 @@ export function create{{entityPascal}}Service(apiFetch: ApiFetch) {
       })
       assertApiSuccess(res)
       return parseApiData({{entityPascal}}ListResponseSchema, res.data)
-    }
+    }{{#if exportEndpoint}},
+    async exportReport(body: Record<string, unknown>): Promise<Blob> {
+      return apiFetch<Blob>('{{exportEndpoint.path}}', {
+        method: '{{exportEndpoint.method}}',
+        body,
+        responseType: 'blob'
+      })
+    }{{/if}}
   }
 }
 

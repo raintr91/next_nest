@@ -1,36 +1,68 @@
 ---
 name: test
 description: >-
-  /test command for Portal Playwright E2E. Use when refining testcase YAML,
-  writing E2E specs, converting Rapi recordings, or validating UI behavior from
-  data-testid based tests.
+  /test command for Portal Playwright E2E. Use when implementing Playwright from
+  testcase YAML, Page Objects, or converting Rapi recordings. Testcase YAML is
+  E2E only — not unit tests.
 disable-model-invocation: true
 ---
 
 # /test — Portal E2E
 
-Shared extracts: `.cursor/extracts/legacy-config.md`, `agent-discipline.md`, `verify-gate.md`
+Shared extracts: `.cursor/extracts/portal-test-readiness.md`, `agent-discipline.md`, `verify-gate.md`, `spec-split-by-function.md`
 
-## Inputs
+**Inputs only:** `spec.yaml`, `testcases/*.yaml`, prototype/wired UI — **no legacy** analysis in this phase.
 
-- `docs/features/{slug}/spec.yaml`
-- `docs/features/{slug}/testcases/*.yaml`
-- Prototype or wired UI with `data-testid`
+## Prerequisites
+
+- `/prototype` complete for the route
+- Readiness gate: `.cursor/extracts/portal-test-readiness.md`
 
 ## Rules
 
-1. Testcases YAML is source of truth.
-2. Playwright only under `tests/e2e/`; `page.getByTestId()` only.
-3. Add missing testId before writing specs; Page Objects + focused specs.
-4. Mock network only for prototype UI before `/wire`.
-5. Vertical slice: one scenario → minimal spec/PO → scoped run → next scenario.
-6. Test observable UI behavior, not composable/store internals.
-7. Reuse `/prototype` smoke skeleton as draft; this phase completes assertions and runs Playwright.
+1. **Testcase YAML = E2E source of truth** — one file per child function (spec split).
+2. Playwright under `tests/e2e/` only; locators via **Page Object** → `page.getByTestId()` only (no css/xpath in specs).
+3. Missing `testId` on UI → add on shared components first, then PO/spec.
+4. **Vertical slice:** one testcase → PO slice + spec → scoped run → next.
+5. Test **observable UI** — not composable/store internals (that is `/unit`, dev-owned).
+6. After `goto`: `assertLayoutIntegrity` when testcase uses semantic smoke / list pages.
 
-## Minimum Scenarios
+## Layout
 
-List/empty, create success, validation errors, edit/delete when in design, permission denied when guarded.
+```text
+tests/e2e/pages/{module}/{Function}Page.ts
+tests/e2e/{module}/{function}.spec.ts
+tests/e2e/helpers/session.ts    # setup.session names from testcase
+tests/e2e/fixtures/{module}.ts  # optional mock bundles
+```
+
+## Network modes
+
+| When | E2E network |
+|------|-------------|
+| Before `/wire` (lifecycle ≠ wire) | Mock per `testcase.setup.mocks` |
+| After `/wire` | Real API for wired endpoints; drop obsolete route mocks |
+
+Honor spec `tags: #wire-only` — mock or skip until integration.
+
+## Session helpers
+
+`testcase.setup.session` must match a function in `tests/e2e/helpers/session.ts` (e.g. `mockAuthenticatedSession`). Implement helper before spec if grill noted `#needs-session-helper`.
+
+## Minimum scenarios
+
+Derive from spec `codegen.profile` and split testcases — list smoke, create success, validation visible, row actions, forbidden when spec requires. See readiness doc table.
+
+## Verify
+
+```bash
+pnpm test:e2e tests/e2e/{module}/{function}.spec.ts
+```
+
+Report exit code (`verify-gate.md`).
 
 ## Done
 
-Scoped Playwright pass or failure with root cause. Then `/grill-test` for coverage audit.
+Scoped Playwright pass or failure with root cause → `/grill-test` → optional `pnpm portal:lifecycle set {route} test`.
+
+Optional Rapi path: skill `portal-rapi-playwright` — same PO and `getByTestId` rules.

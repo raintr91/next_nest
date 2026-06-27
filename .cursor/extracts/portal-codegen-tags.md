@@ -10,7 +10,7 @@ Handoff output: `{feature-dir}/generated/HANDOFF.md`
 |-------|----------------|
 | `/legacy-spec`, `/spec` | Design v1 only — **no** `codegen`, `ui.filters`, `ui.columns`, gen `tags` |
 | `/grill-with-docs` | `codegen`, `ui.composition`, `ui.filters`, `ui.columns`, `ui.testIds`, `api.action`, `tags` — see `portal-codegen-readiness.md` |
-| `/prototype` + `portal:gen` | Code files + `generated/HANDOFF.md`; **no** spec YAML edits |
+| `/prototype` + `portal:gen` | Gen scaffold + `generated/HANDOFF.md` (*Prototype next* = slot inventory only); **implement Mo* in /prototype**; registry promote in prototype |
 | After gen | `docs:render` — Screen `# /path` → dev URL in **generated `.md`** only |
 
 ## Spec blocks for codegen
@@ -29,10 +29,33 @@ Handoff output: `{feature-dir}/generated/HANDOFF.md`
 
 ## Hashtags (`tags:`)
 
+### Design registry (shadcn canonical)
+
+Source: `shared/portal-design.registry.json` · Rule: `.cursor/rules/portal-design-vocabulary.mdc`
+
+| Tag | Generator / grill |
+|-----|-------------------|
+| `#shell: DataListPage` | **List mặc định** — `DataListPage` + `list/page.vue.hbs` |
+| `#shell: custom` | `list/page.custom.vue.hbs` khi override |
+| `#shell: DataFormPage` | Create/edit shell (planned organism) |
+| `#pattern: CRUD` | Flow list/create/edit/detail |
+| `#ui: {Component}` | shadcn primitive — must exist in `components/ui/` |
+| `#widget: {Name}` | Form field — `fieldWidgets` in registry |
+| `#render: text\|chip\|badge` | Detail read-only |
+| `#shape: array\|dynamic` | Repeater / dynamic fields |
+| `#style: compact\|flat` | Density / flat design |
+| `#needs-ui: {Name}` | Registry `planned` — **prototype** implements; HANDOFF lists only |
+
+List grill default (nếu thiếu): `#shell: DataListPage`, `#pattern: CRUD`, `#style: shadcn/ui`, `#style: compact`, `#style: flat`.
+
+Alias: `DataListTable`, `common list` → `#shell: DataListPage`.
+
+### Codegen workflow
+
 | Tag | Generator behavior |
 |-----|-------------------|
-| `#needs-component: MoXxx` | Stub at `components/molecules/custom/` if missing; wire slot when paired |
-| `#needs-component: cell-{key}:MoXxx` | Wire `<template #cell-{key}>` → `<MoXxx />` (Nuxt auto-import) |
+| `#needs-component: MoXxx` | Spec inventory; **prototype** implements file; gen wires slot when file exists — **no stub emit** |
+| `#needs-component: cell-{key}:MoXxx` | Wire `<template #cell-{key}>` when `Mo*` exists on disk |
 | `#needs-component: cell-{key}:MoXxx:label` | Third segment = prop bound from slot `value` (e.g. `MoStatusChip :label`) |
 | `#custom-slot: cell-{key}` | Page slot; pair with `#needs-component` for auto-wire |
 | `#manual-composable: {name}` | Skip that function in composable; HANDOFF entry |
@@ -44,6 +67,7 @@ Handoff output: `{feature-dir}/generated/HANDOFF.md`
 ## Commands
 
 ```bash
+pnpm portal:registry   # validate shared/portal-design.registry.json
 pnpm portal:gen:dry --spec docs/features/admin/hotel/admin-hotel-list.spec.yaml  # gate after grill
 pnpm portal:gen --spec docs/features/admin/hotel/admin-hotel-list.spec.yaml
 pnpm portal:gen --spec ... --force   # overwrite existing generated targets
@@ -53,17 +77,18 @@ pnpm portal:gen --spec ... --force   # overwrite existing generated targets
 
 Prerequisite: `portal:gen:dry` passed in `/grill-with-docs`.
 
-1. **Quét `#needs-component`** — tags + columns `render: custom`; không scaffold tay.
-2. **Component nhỏ** — chỉ `Mo*` thiếu.
-3. **`pnpm portal:gen --spec ...`** — auto `docs:render`.
-4. **Post-gen** — HANDOFF, auth bypass, lint.
+1. **Đọc spec `tags:`** — `#needs-component` / `#needs-ui` inventory (grill đã đặt tên `Mo*`).
+2. **Implement `Mo*` thiếu** — trước khi wire slot; promote registry nếu common (`DESIGN-REGISTRY-PROMOTION.md`).
+3. **`pnpm portal:gen --spec ...`** (`--force` nếu cần) — auto `docs:render`.
+4. **Post-gen** — HANDOFF chỉ còn gap; auth bypass; lint.
 
 ## After generate
 
-1. Read `{feature-dir}/generated/HANDOFF.md`
-2. Wire slots to components from step 2; finish remaining HANDOFF items
-3. `portal:gen` auto-runs `docs:render` → Screen link in spec `.md`; nếu fail: `pnpm docs:render`
-4. `/grill-prototype` before demo; `/wire` for real API
+1. Read `{feature-dir}/generated/HANDOFF.md` — *Prototype next* lists slots; gen does not build `Mo*`
+2. **/prototype:** implement missing components from spec tags **before** expecting wired slots
+3. Registry promotion (common widgets only): `docs/operational/DESIGN-REGISTRY-PROMOTION.md` — **prototype phase**, not gen
+4. Re-run `portal:gen --force` after components exist
+5. `portal:gen` auto-runs `docs:render`; `/wire` for real API
 
 ## Rendered in spec.md (`pnpm docs:render`)
 

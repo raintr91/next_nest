@@ -2,6 +2,8 @@ import {
   createEndpoint,
   listEndpoint,
   pluralize,
+  resolveCodegenNamespace,
+  buildMockRowsFromSpec,
   routeToPagePath,
   toCamelCase,
   toKebabCase,
@@ -9,6 +11,7 @@ import {
   zodFieldForColumn,
   zodFieldForFormField
 } from './naming.mjs'
+import { applyDesignRegistry, validateSpecDesign, parseDesignTags } from './design-registry.mjs'
 import { resolveComponentFiles } from './component-resolve.mjs'
 import { buildSlotBindings, collectUniqueComponents } from './slots.mjs'
 
@@ -66,11 +69,12 @@ function mergeCustomSlots(columns, parsedTags) {
  */
 export function buildCodegenContext(spec, specFile) {
   const codegen = spec.codegen ?? {}
-  const entity = codegen.entity ?? spec.id?.split('-').pop() ?? 'entity'
+  const namespaceKebab = resolveCodegenNamespace(codegen)
+  const entity = namespaceKebab
   const module = codegen.module ?? pluralize(entity)
   const profile = codegen.profile ?? 'list'
-  const entityPascal = toPascalCase(entity)
-  const entityCamel = toCamelCase(entity)
+  const entityPascal = toPascalCase(namespaceKebab)
+  const entityCamel = toCamelCase(namespaceKebab)
   const moduleKebab = toKebabCase(module)
 
   const route = spec.ui?.routes?.[0] ?? { path: `/${moduleKebab}`, pageTestId: `${moduleKebab}-page` }
@@ -89,6 +93,9 @@ export function buildCodegenContext(spec, specFile) {
 
   const listEp = listEndpoint(spec)
   const createEp = createEndpoint(spec)
+  const exportEp =
+    spec.api?.endpoints?.find((e) => e.action === 'export') ??
+    spec.api?.endpoints?.find((e) => /export/i.test(e.path ?? ''))
 
   const columnSchemas = columns.map((col) => ({
     ...col,
@@ -103,6 +110,24 @@ export function buildCodegenContext(spec, specFile) {
   const useCustomShell =
     spec.ui?.composition?.pattern === 'custom' || spec.ui?.composition?.overrideCommonPattern === true
 
+  const embeddedBlocks = spec.ui?.embeddedBlocks ?? []
+  const toolbar = spec.ui?.toolbar ?? {}
+  const defaultPageSize = toolbar.defaultPageSize ?? 10
+  const pageSizeOptions = toolbar.pageSizeOptions ?? []
+  const hasPerPageToolbar = pageSizeOptions.length > 0
+  const perPageConfig = toolbar.perPage ?? {}
+  const manualComposables = parsedTags.manualComposables
+  const hasExportBlock = embeddedBlocks.some((block) => block.id === 'export-open-rate') ||
+    manualComposables.includes('exportOpenRateReport')
+  const hasLoginAs = manualComposables.includes('loginAsStoreManager')
+
+  const mockRowsPage1 = buildMockRowsFromSpec(spec, spec.title ?? entityPascal)
+  const mockRowsPage2 = buildMockRowsFromSpec(spec, spec.title ?? entityPascal).map((row, index) => ({
+    ...row,
+    id: Number(row.id ?? index + 1) + 100,
+    name: `${row.name ?? 'Item'} (page 2)`
+  }))
+
   const customSlots = mergeCustomSlots(columns, parsedTags)
   const slotBindings = buildSlotBindings(customSlots, parsedTags.needsComponents, columns)
 
@@ -111,6 +136,7 @@ export function buildCodegenContext(spec, specFile) {
     specFile,
     profile,
     entity,
+    namespaceKebab,
     module,
     entityPascal,
     entityCamel,
@@ -127,9 +153,21 @@ export function buildCodegenContext(spec, specFile) {
     formFieldSchemas,
     listEndpoint: listEp,
     createEndpoint: createEp,
+    exportEndpoint: exportEp,
     parsedTags,
     skip,
     useCustomShell,
+    embeddedBlocks,
+    toolbar,
+    defaultPageSize,
+    pageSizeOptions,
+    hasPerPageToolbar,
+    perPageConfig,
+    hasExportBlock,
+    hasLoginAs,
+    mockRowsPage1,
+    mockRowsPage2,
+    manualComposables,
     customSlots,
     slotBindings,
     componentFiles: {},
@@ -147,15 +185,18 @@ export async function enrichCodegenContext(ctx, root) {
   const components = collectUniqueComponents(ctx.slotBindings)
   const componentFiles = await resolveComponentFiles(root, components)
 
-  const componentStubs = components
-    .filter((name) => !componentFiles[name]?.exists)
-    .map((name) => ({
-      moName: name,
-      relativePath: componentFiles[name].stubPath
-    }))
+  ctx.slotBindings = ctx.slotBindings.map((binding) => {
+    if (!binding.component) return binding
+    const exists = Boolean(componentFiles[binding.component]?.exists)
+    return {
+      ...binding,
+      intendedComponent: binding.component,
+      wired: exists
+    }
+  })
 
   ctx.componentFiles = componentFiles
-  ctx.componentStubs = componentStubs
+  ctx.componentStubs = []
   ctx.handoffItems = buildHandoffItems(
     ctx.spec,
     ctx.parsedTags,
@@ -169,32 +210,44 @@ export async function enrichCodegenContext(ctx, root) {
 
 function buildHandoffItems(spec, parsedTags, useCustomShell, slotBindings, componentFiles) {
   const items = []
+  const designTags = parseDesignTags(spec.tags ?? [])
 
   if (useCustomShell) {
     items.push({
       type: 'override-shell',
-      detail: 'ui.composition.overrideCommonPattern or pattern: custom — implement organism shell manually.'
+      detail: 'ui.composition.overrideCommonPattern or pattern: custom — implement organism shell in /prototype.'
     })
   }
 
   for (const binding of slotBindings) {
-    if (!binding.wired) {
-      items.push({
-        type: 'custom-slot',
-        name: binding.slot,
-        detail: `Add #needs-component: ${binding.slot}:MoYourComponent in spec tags, then re-run portal:gen.`
-      })
+    if (binding.component) {
+      const file = componentFiles[binding.component]
+      if (!file?.exists) {
+        items.push({
+          type: 'needs-component',
+          name: binding.component,
+          detail:
+            `Slot #${binding.slot} — implement \`${binding.component}\` in /prototype (spec tag already names it). ` +
+            'Re-run portal:gen after the file exists. Common widget → update registry per DESIGN-REGISTRY-PROMOTION.md.'
+        })
+      }
       continue
     }
 
-    const file = componentFiles[binding.component]
-    if (file && !file.exists) {
-      items.push({
-        type: 'needs-component',
-        name: binding.component,
-        detail: `Review generated stub ${file.stubPath} and adjust props for :${binding.valueProp}.`
-      })
-    }
+    items.push({
+      type: 'custom-slot',
+      name: binding.slot,
+      detail: `Add #needs-component: ${binding.slot}:MoYourComponent:prop in spec (/grill-with-docs), implement in /prototype, then re-run portal:gen.`
+    })
+  }
+
+  for (const widget of designTags.needsUi) {
+    items.push({
+      type: 'needs-ui',
+      name: widget,
+      detail:
+        `Registry widget \`${widget}\` is planned — implement molecule in /prototype, promote registry if reusable, then re-run portal:gen.`
+    })
   }
 
   for (const fn of parsedTags.manualComposables) {
@@ -206,7 +259,11 @@ function buildHandoffItems(spec, parsedTags, useCustomShell, slotBindings, compo
   }
 
   for (const q of spec.openQuestions ?? []) {
-    items.push({ type: 'open-question', detail: String(q) })
+    const detail =
+      typeof q === 'string'
+        ? q
+        : q?.question ?? q?.id ?? JSON.stringify(q)
+    items.push({ type: 'open-question', detail: String(detail) })
   }
 
   return items
@@ -225,23 +282,17 @@ export function buildFilePlan(ctx) {
   }
 
   if (profile === 'list') {
+    const listTemplate =
+      ctx.listPageTemplate ??
+      (ctx.useCustomShell ? 'list/page.custom.vue.hbs' : 'list/page.vue.hbs')
+
     add('models', `models/${entity}/${entity}.schema.ts`, 'list/model.schema.ts.hbs')
     add('models', `models/${entity}/${entity}.types.ts`, 'list/model.types.ts.hbs')
     add('models', `models/${entity}/index.ts`, 'list/model.index.ts.hbs')
     add('service', `services/${entity}.service.ts`, 'list/service.ts.hbs')
     add('composable', `composables/${entity}/use${entityPascal}List.ts`, 'list/useList.ts.hbs')
-    add('page', ctx.pagePath, ctx.useCustomShell ? 'list/page.custom.vue.hbs' : 'list/page.vue.hbs')
+    add('page', ctx.pagePath, listTemplate)
     add('mock', `mocks/${entity}.mock.ts`, 'list/mock.ts.hbs')
-
-    for (const stub of ctx.componentStubs ?? []) {
-      if (skip.has('component')) continue
-      files.push({
-        layer: 'component',
-        relativePath: stub.relativePath,
-        template: 'partials/component-stub.vue.hbs',
-        moName: stub.moName
-      })
-    }
   }
 
   if (profile === 'create') {
@@ -256,4 +307,25 @@ export function buildFilePlan(ctx) {
   }
 
   return files
+}
+
+/**
+ * Apply portal design registry and optional validation.
+ * @param {ReturnType<typeof buildCodegenContext>} ctx
+ * @param {Record<string, unknown>} registry
+ * @param {{ validate?: boolean }} options
+ */
+export function applyRegistryToContext(ctx, registry, options = {}) {
+  applyDesignRegistry(ctx, registry)
+
+  if (options.validate) {
+    const { errors, warnings } = validateSpecDesign(ctx, registry, { strict: false })
+    ctx.designValidation = { errors, warnings }
+    if (errors.length > 0) {
+      const message = errors.map((e) => `  - ${e}`).join('\n')
+      throw new Error(`portal-gen design registry validation failed:\n${message}`)
+    }
+  }
+
+  return ctx
 }

@@ -1,25 +1,49 @@
 ---
 name: grill-prototype
 description: >-
-  /grill-prototype command for stress-testing a Portal design prototype before
-  running or demoing it. Use after /prototype has produced or changed prototype
-  UI, before opening dev/demo, to verify spec fit, real actions, mocked API
-  boundary, state coverage, test IDs, and legacy-to-SPA conversion.
+  /grill-prototype command for auditing a Portal prototype before demo or
+  handoff to /test or /wire. Verifies spec fit, mock API boundary, testIds, and
+  E2E handoff — without running Playwright.
 disable-model-invocation: true
 ---
 
-# /grill-prototype — Prototype Audit
+# /grill-prototype — Prototype audit
 
-Use after `/prototype`, before demo or handoff to `/wire` / `/test`.
+Use after `/prototype`, before demo, `/test`, or `/wire`.
 
-Shared extracts: `.cursor/extracts/legacy-blade-to-api.md`, `common-ui-spec.md`, `verify-gate.md`
+Shared extracts: `.cursor/extracts/common-ui-spec.md`, `.cursor/extracts/portal-test-readiness.md`, `verify-gate.md`
 
-Detail checklist lives in `.cursor/skills/prototype/SKILL.md` — verify:
+Detail checklist in `.cursor/skills/prototype/SKILL.md` — verify:
 
-- Spec fit, happy path, validation messages, loading/empty/error states
-- Mock pagination ≥2 pages when applicable; text/icon/layout positions
-- Auth bypass on prototype routes; no real backend calls
-- `DataListPage` reuse; composable interface depth; testId handoff
-- Fix clear issues in scope; no full E2E/unit runs
+- Spec fit: happy path, validation messages, loading/empty/error when in spec
+- Mock pagination ≥2 pages when list spec applies
+- Auth bypass on prototype routes (`PAGE-LIFECYCLE.md`); no real backend calls
+- `DataListPage` / registry shell fit; composable mock boundary
+- **testId:** every id in linked testcase `testIds.required` visible on UI
 
-Handoff (Vietnamese): route grilled, fixes applied, open issues, auth bypass list, smoke skeleton notes for `/test` or `/unit`.
+**Do not** run full Playwright or Vitest in this command.
+
+## E2E handoff checklist (for `/test`)
+
+Copy into handoff notes (Vietnamese):
+
+1. **Route:** `{path}` · lifecycle stage · auth bypass yes/no
+2. **Spec files:** list `docs/features/.../*.spec.yaml` for this route
+3. **Testcase files:** list `testcases/*.yaml` (E2E only — one per function split)
+4. **testIds.required:** table ok / missing (fix prototype before `/test`)
+5. **Session:** `setup.session` values — helper exists in `session.ts` yes/no
+6. **Mocks:** `setup.mocks` vs spec `api.endpoints` — aligned yes/no
+7. **#wire-only** tags — list scenarios deferred to `/wire`
+8. **Open issues** — blockers for `/test`
+
+## Out of scope
+
+- Legacy code comparison (design lane only if ever needed)
+- Writing Playwright specs (`/test`)
+- Unit tests (dev-owned; no testcase YAML)
+
+## Handoff targets
+
+- Clear fixes → apply in prototype scope
+- Ready for E2E → `/test` (read `portal-test-readiness.md`)
+- API contract gaps → `/api` in backend repo, then `/wire`

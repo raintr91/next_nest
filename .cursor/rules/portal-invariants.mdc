@@ -26,6 +26,8 @@ Nuxt 4 auth-first portal. Details: `docs/operational/ARCHITECTURE.md`, `docs/ope
 
 Dashboard dùng shadcn admin primitives trong `layouts/dashboard.vue`; không thêm `layouts/themes/*` hoặc theme switcher.
 
+- **UI vocabulary / gen:** `shared/portal-design.registry.json` — shadcn canonical, `#shell: DataListPage` cho list. Rule: `portal-design-vocabulary.mdc`. Promotion: `docs/operational/DESIGN-REGISTRY-PROMOTION.md`.
+
 ## Kích thước (ngưỡng mềm)
 
 File ~**200** dòng · function ~**20** dòng — vượt thì tách. Chi tiết: `portal-code-size.mdc` (glob).

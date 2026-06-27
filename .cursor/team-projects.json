@@ -23,8 +23,8 @@
     }
   },
   "projects": {
-    "v2-mairy": {
-      "root": "/home/vutv/workspace/v2-mairy",
+    "api": {
+      "root": "/home/vutv/workspace/api",
       "role": "backend",
       "description": "New Laravel API for the Mairy SaaS rebuild",
       "write": true
@@ -35,8 +35,8 @@
       "description": "New admin portal for SaaS operations, tenant management, and system jobs",
       "write": true
     },
-    "v2-mairy-chain": {
-      "root": "/home/vutv/workspace/v2-mairy-chain",
+    "portal": {
+      "root": "/home/vutv/workspace/portal",
       "role": "frontend-chain",
       "description": "New chain portal for chain-level users and their stores",
       "write": true

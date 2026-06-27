@@ -12,7 +12,7 @@ disable-model-invocation: true
 
 Adapted from Matt Pocock grilling: ask hard questions until the spec is unambiguous; update docs as decisions land.
 
-Shared extracts: `.cursor/extracts/legacy-config.md`, `legacy-blade-to-api.md`, `common-ui-spec.md`, `spec-split-by-function.md`, `agent-discipline.md`, `portal-codegen-tags.md`, `portal-codegen-readiness.md`
+Shared extracts: `.cursor/extracts/legacy-config.md`, `legacy-blade-to-api.md`, `common-ui-spec.md`, `spec-split-by-function.md`, `agent-discipline.md`, `portal-codegen-tags.md`, `portal-codegen-readiness.md`, `portal-design-registry.md`
 
 ## Goal
 
@@ -39,7 +39,10 @@ Enrich design v1 → post-grill shape per `portal-codegen-readiness.md` and `doc
 4. Add structured `ui.columns` from `api.response` / `importantFields`; `render: custom` where needed.
 5. Add `ui.testIds.module` aligned with action testIds.
 6. Set `api.endpoints[].action` (`list`, `create`, …).
-7. Add `tags:` — `#needs-component`, `#wire-only`, `#skip-codegen`, `#manual-composable`, `#phase-api` as needed.
+7. Add `tags:` — design registry (`#shell: DataListPage`, `#pattern:`, `#style:`) + **missing component inventory**:
+   - `#needs-component: cell-{key}:Mo{Name}:{prop}` — tên `Mo*` rõ; `/prototype` implement, **không** đợi gen stub
+   - `#needs-ui: {Widget}` — registry `planned`
+   - plus `#wire-only`, `#skip-codegen`, `#manual-composable`, `#phase-api` as needed
 8. Close or tag remaining `openQuestions`.
 9. **Gate:** `pnpm portal:gen:dry --spec <spec.yaml>` must exit 0.
 

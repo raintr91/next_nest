@@ -1,0 +1,69 @@
+---
+description: Portal design vocabulary — shadcn canonical, registry hashtags, grill normalization
+globs: docs/features/**/*.yaml, docs/templates/*.yaml, scripts/portal-gen/**/*
+alwaysApply: false
+---
+
+# Design vocabulary (portal)
+
+**Source of truth:** `shared/portal-design.registry.json`  
+**Validate:** `pnpm portal:registry`  
+**Gen reads registry:** `portal:gen` / `portal:gen:dry`
+
+## Canonical system
+
+- **shadcn/ui** = tên chuẩn (`Input`, `AlertDialog`, `Sheet`, …).
+- Material / Ant / Apple / BA mô tả mơ hồ → map qua `aliasIndex` / `componentAliases` — **không** đặt tên component tùy ý trong spec.
+
+## Hashtags (grill ghi vào `tags:`)
+
+| Prefix | Ví dụ | Dùng khi |
+|--------|-------|----------|
+| `#shell:` | `DataListPage` | Page organism — **list mặc định** |
+| `#pattern:` | `CRUD`, `Settings` | Interaction pattern |
+| `#ui:` | `AlertDialog` | shadcn primitive |
+| `#widget:` | `Input`, `Repeater` | Form field |
+| `#render:` | `text`, `chip` | Detail read-only |
+| `#shape:` | `array`, `dynamic` | Field structure |
+| `#style:` | `compact`, `flat` | Visual density |
+| `#needs-ui:` | `Repeater` | Widget `planned` — stub/HANDOFF |
+
+## List page (mặc định)
+
+`codegen.profile: list` → grill **auto** (nếu chưa có):
+
+```yaml
+tags:
+  - "#shell: DataListPage"
+  - "#pattern: CRUD"
+  - "#style: shadcn/ui"
+  - "#style: compact"
+  - "#style: flat"
+```
+
+Alias member hay gõ: `DataListTable`, `common list` → `#shell: DataListPage`.
+
+**Custom list** (export block, toolbar đặc thù): giữ `#shell: DataListPage` + `overrideCommonPattern: true` → gen `list/page.custom.vue.hbs`.
+
+**Khác list:** `#shell: DataFormPage` | `DataDetailPage` | `#shell: custom` + lý do trong `notes`.
+
+## Grill workflow
+
+1. Parse BA bullet → `lookupAlias()` (registry).
+2. Confidence thấp → `fuzzyGroups` → hỏi member chọn canonical.
+3. Ghi structured `ui.composition.pattern` + hashtags — không prose dài thay cho widget.
+4. `pnpm portal:gen:dry` phải pass (registry validate tags).
+
+## Registry promotion (chỉ /prototype)
+
+Sau khi **implement** `Mo*` từ spec `tags:` — **không** phải output của `portal:gen`. HANDOFF chỉ liệt kê slot thiếu.
+
+Doc: `docs/operational/DESIGN-REGISTRY-PROMOTION.md`
+
+## Không làm
+
+- ❌ Invent component name ngoài registry
+- ❌ Copy legacy Vuetify naming vào spec
+- ❌ Bỏ `#shell: DataListPage` trên list chuẩn mà không có shell thay thế
+
+Chi tiết: `.cursor/extracts/portal-design-registry.md` · Promotion: `docs/operational/DESIGN-REGISTRY-PROMOTION.md`

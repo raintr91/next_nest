@@ -1,0 +1,521 @@
+{
+  "version": 1,
+  "canonicalSystem": "shadcn/ui",
+  "defaults": {
+    "style": ["shadcn/ui", "flat", "compact"],
+    "shellByProfile": {
+      "list": "DataListPage",
+      "create": "DataFormPage",
+      "edit": "DataFormPage",
+      "detail": "DataDetailPage"
+    },
+    "listShell": "DataListPage",
+    "overlayConfirm": "AlertDialog",
+    "toast": "Sonner"
+  },
+  "tagPrefixes": {
+    "shell": "#shell:",
+    "ui": "#ui:",
+    "widget": "#widget:",
+    "render": "#render:",
+    "shape": "#shape:",
+    "pattern": "#pattern:",
+    "style": "#style:",
+    "needsUi": "#needs-ui:"
+  },
+  "shells": {
+    "DataListPage": {
+      "canonical": "DataListPage",
+      "tags": ["#shell: DataListPage"],
+      "aliases": {
+        "informal": [
+          "DataListTable",
+          "data list table",
+          "common list",
+          "list table",
+          "search filter table",
+          "bảng danh sách"
+        ],
+        "ant": ["Table + Form search"],
+        "material": ["List"]
+      },
+      "portal": {
+        "layer": "organism",
+        "path": "components/organisms/DataListPage.vue",
+        "status": "implemented",
+        "layout": "dashboard"
+      },
+      "defaultFor": {
+        "codegenProfile": "list"
+      },
+      "portalGen": {
+        "templateStandard": "list/page.vue.hbs",
+        "templateCustom": "list/page.custom.vue.hbs",
+        "composableSuffix": "List",
+        "layers": ["models", "service", "composable", "page", "mock"]
+      },
+      "commonSpecRef": "docs/features/common/common-list-page.spec.yaml",
+      "includes": {
+        "organisms": ["DataListPage"],
+        "molecules": ["MoSearchForm", "MoDataTable", "MoPaginationBar", "MoAppBar"],
+        "slots": ["actions", "above-toolbar", "toolbar-end", "toolbar-start", "cell-{key}"]
+      },
+      "variants": {
+        "standard": {
+          "template": "list/page.vue.hbs",
+          "when": "default list; no overrideCommonPattern"
+        },
+        "custom": {
+          "template": "list/page.custom.vue.hbs",
+          "when": "#shell: custom | ui.composition.pattern custom | overrideCommonPattern true"
+        }
+      }
+    },
+    "DataTablePage": {
+      "canonical": "DataTablePage",
+      "tags": ["#shell: DataTablePage"],
+      "aliases": {
+        "informal": ["simple table", "dashboard table", "table without search"]
+      },
+      "portal": {
+        "layer": "organism",
+        "path": "components/organisms/DataTablePage.vue",
+        "status": "implemented"
+      },
+      "when": "Table đơn giản, không full search/filter shell"
+    },
+    "DataFormPage": {
+      "canonical": "DataFormPage",
+      "tags": ["#shell: DataFormPage"],
+      "aliases": {
+        "informal": ["form page", "create edit form", "settings form"]
+      },
+      "portal": {
+        "layer": "organism",
+        "path": "components/organisms/DataFormPage.vue",
+        "status": "planned"
+      },
+      "defaultFor": {
+        "codegenProfile": ["create", "edit"]
+      },
+      "portalGen": {
+        "templateStandard": "create/page.vue.hbs",
+        "composableSuffix": "Form",
+        "layers": ["models", "service", "composable", "validation", "page", "mock"]
+      }
+    },
+    "DataDetailPage": {
+      "canonical": "DataDetailPage",
+      "tags": ["#shell: DataDetailPage"],
+      "aliases": {
+        "ant": ["Descriptions"],
+        "informal": ["detail page", "readonly view", "show page"]
+      },
+      "portal": {
+        "layer": "organism",
+        "path": "components/organisms/DataDetailPage.vue",
+        "status": "planned"
+      },
+      "defaultFor": {
+        "codegenProfile": "detail"
+      }
+    },
+    "custom": {
+      "canonical": "custom",
+      "tags": ["#shell: custom"],
+      "aliases": {
+        "informal": ["override list", "custom layout", "layout đặc thù"]
+      },
+      "portalGen": {
+        "listTemplate": "list/page.custom.vue.hbs",
+        "requiresReason": true
+      }
+    }
+  },
+  "patterns": {
+    "CRUD": {
+      "canonical": "CRUD",
+      "tags": ["#pattern: CRUD"],
+      "aliases": {
+        "informal": ["crud", "list create edit delete", "quản lý crud"]
+      },
+      "profiles": ["list", "create", "edit", "detail"]
+    },
+    "Settings": {
+      "canonical": "Settings",
+      "tags": ["#pattern: Settings"],
+      "aliases": {
+        "informal": ["settings", "config page", "cài đặt"]
+      },
+      "preferredShell": "DataFormPage",
+      "preferredUi": ["Tabs", "Accordion", "Card"]
+    },
+    "Dashboard": {
+      "canonical": "Dashboard",
+      "tags": ["#pattern: Dashboard"],
+      "aliases": {
+        "ant": ["Statistic", "KPI"],
+        "informal": ["dashboard", "analytics overview"]
+      },
+      "preferredUi": ["Card", "Chart"],
+      "portalGen": "manual-blocks"
+    },
+    "Confirmation Flow": {
+      "canonical": "Confirmation Flow",
+      "tags": ["#pattern: Confirmation Flow"],
+      "aliases": {
+        "informal": ["confirm before delete", "xác nhận xóa", "confirm popup"]
+      },
+      "requiresUi": ["AlertDialog"]
+    },
+    "Empty State": {
+      "canonical": "Empty State",
+      "tags": ["#pattern: Empty State"],
+      "preferredMolecule": "MoEmptyState"
+    },
+    "Loading State": {
+      "canonical": "Loading State",
+      "tags": ["#pattern: Loading State"],
+      "preferredUi": ["Skeleton"]
+    },
+    "Filter Panel": {
+      "canonical": "Filter Panel",
+      "tags": ["#pattern: Filter Panel"],
+      "aliases": {
+        "informal": ["search filter", "filter bar"]
+      },
+      "includedInShell": ["DataListPage"]
+    },
+    "Sticky Header": {
+      "canonical": "Sticky Header",
+      "tags": ["#pattern: Sticky Header"],
+      "preferredOrganism": "DataPageHeader"
+    },
+    "Master Detail": {
+      "canonical": "Master Detail",
+      "tags": ["#pattern: Master Detail"],
+      "aliases": {
+        "apple": ["Split View", "Inspector"]
+      }
+    },
+    "Wizard": {
+      "canonical": "Wizard",
+      "tags": ["#pattern: Wizard"],
+      "preferredUi": ["Stepper"]
+    }
+  },
+  "fieldWidgets": {
+    "Input": {
+      "canonical": "Input",
+      "tags": ["#widget: Input"],
+      "shape": "scalar",
+      "aliases": {
+        "material": ["Text field"],
+        "informal": ["textbox", "ô nhập", "text field"]
+      },
+      "portal": {
+        "ui": "Input",
+        "wrapper": "FormField",
+        "status": "implemented"
+      },
+      "zodDefault": "fields.optionalNullableString"
+    },
+    "Textarea": {
+      "canonical": "Textarea",
+      "tags": ["#widget: Textarea"],
+      "shape": "scalar",
+      "portal": { "ui": "Textarea", "wrapper": "FormField", "status": "implemented" }
+    },
+    "Select": {
+      "canonical": "Select",
+      "tags": ["#widget: Select"],
+      "shape": "scalar",
+      "aliases": { "ant": ["Select"] },
+      "portal": { "ui": "Select", "wrapper": "FormField", "status": "implemented" }
+    },
+    "Combobox": {
+      "canonical": "Combobox",
+      "tags": ["#widget: Combobox"],
+      "shape": "scalar",
+      "portal": { "molecule": "MoComboboxField", "status": "implemented" }
+    },
+    "Autocomplete": {
+      "canonical": "Autocomplete",
+      "tags": ["#widget: Autocomplete"],
+      "shape": "scalar",
+      "aliases": { "ant": ["AutoComplete", "Cascader"] },
+      "portal": { "molecule": "MoAutocompleteField", "status": "implemented" }
+    },
+    "Checkbox": {
+      "canonical": "Checkbox",
+      "tags": ["#widget: Checkbox"],
+      "shape": "scalar",
+      "portal": { "ui": "Checkbox", "wrapper": "FormField", "status": "implemented" }
+    },
+    "Switch": {
+      "canonical": "Switch",
+      "tags": ["#widget: Switch"],
+      "shape": "scalar",
+      "portal": { "molecule": "MoSwitchField", "status": "implemented" }
+    },
+    "DatePicker": {
+      "canonical": "DatePicker",
+      "tags": ["#widget: DatePicker"],
+      "shape": "scalar",
+      "portal": { "molecule": "MoDatePickerField", "status": "implemented" },
+      "uiAlias": "Calendar"
+    },
+    "FileUpload": {
+      "canonical": "FileUpload",
+      "tags": ["#widget: FileUpload"],
+      "shape": "scalar",
+      "aliases": { "ant": ["Upload"], "informal": ["file input", "uploader"] },
+      "portal": { "molecule": "MoFileInputField", "status": "implemented" }
+    },
+    "TagsInput": {
+      "canonical": "TagsInput",
+      "tags": ["#widget: TagsInput"],
+      "shape": "array",
+      "portal": { "ui": "TagsInput", "wrapper": "FormField", "status": "implemented" }
+    },
+    "Repeater": {
+      "canonical": "Repeater",
+      "tags": ["#widget: Repeater", "#shape: array"],
+      "shape": "array",
+      "aliases": {
+        "ant": ["Form.List"],
+        "informal": ["dynamic list", "thêm nhiều dòng", "ip list", "repeater field"]
+      },
+      "portal": { "molecule": "MoRepeaterField", "status": "planned" },
+      "itemWidgetDefault": "Input"
+    },
+    "DynamicFieldList": {
+      "canonical": "DynamicFieldList",
+      "tags": ["#shape: dynamic"],
+      "shape": "dynamic",
+      "aliases": {
+        "informal": ["schema driven", "field động", "survey answers"]
+      },
+      "portal": { "molecule": "MoDynamicFieldList", "status": "planned" }
+    },
+    "FieldGroup": {
+      "canonical": "FieldGroup",
+      "tags": ["#shape: nested_object"],
+      "shape": "nested_object",
+      "portal": { "molecule": "MoFieldGroup", "status": "planned" }
+    },
+    "NumberInput": {
+      "canonical": "NumberInput",
+      "tags": ["#widget: NumberInput"],
+      "shape": "scalar",
+      "portal": { "molecule": "MoNumberInputField", "status": "implemented" }
+    },
+    "PinInput": {
+      "canonical": "PinInput",
+      "tags": ["#widget: PinInput"],
+      "shape": "scalar",
+      "aliases": { "informal": ["OTP", "input otp"] },
+      "portal": { "ui": "PinInput", "wrapper": "FormField", "status": "implemented" }
+    }
+  },
+  "detailRenders": {
+    "text": {
+      "canonical": "text",
+      "tags": ["#render: text"],
+      "aliases": { "ant": ["Descriptions.Item"] },
+      "portal": { "molecule": "MoReadonlyValue", "status": "planned" }
+    },
+    "chip": {
+      "canonical": "chip",
+      "tags": ["#render: chip"],
+      "portal": { "molecule": "MoStatusChip", "status": "implemented", "prop": "label" }
+    },
+    "badge": {
+      "canonical": "badge",
+      "tags": ["#render: badge"],
+      "portal": { "ui": "Badge", "status": "implemented" }
+    }
+  },
+  "styles": {
+    "shadcn/ui": {
+      "canonical": "shadcn/ui",
+      "tags": ["#style: shadcn/ui"],
+      "aliases": { "informal": ["modern admin", "vercel style"] }
+    },
+    "flat": {
+      "canonical": "flat",
+      "tags": ["#style: flat"],
+      "portalRef": "docs/features/common/common-flat-design.spec.yaml"
+    },
+    "compact": {
+      "canonical": "compact",
+      "tags": ["#style: compact"],
+      "portalRef": "docs/features/common/common-list-page.spec.yaml"
+    },
+    "comfortable": {
+      "canonical": "comfortable",
+      "tags": ["#style: comfortable"]
+    }
+  },
+  "componentAliases": {
+    "Sonner": {
+      "aliases": {
+        "material": ["Snackbar"],
+        "informal": ["toast notification", "snackbar"]
+      }
+    },
+    "Toast": {
+      "aliases": {
+        "informal": ["toast"]
+      }
+    },
+    "Sidebar": {
+      "aliases": {
+        "material": ["Navigation Drawer", "Navigation Rail"],
+        "apple": ["Sidebar Navigation"]
+      }
+    },
+    "Sheet": {
+      "aliases": {
+        "material": ["Bottom Sheet", "Side Sheet"],
+        "apple": ["Sheet"],
+        "ant": ["Drawer"],
+        "informal": ["slide over", "slide-over", "panel phải"]
+      },
+      "disambiguate": {
+        "preferOver": ["Drawer"],
+        "note": "Ant Drawer thường map Sheet; full-height mobile có thể dùng Drawer"
+      }
+    },
+    "Drawer": {
+      "aliases": {
+        "informal": ["drawer full screen"]
+      }
+    },
+    "Dialog": {
+      "aliases": {
+        "ant": ["Modal"],
+        "material": ["Dialog"],
+        "informal": ["modal", "popup"]
+      }
+    },
+    "AlertDialog": {
+      "aliases": {
+        "ant": ["Modal.confirm", "Popconfirm"],
+        "informal": ["confirm modal", "confirm popup", "xác nhận"]
+      },
+      "patterns": ["Confirmation Flow"]
+    },
+    "Popover": {
+      "aliases": {
+        "apple": ["Popover"],
+        "informal": ["popup nhỏ cạnh nút"]
+      }
+    },
+    "Card": {
+      "aliases": {
+        "ant": ["Statistic", "KPI Card"],
+        "informal": ["kpi card", "metric card"]
+      }
+    },
+    "PinInput": {
+      "aliases": {
+        "shadcn": ["Input OTP"],
+        "informal": ["otp", "one time password"]
+      }
+    }
+  },
+  "aliasIndex": {
+    "snackbar": "Sonner",
+    "toast notification": "Sonner",
+    "navigation drawer": "Sidebar",
+    "navigation rail": "Sidebar",
+    "bottom sheet": "Sheet",
+    "side sheet": "Sheet",
+    "slide over": "Sheet",
+    "slide-over": "Sheet",
+    "modal": "Dialog",
+    "modal.confirm": "AlertDialog",
+    "popconfirm": "AlertDialog",
+    "confirm popup": "AlertDialog",
+    "confirm modal": "AlertDialog",
+    "datalisttable": "DataListPage",
+    "data list table": "DataListPage",
+    "data list page": "DataListPage",
+    "common list": "DataListPage",
+    "list table": "DataListPage",
+    "list page chuẩn": "DataListPage",
+    "search filter table": "DataListPage",
+    "descriptions": "text",
+    "descriptions.item": "text",
+    "form.list": "Repeater",
+    "dynamic list": "Repeater",
+    "kpi card": "Card",
+    "statistic": "Card",
+    "text field": "Input",
+    "textbox": "Input",
+    "uploader": "FileUpload",
+    "upload": "FileUpload",
+    "otp": "PinInput",
+    "input otp": "PinInput",
+    "cascader": "Autocomplete",
+    "fab": "MoFabButton",
+    "top app bar": "DataPageHeader"
+  },
+  "fuzzyGroups": [
+    {
+      "id": "slide-panel",
+      "triggers": ["drawer", "slide over", "side panel", "panel trượt"],
+      "options": [
+        { "canonical": "Sheet", "when": "edit form / filter panel / slide-over" },
+        { "canonical": "Drawer", "when": "mobile full-height panel" }
+      ],
+      "grillAction": "ask_member"
+    },
+    {
+      "id": "toast-feedback",
+      "triggers": ["toast", "snackbar", "notification message"],
+      "options": [
+        { "canonical": "Sonner", "when": "global toast stack (default)" },
+        { "canonical": "Toast", "when": "legacy toast primitive" }
+      ],
+      "grillAction": "ask_member"
+    }
+  ],
+  "componentCategories": {
+    "layout": ["Card", "Separator", "AspectRatio", "Resizable", "ScrollArea", "Sidebar"],
+    "navigation": [
+      "Breadcrumb",
+      "Tabs",
+      "Menubar",
+      "NavigationMenu",
+      "DropdownMenu",
+      "ContextMenu",
+      "Pagination",
+      "Command",
+      "Stepper"
+    ],
+    "form": [
+      "Form",
+      "Input",
+      "Textarea",
+      "Select",
+      "Checkbox",
+      "RadioGroup",
+      "Switch",
+      "Slider",
+      "Label",
+      "PinInput",
+      "Calendar",
+      "RangeCalendar",
+      "TagsInput",
+      "NumberField",
+      "Toggle",
+      "ToggleGroup"
+    ],
+    "overlay": ["Dialog", "AlertDialog", "Drawer", "Sheet", "Popover", "HoverCard", "Tooltip"],
+    "feedback": ["Alert", "Toast", "Sonner", "Skeleton", "Progress"],
+    "data-display": ["Table", "Accordion", "Avatar", "Carousel", "Chart", "Collapsible", "Badge"],
+    "actions": ["Button"]
+  }
+}

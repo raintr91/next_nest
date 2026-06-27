@@ -17,7 +17,11 @@ codegen:
   skip: [] # models | service | composable | page | mock | validation
 
 tags: []
-# - "#needs-component: MoHotelStatusChip"
+# Design registry (grill — list default):
+# - "#shell: DataListPage"
+# - "#pattern: CRUD"
+# - "#style: shadcn/ui"
+# - "#needs-component: MoXxx"
 # - "#custom-slot: cell-status"
 # - "#manual-composable: export-csv"
 # - "#skip-codegen: page"

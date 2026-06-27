@@ -1,8 +1,11 @@
 <script setup lang="ts">
 import { use{{entityPascal}}List } from '~/composables/{{entity}}/use{{entityPascal}}List'
 
-const {
-  filters,
+definePageMeta({
+  layout: 'dashboard'
+})
+
+const {  filters,
   columns,
   items,
   query,
@@ -30,7 +33,7 @@ onMounted(load)
     v-model:query="query"
     :pending="pending"
     :total="total ?? undefined"
-    :page-size="10"
+    :page-size="{{defaultPageSize}}"
     @search="onSearch"
     @reset="onReset"
   >

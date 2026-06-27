@@ -1,11 +1,12 @@
 import { createRouteGuardHandler } from '~/composables/useRouteGuard'
+import { getAuthBypassPaths } from '~/utils/page-lifecycle'
 
 export default defineNuxtRouteMiddleware(
   createRouteGuardHandler({
     cookieName: 'auth_token',
     mode: 'require',
-    // Public routes: landing page + auth/reset + error pages
-    skipPaths: ['/auth', '/password/reset', '/404', '/forbidden'],
+    // Public routes + lifecycle routes chưa wire (see shared/page-lifecycle.registry.json)
+    skipPaths: ['/auth', '/password/reset', '/404', '/forbidden', ...getAuthBypassPaths()],
     redirectTo: '/auth/login',
     redirectQueryKey: 'redirect'
   })

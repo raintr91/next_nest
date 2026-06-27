@@ -2,6 +2,8 @@
 
 Source of truth cho pattern UI dùng chung: **`docs/features/common/*.spec.yaml`**.
 
+**Design registry (shadcn canonical + shells):** `shared/portal-design.registry.json` — `#shell: DataListPage`, `#widget:`, `#ui:`. Validate: `pnpm portal:registry`. Agent: `.cursor/extracts/portal-design-registry.md`. **Promotion sau prototype:** [DESIGN-REGISTRY-PROMOTION.md](/operational/DESIGN-REGISTRY-PROMOTION).
+
 Agent đọc thêm `.cursor/extracts/common-ui-spec.md`. Trước khi copy UI legacy ad hoc, bám common spec hoặc ghi `#legacy-global-ui-violation` kèm evidence.
 
 ## Review (BA/QA)

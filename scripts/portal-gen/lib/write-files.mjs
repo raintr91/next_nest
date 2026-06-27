@@ -79,16 +79,20 @@ export function renderHandoffMarkdown(ctx, written, skipped) {
   ]
 
   if (ctx.handoffItems.length) {
-    lines.push('## Manual follow-up', '')
+    lines.push('## Prototype next (/prototype)', '')
+    lines.push(
+      '_portal:gen does not emit component code for `#needs-component` / `#needs-ui` — implement molecules in /prototype, then re-run gen._',
+      ''
+    )
     for (const item of ctx.handoffItems) {
       lines.push(`- **${item.type}**${item.name ? ` (\`${item.name}\`)` : ''}: ${item.detail}`)
     }
     lines.push('')
   } else {
-    lines.push('## Manual follow-up', '', '- _None — review generated code and run lint/typecheck._', '')
+    lines.push('## Prototype next (/prototype)', '', '- _No missing components — review generated code and run lint/typecheck._', '')
   }
 
-  lines.push('## Commands', '', '```bash', 'pnpm docs:render', '# after spec edits', 'pnpm portal:gen --spec ... --force  # re-generate', '```', '')
+  lines.push('## Commands', '', '```bash', 'pnpm docs:render', '# after spec edits', 'pnpm portal:gen --spec ... --force  # re-generate after /prototype components', '```', '')
 
   return lines.join('\n')
 }

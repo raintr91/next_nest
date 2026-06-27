@@ -183,10 +183,11 @@ Slug: {admin-hotel-list}
 Spec: docs/features/admin/hotel/admin-hotel-list.spec.yaml
 
 Order:
-1. Analyze spec + tags + DataListPage fit (no code yet)
-2. Implement only #needs-component molecules missing from codebase
-3. pnpm portal:gen --spec docs/features/admin/hotel/admin-hotel-list.spec.yaml
-4. Wire #custom-slot to components; auth bypass prototype routes; read generated/HANDOFF.md
+1. Read spec tags — `#needs-component` inventory (Mo* names from grill)
+2. Implement missing Mo* molecules in /prototype (gen does not emit stubs)
+3. Registry promote if common — DESIGN-REGISTRY-PROMOTION.md
+4. pnpm portal:gen --spec ... --force
+5. HANDOFF *Prototype next* = remaining slots only; wire-only / manual-composable
 
 Scope IN: components (Mo* only if tagged), wire generated pages, mocks boundary, testId
 Scope OUT: hand-write models/service/composable/page if gen already emitted them
@@ -205,7 +206,7 @@ Chỉ form create + validation inline alert. Không làm list page trong session
 
 ### `/grill-prototype` — Audit trước demo / handoff
 
-**Khi nào:** Sau `/prototype`, trước demo team hoặc `/wire`.
+**Khi nào:** Sau `/prototype`, trước demo team, `/test`, hoặc `/wire`.
 
 ```text
 /grill-prototype
@@ -217,15 +218,16 @@ Checklist (verify, sửa trong scope nếu rõ):
 - [ ] Khớp spec: happy path, validation message, loading/empty/error
 - [ ] Mock pagination ≥2 pages
 - [ ] Không gọi backend thật; mock đúng boundary
-- [ ] DataListPage reuse; composable đủ sâu cho /unit và /test
-- [ ] testId đủ theo E2E-TESTIDS
+- [ ] DataListPage / registry shell reuse; composable mock boundary
+- [ ] testcase testIds.required ⊆ UI (E2E-TESTIDS)
 - [ ] Auth bypass documented
 - [ ] Layout: text/icon/vị trí theo common UI
 
-Không chạy full E2E/unit.
-Extracts: verify-gate, common-ui-spec, legacy-blade-to-api
+Không chạy Playwright/Vitest.
+Extracts: verify-gate, common-ui-spec, portal-test-readiness
 
-Handoff (tiếng Việt): route đã grill, fix đã làm, open issues, auth bypass list, ghi chú smoke cho /test
+Handoff (tiếng Việt): route, spec + testcase files, testIds ok/missing,
+setup.session + mocks vs spec api, #wire-only list, open issues → /test
 ```
 
 ---
@@ -388,27 +390,27 @@ Handoff: /grill-test nếu E2E đã có; gap test → /test
 /test
 
 Slug: {admin-hotel-list}
-Scenario focus: {hotel-list-empty} (1 scenario / session)
+Scenario focus: {hotel-list-empty} (1 testcase YAML / session)
 
-Inputs:
+Inputs (only — không legacy):
 - docs/features/.../admin-hotel-list.spec.yaml
-- docs/features/.../testcases/*.yaml
-- UI đã có data-testid
+- docs/features/.../testcases/*.yaml (E2E only; không map unit)
+- Prototype UI + composables
+
+Readiness: .cursor/extracts/portal-test-readiness.md
 
 Rules:
-- Testcase YAML = source of truth
-- tests/e2e/ only; page.getByTestId() qua Page Object
-- Thiếu testId → thêm trước khi viết spec
-- Vertical slice: 1 scenario → minimal PO + spec → chạy scoped → xong mới scenario tiếp
-- Prototype chưa /wire: mock network OK; sau /wire: test API thật
+- Testcase YAML = E2E source of truth (1 file ≈ 1 tests/e2e/{module}/{function}.spec.ts)
+- Page Object: tests/e2e/pages/{module}/*Page.ts — getByTestId only
+- helpers/session.ts cho setup.session; fixtures/ cho mocks
+- Vertical slice: 1 testcase → PO + spec → pnpm test:e2e scoped → scenario tiếp
+- Pre-/wire: mock theo testcase.setup.mocks; post-/wire: API thật; #wire-only mock/skip
 
-Minimum (theo spec): list/empty, create success, validation, edit/delete, forbidden nếu có guard
+Sau goto: assertLayoutIntegrity khi smoke / semantic assertions
 
-Sau goto: assertLayoutIntegrity khi smoke
+Verify: pnpm test:e2e {path-to-spec} — báo exit code (verify-gate)
 
-Verify: pnpm test:e2e {path-to-spec} — báo exit code
-
-Handoff: /grill-test
+Done: /grill-test → pnpm portal:lifecycle set {route} test
 ```
 
 **Variant — Rapi convert:**
@@ -431,15 +433,20 @@ Ref: docs/operational/RAPI-RECORDER-QA.md · skill portal-rapi-playwright
 
 Slug: {admin-hotel-list}
 
-Cross-check spec + testcase YAML vs tests/e2e/:
-- [ ] Happy path, filter, pagination ≥2 pages
-- [ ] CRUD/row actions theo spec
-- [ ] Validation, empty, error, forbidden
-- [ ] Page Object + getByTestId; không selector css/xpath
-- [ ] Scoped Playwright pass hoặc root cause rõ
+Matrix: requirementIds ↔ testcase ↔ spec file ↔ tests/e2e/*.spec.ts
 
-Extract: verify-gate
-Không thay /test; không làm backend
+Cross-check spec + testcase YAML vs tests/e2e/:
+- [ ] Mỗi function split có testcase + Playwright spec + PO
+- [ ] testIds.required trên UI và trong PO
+- [ ] List: happy path; pagination ≥2 pages khi mock có
+- [ ] Create/edit/detail/row actions theo spec split
+- [ ] #wire-only: mock hoặc skip pre-wire
+- [ ] PO only — không getByTestId/css/xpath trực tiếp trong spec
+- [ ] Scoped pnpm test:e2e pass hoặc root cause rõ (verify-gate)
+
+Extracts: portal-test-readiness, verify-gate
+Pass → pnpm portal:lifecycle set {route} test
+Không thay /test; không backend; không Vitest
 ```
 
 ---
@@ -553,5 +560,6 @@ Session mới: *"Đọc .harness/progress.md, tiếp tục /wire create cho admi
 | Model Cursor | Auto cho `/model`, `/wire`, `/prototype`; Premium cho grill/debug |
 | Session | Chat mới khi đổi phase; harness thay vì kể lại chat cũ |
 | Scaffold | `pnpm portal:gen --spec ...` trước `/prototype`; agent chỉ HANDOFF + diff |
+| Registry | Sau prototype: promote reusable UI → `shared/portal-design.registry.json` — [DESIGN-REGISTRY-PROMOTION.md](./DESIGN-REGISTRY-PROMOTION.md) |
 
 Chi tiết codegen: `.cursor/extracts/portal-codegen-tags.md` · mục **Rules vs skills — token budget** trong [`TEAM-AI-WORKFLOW.md`](TEAM-AI-WORKFLOW.md).

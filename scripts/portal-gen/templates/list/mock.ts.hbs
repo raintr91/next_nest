@@ -1,17 +1,10 @@
 import type { {{entityPascal}}ListResponse } from '~/models/{{entity}}/{{entity}}.types'
 
-const PAGE_SIZE = 10
+const PAGE_SIZE = {{defaultPageSize}}
 
-const mockItemsPage1: Record<string, unknown>[] = [
-  { id: 1, name: '{{title}} A', status: 'active', created_at: '2026-01-01T00:00:00Z' },
-  { id: 2, name: '{{title}} B', status: 'inactive', created_at: '2026-01-02T00:00:00Z' },
-  { id: 3, name: '{{title}} C', status: 'active', created_at: '2026-01-03T00:00:00Z' }
-]
+const mockItemsPage1: Record<string, unknown>[] = {{{json mockRowsPage1}}}
 
-const mockItemsPage2: Record<string, unknown>[] = [
-  { id: 4, name: '{{title}} D', status: 'active', created_at: '2026-01-04T00:00:00Z' },
-  { id: 5, name: '{{title}} E', status: 'inactive', created_at: '2026-01-05T00:00:00Z' }
-]
+const mockItemsPage2: Record<string, unknown>[] = {{{json mockRowsPage2}}}
 
 /** Prototype mock — ≥2 pages for pagination (portal-gen). */
 export async function {{entityCamel}}MockSearch(

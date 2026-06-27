@@ -34,7 +34,20 @@ Template post-grill: `docs/templates/spec.yaml`
 | `ui.columns[]` | `api.endpoints[].response.data[0]` keys + `entities[].importantFields`; nested objects → flat key or `render: custom` |
 | `ui.testIds.module` | Prefix shared by `ui.screens[].actions[].testId` / `testIdPattern` |
 | `api.endpoints[].action` | `list` \| `create` \| `show` \| `update` \| `delete` matching profile |
-| `tags:` | See `portal-codegen-tags.md` |
+| `tags:` | See `portal-codegen-tags.md` + design registry hashtags (`#shell:`, `#widget:`, …) |
+
+### Design registry (list default)
+
+Source: `shared/portal-design.registry.json`. Grill adds for `profile: list`:
+
+- `#shell: DataListPage` (alias: DataListTable, common list)
+- `#pattern: CRUD`
+- `#style: shadcn/ui`, `#style: compact`, `#style: flat`
+
+Custom list: keep `#shell: DataListPage` + `overrideCommonPattern: true`.  
+Validate: `pnpm portal:registry` before `portal:gen:dry`.
+
+Sau `/prototype`: promote widget/shell tái sử dụng → `docs/operational/DESIGN-REGISTRY-PROMOTION.md`.
 
 ### Filter type heuristic
 

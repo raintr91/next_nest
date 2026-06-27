@@ -41,7 +41,13 @@ const emit = defineEmits<{ (e: 'search' | 'reset'): void }>()
       </template>
     </MoAppBar>
 
-    <div class="rounded-lg border bg-card p-4" :data-testid="props.filterTestId">
+    <slot name="above-toolbar" />
+
+    <div
+      v-if="props.filters.length > 0"
+      class="rounded-lg border bg-card p-4"
+      :data-testid="props.filterTestId"
+    >
       <MoSearchForm
         v-model="query"
         :filters="props.filters"

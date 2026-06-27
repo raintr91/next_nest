@@ -80,6 +80,7 @@ See `.cursor/extracts/portal-codegen-tags.md` and `docs/templates/spec.yaml` (`c
 | `agent-discipline.md` | Scope, simplicity, surgical edits |
 | `verify-gate.md` | Verify trước khi claim done |
 | `portal-codegen-tags.md` | Spec hashtags + `pnpm portal:gen` |
+| `portal-test-readiness.md` | Gate sau `/prototype`, trước `/test` — testcase, testIds, session, mocks |
 
 Không cài Superpowers/Karpathy/Matt Pocock/Learn Harness clone — nội dung đã rút gọn trong extracts + team skills.
 
