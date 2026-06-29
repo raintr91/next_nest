@@ -12,16 +12,19 @@ disable-model-invocation: true
 
 Adapted from Matt Pocock grilling: ask hard questions until the spec is unambiguous; update docs as decisions land.
 
-Shared extracts: `.cursor/extracts/legacy-config.md`, `legacy-blade-to-api.md`, `common-ui-spec.md`, `spec-split-by-function.md`, `agent-discipline.md`, `portal-codegen-tags.md`, `portal-codegen-readiness.md`, `portal-design-registry.md`
+Shared extracts: `.cursor/extracts/legacy-config.md`, `legacy-blade-to-api.md`, `common-ui-spec.md`, `spec-split-by-function.md`, `agent-discipline.md`, `grill-docs-roles.md`, `grill-tech-debt.md`, `portal-codegen-tags.md`, `portal-codegen-readiness.md`
 
 ## Goal
 
-Use after `/spec` or `/legacy-spec`, **before** `/prototype`.
+Use after `/bqa-grill-docs` + `/dev-grill-docs` when reconciliation needed, **or** as single-pass grill when role split is skipped.
+
+Before `/prototype` — spec must be portal-gen-ready.
 
 Output: portal-gen-ready `spec.yaml`, updated testcase YAML, generated Markdown, optional `docs/adr/` or glossary notes.
 
 ## Interview Loop
 
+0. **Tech debt step 0** — re-ask `#tech-debt:*` where `deferTo` matches this phase (`grill-tech-debt.md`).
 1. Locate target spec/testcase; ask if unclear.
 2. Read spec, testcase YAML, generated Markdown, related models/docs, `docs/features/common/*.spec.yaml` when list/form UI.
 3. Ask focused batches: actors/permissions, routes/dialogs, fields/validation, API contract shape, loading/empty/error states, list/pagination, testId, destructive flows, common UI vs legacy.
@@ -39,10 +42,7 @@ Enrich design v1 → post-grill shape per `portal-codegen-readiness.md` and `doc
 4. Add structured `ui.columns` from `api.response` / `importantFields`; `render: custom` where needed.
 5. Add `ui.testIds.module` aligned with action testIds.
 6. Set `api.endpoints[].action` (`list`, `create`, …).
-7. Add `tags:` — design registry (`#shell: DataListPage`, `#pattern:`, `#style:`) + **missing component inventory**:
-   - `#needs-component: cell-{key}:Mo{Name}:{prop}` — tên `Mo*` rõ; `/prototype` implement, **không** đợi gen stub
-   - `#needs-ui: {Widget}` — registry `planned`
-   - plus `#wire-only`, `#skip-codegen`, `#manual-composable`, `#phase-api` as needed
+7. Add `tags:` — `#needs-component`, `#wire-only`, `#skip-codegen`, `#manual-composable`, `#phase-api` as needed.
 8. Close or tag remaining `openQuestions`.
 9. **Gate:** `pnpm portal:gen:dry --spec <spec.yaml>` must exit 0.
 

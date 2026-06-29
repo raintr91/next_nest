@@ -8,6 +8,7 @@ alwaysApply: false
 **Opt-in** — user gọi command hoặc nói phase/feature thì agent đọc **một** skill tương ứng.
 
 → Doc: `docs/operational/TEAM-AI-WORKFLOW.md`  
+→ Pipeline diagram: `docs/operational/FULL-CYCLE-PIPELINE-DIAGRAM.md`  
 → Prompt templates: `docs/operational/PROMPT-TEMPLATES.md`  
 → Shared snippets: `.cursor/extracts/`  
 → Related projects: `.cursor/team-projects.example.json`
@@ -22,11 +23,17 @@ Một session = **một** command. State: `.harness/progress.md`.
 |---------|-------|
 | `/spec` | `.cursor/skills/spec/SKILL.md` |
 | `/legacy-spec` | `.cursor/skills/legacy-spec/SKILL.md` |
+| `/bqa-grill-docs` | `.cursor/skills/bqa-grill-docs/SKILL.md` |
+| `/dev-grill-docs` | `.cursor/skills/dev-grill-docs/SKILL.md` |
 | `/grill-with-docs` | `.cursor/skills/grill-with-docs/SKILL.md` |
+| `/update-spec` | `.cursor/skills/update-spec/SKILL.md` |
+| `/update-spec-legacy` | `.cursor/skills/update-spec-legacy/SKILL.md` |
 | `/prototype` | `.cursor/skills/prototype/SKILL.md` |
 | `/grill-prototype` | `.cursor/skills/grill-prototype/SKILL.md` |
 
-Typical order: `/legacy-spec` or `/spec` → `/grill-with-docs` → `/prototype` → `/grill-prototype`
+Typical order: `/legacy-spec` or `/spec` → `/bqa-grill-docs` → `/dev-grill-docs` → [`/grill-with-docs`] → `/prototype` → `/grill-prototype`
+
+Gap loop: `/grill-prototype` → `/update-spec` or `/update-spec-legacy` → grill again.
 
 `/design` is deprecated — use `/spec` or `/prototype`.
 

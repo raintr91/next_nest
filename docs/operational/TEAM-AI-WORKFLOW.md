@@ -14,18 +14,26 @@ Shared snippets (committed, không clone vendor): `.cursor/extracts/`
 
 ```
 /legacy-spec ──┐
-/spec ─────────┼──► /grill-with-docs ──► /prototype ──► /grill-prototype
-               │
-               └── (entry tùy nguồn)
+/spec ─────────┼──► /bqa-grill-docs ──► /dev-grill-docs ──► [/grill-with-docs] ──► /prototype ──► /grill-prototype
+               │                                      ▲
+               └── (entry tùy nguồn)                  └── reconcile nếu BQA↔Dev mâu thuẫn
+
+/grill-prototype gap ──► /update-spec | /update-spec-legacy ──► grill lại
 ```
 
 | Command | Output | Skill |
 |---------|--------|-------|
-| `/spec` | `spec.yaml`, testcase round 1, `pnpm docs:render` | `.cursor/skills/spec/` |
+| `/spec` | design v1 `spec.yaml`, incremental `ui.blocks`, testcase round 1 | `.cursor/skills/spec/` |
 | `/legacy-spec` | Spec từ code legacy (read-only) | `.cursor/skills/legacy-spec/` |
-| `/grill-with-docs` | Hỏi sâu, portal-gen-ready YAML, `portal:gen:dry` gate | `.cursor/skills/grill-with-docs/` |
+| `/bqa-grill-docs` | UI, acceptance, breadcrumb, delete rules | `.cursor/skills/bqa-grill-docs/` |
+| `/dev-grill-docs` | portal-gen-ready YAML, `portal:gen:dry` gate | `.cursor/skills/dev-grill-docs/` |
+| `/grill-with-docs` | Full reconcile + codegen gate | `.cursor/skills/grill-with-docs/` |
+| `/update-spec` | Controlled delta + `#update:*` | `.cursor/skills/update-spec/` |
+| `/update-spec-legacy` | Delta với legacy evidence | `.cursor/skills/update-spec-legacy/` |
 | `/prototype` | UI thật, mock API boundary | `.cursor/skills/prototype/` |
 | `/grill-prototype` | Audit prototype trước demo | `.cursor/skills/grill-prototype/` |
+
+Pipeline diagram: [`FULL-CYCLE-PIPELINE-DIAGRAM.md`](./FULL-CYCLE-PIPELINE-DIAGRAM.md)
 
 `/design` **deprecated** → dùng `/spec` hoặc `/prototype`.
 
@@ -80,6 +88,14 @@ See `.cursor/extracts/portal-codegen-tags.md` and `docs/templates/spec.yaml` (`c
 | `agent-discipline.md` | Scope, simplicity, surgical edits |
 | `verify-gate.md` | Verify trước khi claim done |
 | `portal-codegen-tags.md` | Spec hashtags + `pnpm portal:gen` |
+| `grill-docs-roles.md` | BQA vs Dev vs full grill ownership |
+| `spec-incremental-blocks.md` | `/spec` multi-turn `ui.blocks` |
+| `spec-update-delta.md` | `/update-spec` patch matrix |
+| `spec-update-tags.md` | `#update:*` lifecycle |
+| `common-delete-flow.md` | Delete confirm + result dialogs |
+| `common-breadcrumb-flow.md` | Breadcrumb → page title stack |
+| `grill-tech-debt.md` | `#tech-debt:{id}` defer across phases |
+| `feature-lifecycle-status.md` | `featureStatus`, `wireCount`, `specRevision` |
 | `portal-test-readiness.md` | Gate sau `/prototype`, trước `/test` — testcase, testIds, session, mocks |
 
 Không cài Superpowers/Karpathy/Matt Pocock/Learn Harness clone — nội dung đã rút gọn trong extracts + team skills.

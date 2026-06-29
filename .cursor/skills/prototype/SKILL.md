@@ -9,19 +9,18 @@ disable-model-invocation: true
 
 # /prototype — UI Prototype (Mock API Boundary)
 
-Shared extracts: `.cursor/extracts/legacy-config.md`, `legacy-blade-to-api.md`, `common-ui-spec.md`, `agent-discipline.md`, `portal-codegen-tags.md`, `portal-design-registry.md`
+Shared extracts: `.cursor/extracts/legacy-config.md`, `legacy-blade-to-api.md`, `common-ui-spec.md`, `agent-discipline.md`, `portal-codegen-tags.md`
 
-Prerequisite: `docs/features/{slug}/*.spec.yaml` **portal-gen-ready** from `/grill-with-docs` (`codegen.profile` present; `pnpm portal:gen:dry` passed).
+Prerequisite: `docs/features/{slug}/*.spec.yaml` **portal-gen-ready** from `/dev-grill-docs` (`codegen.profile` present; `pnpm portal:gen:dry` passed).
 
 ## Workflow
 
-1. **Đọc inventory từ spec** — `tags:` (`#needs-component`, `#needs-ui`, `#custom-slot`) và `ui.columns` (`render: custom`). Đây là danh sách component chưa có / chưa wire — grill đã ghi tên `Mo*` đề xuất.
-2. **Implement component thiếu** — viết molecule/organism (`components/molecules/…`) **trước** khi expect slot wire. `portal:gen` **không** emit stub `.vue` cho `#needs-component`.
-3. **Registry (nếu common)** — widget/shell tái sử dụng → `shared/portal-design.registry.json` + `pnpm portal:registry`. Domain-only (vd. `MoManagerHandoffPills`) → *Feature-only*, không promote. Doc: `docs/operational/DESIGN-REGISTRY-PROMOTION.md`.
-4. **`pnpm portal:gen --spec ...`** (`--force` nếu chạy lại). Gen scaffold từ registry; slot wire khi file `Mo*` đã tồn tại. HANDOFF *Prototype next* chỉ liệt kê slot còn thiếu.
-5. **Sau gen** — auth bypass; `#wire-only` / `#manual-composable` từ HANDOFF; lint/typecheck.
+1. **Quét hashtag component** — đọc `tags:` và `ui.columns` (`render: custom`); chỉ xử lý `#needs-component` / `#custom-slot` / component `Mo*` chưa có trong codebase.
+2. **Tạo component nhỏ** — implement **chỉ** molecule/organism thiếu (`components/molecules/` …); **không** hand-write models/service/composable/page (để `portal:gen`).
+3. **`pnpm portal:gen --spec docs/features/.../<slug>.spec.yaml`** (`--force` nếu chạy lại). Gen tự gọi `pnpm docs:render` (script local) — Screen trong **generated `.md`** đổi từ `# /path` sang dev URL khi `pages/` đã có.
+4. **Sau gen** — auth bypass route; sửa gap trong `generated/HANDOFF.md`; `#wire-only` để `/wire`; scoped lint/typecheck.
 
-Nếu thiếu `codegen.profile` → quay lại `/grill-with-docs`, **không** sửa spec tay lúc gen.
+Nếu thiếu `codegen.profile` → quay lại `/dev-grill-docs`, **không** sửa spec tay lúc gen.
 
 Nếu `docs:render` lỗi sau gen, member chạy: `pnpm docs:render`.
 
@@ -38,23 +37,19 @@ Nếu `docs:render` lỗi sau gen, member chạy: `pnpm docs:render`.
 
 ## Core Rules
 
-0. **Component trước, gen sau** — `#needs-component` trong spec → implement `Mo*` rồi mới `portal:gen` để wire slot.
+0. **portal:gen cho scaffold** — sau bước component nhỏ; không viết lại layer gen đã emit trừ `codegen.skip` / HANDOFF.
 1. Real UI, real actions; mock **chỉ** API response tại service/composable.
-2. Layers: `models/` → mock service → composables → pages/components (gen emit trừ HANDOFF gap).
+2. Layers: `models/` → mock service → composables → pages/components.
 3. Reuse shadcn, `Mo*`, `DataListPage`; list: mock ≥2 pages khi có pagination.
 4. Dynamic routes: `pages/{module}/[id]/index.vue`, `[id]/edit.vue`.
 
 ## Prototype Auth & Routing
 
-- Route `stage` trong registry: mọi stage **trừ `wire`** → auth bypass (`middleware/auth.global.ts`).
-- `portal:gen` đăng ký route mới ở `prototype`; re-gen **không hạ** stage nếu đã `test` / `wire`.
-- `pnpm portal:lifecycle sync` — quét manifest + kiểm tra page trên disk.
-- `pnpm portal:remove --spec <file>` — xóa code gen, hạ về `design-spec`.
-- Promote lifecycle: `pnpm portal:lifecycle set /hotels test` hoặc `--force` để hạ stage.
+- Bypass auth/guest/rbac trên route prototype; không redirect login thật.
+- Ghi bypass trong handoff cho `/wire`.
 
 ## Handoff
 
 - `data-testid` theo `docs/operational/E2E-TESTIDS.md`.
-- `generated/HANDOFF.md` từ gen = slot inventory; **registry promotion** là việc prototype (bước 3), không phải gen.
-- Hashtag `#wire-only`, `#manual-composable` → phase sau.
+- Hashtag `#wire-only`, `#manual-composable` → HANDOFF / phase sau.
 - Cập nhật `.harness/progress.md` khi có.

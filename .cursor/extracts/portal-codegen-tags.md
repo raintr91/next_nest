@@ -97,3 +97,11 @@ Prerequisite: `portal:gen:dry` passed in `/grill-with-docs`.
 | **Hashtags (workflow)** | `tags:` + auto `#custom-slot` từ columns |
 | **Codegen** | `codegen`, `ui.composition`, `ui.testIds` |
 | Header Screen link | `pages/` probe + `DOCS_APP_BASE_URL` — not stored in YAML |
+
+## `#tech-debt:{id}`
+
+Open question deferred to `openQuestions.deferTo`. Re-asked at grill step 0. Removed when resolved — see `grill-tech-debt.md`.
+
+## `#update:*`
+
+Confirmed spec delta from `/update-spec`. Cleared **only** at `/wire`. See `spec-update-tags.md`.

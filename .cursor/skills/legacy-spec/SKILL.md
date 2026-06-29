@@ -42,5 +42,5 @@ Input: `/legacy-spec <module-or-feature>` when source of truth is existing code.
 ## Handoff
 
 - Refine or split specs → `/spec`
-- **Required before UI:** `/grill-with-docs` (codegen readiness)
+- **Required before UI:** `/bqa-grill-docs` → `/dev-grill-docs` (or `/grill-with-docs` reconcile)
 - UI after grill exit → `/prototype`

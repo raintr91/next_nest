@@ -1,17 +1,33 @@
 import { existsSync, readdirSync, readFileSync } from 'node:fs'
 import { dirname, join, relative, resolve } from 'node:path'
 import { fileURLToPath } from 'node:url'
+import { withMermaid } from 'vitepress-plugin-mermaid'
 import { defineConfig } from 'vitepress'
 import type { DefaultTheme } from 'vitepress'
 
 const docsRoot = resolve(dirname(fileURLToPath(import.meta.url)), '..')
 const featureSidebarItems = buildFeatureSidebar()
 
-export default defineConfig({
+export default withMermaid(defineConfig({
   title: 'Portal Docs',
   description: 'Portal feature specs, testcases, and team workflow',
   cleanUrls: true,
   ignoreDeadLinks: [/^https?:\/\/localhost(:\d+)?/],
+  vite: {
+    optimizeDeps: {
+      include: ['dayjs', 'mermaid'],
+    },
+    resolve: {
+      alias: {
+        dayjs: 'dayjs/',
+      },
+    },
+    build: {
+      commonjsOptions: {
+        include: [/dayjs/, /node_modules/],
+      },
+    },
+  },
   themeConfig: {
     nav: [
       { text: 'Home', link: '/' },
@@ -23,6 +39,20 @@ export default defineConfig({
         text: 'Operational',
         collapsed: false,
         items: [
+      {
+        text: 'Diagrams & flows',
+        collapsed: false,
+        items: [
+          { text: 'Full cycle (overview)', link: '/operational/FULL-CYCLE-PIPELINE-DIAGRAM' },
+          { text: 'Design phase (detail)', link: '/operational/DESIGN-PHASE-DIAGRAM' },
+          { text: 'Test phase (TBD)', link: '/operational/TEST-PHASE-DIAGRAM' },
+          { text: 'API phase (detail)', link: '/operational/BACKEND-PHASE-DIAGRAM' },
+          { text: 'Wire phase (TBD)', link: '/operational/WIRE-PHASE-DIAGRAM' },
+          { text: 'Update spec flow', link: '/operational/UPDATE-SPEC-FLOW' },
+          { text: 'Tech debt flow', link: '/operational/TECH-DEBT-FLOW' },
+          { text: 'Needs component flow', link: '/operational/NEEDS-COMPONENT-FLOW' },
+        ],
+      },
           { text: 'Team AI Workflow', link: '/operational/TEAM-AI-WORKFLOW' },
           { text: 'Architecture', link: '/operational/ARCHITECTURE' },
           { text: 'Design Registry Promotion', link: '/operational/DESIGN-REGISTRY-PROMOTION' },
@@ -72,7 +102,7 @@ export default defineConfig({
       provider: 'local'
     }
   }
-})
+}))
 
 function buildFeatureSidebar() {
   const featuresRoot = join(docsRoot, 'features')

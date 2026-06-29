@@ -26,6 +26,11 @@ skip: []
 ## tags
 
 ```yaml
+- "#shell: DataListPage"
+- "#pattern: CRUD"
+- "#style: shadcn/ui"
+- "#style: compact"
+- "#style: flat"
 - "#needs-component: cell-managers:MoManagerHandoffPills:managers"
 - "#manual-composable: exportOpenRateReport"
 - "#manual-composable: loginAsStoreManager"

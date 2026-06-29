@@ -15,7 +15,7 @@ Active commands: `/prototype`, `/grill-prototype` — one per session.
 
 Shared: `.cursor/extracts/common-ui-spec.md`, `legacy-blade-to-api.md`, `portal-codegen-tags.md` when relevant.
 
-Prerequisite: spec đã qua `/grill-with-docs` — `pnpm portal:gen:dry` passed.
+Prerequisite: spec đã qua `/dev-grill-docs` (hoặc `/grill-with-docs`) — `pnpm portal:gen:dry` passed.
 
 ## Thứ tự
 
