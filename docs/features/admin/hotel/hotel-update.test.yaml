@@ -1,0 +1,49 @@
+id: hotel-update
+feature: hotel-update
+title: Admin xem và cập nhật hotel
+type: e2e
+priority: must
+requirementIds:
+  - REQ-HOTEL-UPDATE-001
+  - REQ-HOTEL-UPDATE-002
+route:
+  path: /hotels/:id/edit
+  auth: required
+testIds:
+  required:
+    - admin-hotel-detail-page
+    - admin-hotel-edit-link
+    - admin-hotel-edit-page
+    - admin-hotel-name-input
+    - admin-hotel-save-btn
+setup:
+  session: mockAdminSession
+data:
+  hotelId: 101
+  updatedName: MAIRY Kyoto Updated
+steps:
+  - action: goto
+    path: /hotels/101
+  - action: click
+    testId: admin-hotel-edit-link
+  - action: assert-url
+    path: /hotels/101/edit
+  - action: fill
+    testId: admin-hotel-name-input
+    valueFrom: data.updatedName
+  - action: click
+    testId: admin-hotel-save-btn
+assertions:
+  ui:
+    - testId: admin-hotel-success-alert
+      contains: 保存しました
+expected:
+  - Detail API fill form trước khi edit.
+  - Save gọi PUT `/hotels/{id}` với legacy keys.
+mockCases:
+  - id: update-readonly
+    title: Mặc định read-only
+    expected: Inputs disabled trước khi bấm Edit.
+  - id: update-success
+    title: Update thành công
+    expected: Success alert hiển thị và data mới được giữ.

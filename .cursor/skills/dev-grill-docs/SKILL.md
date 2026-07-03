@@ -8,6 +8,8 @@ disable-model-invocation: true
 
 # /dev-grill-docs — Dev / codegen grill
 
+Doc hub: `docs/operational/PORTAL-CODEGEN.md`
+
 Shared extracts: `grill-docs-roles.md`, `portal-codegen-readiness.md`, `portal-codegen-tags.md`, `grill-tech-debt.md`, `spec-update-tags.md`
 
 ## Scope
@@ -26,6 +28,8 @@ Re-ask `openQuestions` where `status: open` and `deferTo` matches `dev-grill-doc
 2. Derive routes, API contract, filter/column mapping from `ui.blocks` / `ui.screens`.
 3. Run **Codegen readiness** per `portal-codegen-readiness.md`.
 4. Add `tags` (`#shell:`, `#needs-component`, `#wire-only`, `#tech-debt` as needed).
+   - List profile: `#gen:test-schema`, `#gen:test-service` (unit — xem `portal-unit-test-tags.md`)
+   - Create profile: `#gen:test-validation`
 5. Set `grillStatus.dev: done`.
 6. **Gate:** `pnpm portal:gen:dry --spec <spec.yaml>` exit 0.
 7. User runs `pnpm docs:render` (manual).

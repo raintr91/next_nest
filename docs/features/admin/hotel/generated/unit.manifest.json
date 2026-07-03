@@ -1,0 +1,57 @@
+{
+  "generatedAt": "2026-06-29T10:09:15.274Z",
+  "specFile": "docs/features/admin/hotel/hotel-create.spec.yaml",
+  "phase": "prototype",
+  "profile": "create",
+  "entity": "admin-hotel",
+  "module": "hotels",
+  "codegenManifest": "generated/codegen.manifest.json",
+  "unitRegistry": "shared/portal-unit-test.registry.json",
+  "files": [
+    {
+      "layer": "models",
+      "path": "tests/unit/models/admin-hotel/admin-hotel.schema.test.ts",
+      "pattern": "schema.parseListColumns",
+      "reqIds": [
+        "REQ-HOTEL-CREATE-001",
+        "REQ-HOTEL-CREATE-002"
+      ]
+    },
+    {
+      "layer": "validations",
+      "path": "tests/unit/validations/admin-hotel/schemas.test.ts",
+      "pattern": "validation.createRequiredFields",
+      "reqIds": [
+        "REQ-HOTEL-CREATE-001",
+        "REQ-HOTEL-CREATE-002"
+      ]
+    },
+    {
+      "layer": "composable",
+      "path": "tests/unit/composables/admin-hotel/useAdminHotelForm.test.ts",
+      "pattern": "composable.useForm",
+      "reqIds": [
+        "REQ-HOTEL-CREATE-001",
+        "REQ-HOTEL-CREATE-002"
+      ]
+    },
+    {
+      "layer": "service",
+      "path": "tests/unit/services/admin-hotel.service.create.test.ts",
+      "pattern": "service.create",
+      "reqIds": [
+        "REQ-HOTEL-CREATE-001",
+        "REQ-HOTEL-CREATE-002"
+      ]
+    }
+  ],
+  "written": [
+    "tests/unit/models/admin-hotel/admin-hotel.schema.test.ts",
+    "tests/unit/validations/admin-hotel/schemas.test.ts",
+    "tests/unit/composables/admin-hotel/useAdminHotelForm.test.ts",
+    "tests/unit/services/admin-hotel.service.create.test.ts"
+  ],
+  "skipped": [],
+  "skippedPatterns": [],
+  "needsUnit": []
+}

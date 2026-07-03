@@ -413,15 +413,15 @@ Verify: pnpm test:e2e {path-to-spec} — báo exit code (verify-gate)
 Done: /grill-test → pnpm portal:lifecycle set {route} test
 ```
 
-**Variant — Rapi convert:**
+**Variant — testcase YAML slice:**
 
 ```text
 /test
 
-Convert Rapi export → Playwright cho {hotel.create.success}
-Rapi script: {path-or-paste-reference}
-Rules: getByTestId only, Page Object, storageState (không login trừ auth.*), Faker, random row, fullyParallel
-Ref: docs/operational/RAPI-RECORDER-QA.md · skill portal-rapi-playwright
+Implement Playwright từ testcase {chain-hotel-list.yaml}
+Spec: docs/features/chain/hotel/chain-hotel-list.spec.yaml
+Rules: getByTestId only, Page Object, storageState, Faker khi data.dynamic
+Ref: docs/templates/testcase.yaml · .cursor/skills/test/SKILL.md
 ```
 
 ---
@@ -562,4 +562,4 @@ Session mới: *"Đọc .harness/progress.md, tiếp tục /wire create cho admi
 | Scaffold | `pnpm portal:gen --spec ...` trước `/prototype`; agent chỉ HANDOFF + diff |
 | Registry | Sau prototype: promote reusable UI → `shared/portal-design.registry.json` — [DESIGN-REGISTRY-PROMOTION.md](./DESIGN-REGISTRY-PROMOTION.md) |
 
-Chi tiết codegen: `.cursor/extracts/portal-codegen-tags.md` · mục **Rules vs skills — token budget** trong [`TEAM-AI-WORKFLOW.md`](TEAM-AI-WORKFLOW.md).
+Chi tiết codegen: [`PORTAL-CODEGEN.md`](./PORTAL-CODEGEN.md) · `.cursor/extracts/portal-codegen-tags.md` · mục **Rules vs skills — token budget** trong [`TEAM-AI-WORKFLOW.md`](TEAM-AI-WORKFLOW.md).

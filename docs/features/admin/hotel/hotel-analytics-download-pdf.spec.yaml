@@ -1,0 +1,48 @@
+id: hotel-analytics-download-pdf
+title: Download PDF analytics hotel
+status: draft
+owner: portal-team
+summary: Admin tải PDF báo cáo survey/message toàn bộ hotel theo cùng filter ngày của analytics.
+actors:
+  - id: admin
+    legacyRoleCode: master
+entities:
+  - name: MessageTracking
+    table: message_trackings
+  - name: LinkSurvey
+    table: link_surveys
+  - name: HotelSetting
+    table: hotel_settings
+requirements:
+  - id: REQ-HOTEL-ANALYTICS-PDF-001
+    title: Tải PDF analytics
+    description: PDF render cùng dữ liệu analytics, dùng layout landscape và filename theo khoảng ngày legacy.
+    priority: should
+api:
+  endpoints:
+    - method: GET
+      path: /hotels/analytics/download-pdf
+      legacyPath: /admin/hotel/analytics/download-pdf
+      query:
+        start: string
+        end: string
+      response:
+        contentType: application/pdf
+        fileName: string
+validation:
+  fields:
+    - key: start
+      rules: required date date_format FORMAT_DATE
+    - key: end
+      rules: required date date_format FORMAT_DATE after_or_equal:start
+acceptance:
+  - PDF download giữ cùng query `start`/`end` với analytics page.
+  - Response filename là `【YYYY/MM/DD-YYYY/MM/DD】全施設のアンケートレポート.pdf`.
+  - PDF dùng paper `a4` landscape như legacy.
+openQuestions: []
+notes:
+  - type: inferredFromCode
+    evidence:
+      - /home/vutv/workspace/mairy-backend/app/Http/Controllers/Admin/HotelController.php
+      - /home/vutv/workspace/mairy-backend/resources/views/admin/hotel/pdf.blade.php
+    detail: Legacy `downloadPdf()` load cùng metric analytics, render `admin.hotel.pdf`, set paper A4 landscape rồi download.

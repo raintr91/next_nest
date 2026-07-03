@@ -1,5 +1,7 @@
 # Portal Codegen Readiness (post–grill-with-docs)
 
+> **Hub:** [`docs/operational/PORTAL-CODEGEN.md`](../../docs/operational/PORTAL-CODEGEN.md)
+
 **Who adds:** `/grill-with-docs` only — not `/legacy-spec`, `/spec`, or `portal:gen`.
 
 After grill, `spec.yaml` must pass:
@@ -33,6 +35,8 @@ Template post-grill: `docs/templates/spec.yaml`
 | `ui.filters[]` | `api.endpoints[].query` keys + labels from `ui.screens` search copy |
 | `ui.columns[]` | `api.endpoints[].response.data[0]` keys + `entities[].importantFields`; nested objects → flat key or `render: custom` |
 | `ui.testIds.module` | Prefix shared by `ui.screens[].actions[].testId` / `testIdPattern` |
+| `ui.testIds.required` | Canonical static ids for E2E — grill lists all ids `portal:gen` will emit; testcase mirrors |
+| `ui.testIds.patterns` | Dynamic ids (`{module}-cell-{key}-login-as-{managerId}`) — document template + placeholder keys |
 | `api.endpoints[].action` | `list` \| `create` \| `show` \| `update` \| `delete` matching profile |
 | `tags:` | See `portal-codegen-tags.md` + design registry hashtags (`#shell:`, `#widget:`, …) |
 
@@ -78,10 +82,10 @@ Common list shell: reference `docs/features/common/common-list-page.spec.yaml` i
 ## Grill exit checklist
 
 1. Interview done — contradictions resolved or in `openQuestions` + tag.
-2. `codegen` + structured `ui.filters` / `ui.columns` / `ui.composition` / `ui.testIds` present.
+2. `codegen` + structured `ui.filters` / `ui.columns` / `ui.composition` / `ui.testIds` (`module`, `required`, `patterns` when dynamic) present.
 3. `api.endpoints[].action` set for gen profile.
 4. `tags:` for deferred work and missing `Mo*`.
-5. Testcase YAML aligned with acceptance.
+5. Testcase YAML aligned with acceptance; `testIds.required` mirrors `spec.ui.testIds.required` (+ patterns for dynamic steps).
 6. `pnpm portal:gen:dry --spec <file>` exits 0.
 7. `pnpm docs:render`.
 

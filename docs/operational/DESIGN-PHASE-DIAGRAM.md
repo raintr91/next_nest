@@ -16,6 +16,7 @@ flowchart TD
   GS --> DRY["portal:gen:dry"]
   DRY --> PR["/prototype"]
   PR --> GEN["portal:gen"]
+  GEN --> UGEN["portal:unit-gen"]
   GEN --> GP["/grill-prototype"]
   GP --> OUT["Phase 2 Tests + API"]
   US["/update-spec"]
@@ -36,6 +37,7 @@ flowchart TD
 | `/grill-with-docs` | = grill-spec tổng |
 | `/update-spec` · `/update-spec-legacy` | gap — nhận **sai**, re-grill → grill-spec tổng |
 | `/prototype` · `/grill-prototype` | sau dry |
+| `portal:unit-gen` | sau `portal:gen` — [PORTAL-CODEGEN](./PORTAL-CODEGEN) |
 
 ## Gap loop
 

@@ -9,6 +9,8 @@ disable-model-invocation: true
 
 # /prototype — UI Prototype (Mock API Boundary)
 
+Doc hub: `docs/operational/PORTAL-CODEGEN.md`
+
 Shared extracts: `.cursor/extracts/legacy-config.md`, `legacy-blade-to-api.md`, `common-ui-spec.md`, `agent-discipline.md`, `portal-codegen-tags.md`
 
 Prerequisite: `docs/features/{slug}/*.spec.yaml` **portal-gen-ready** from `/dev-grill-docs` (`codegen.profile` present; `pnpm portal:gen:dry` passed).

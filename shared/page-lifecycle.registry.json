@@ -2,10 +2,10 @@
   "$schema": "./page-lifecycle.registry.schema.json",
   "routes": {
     "/hotels": {
-      "stage": "prototype",
+      "stage": "test",
       "spec": "docs/features/chain/hotel/chain-hotel-list.spec.yaml",
       "title": "Chain — danh sách hotel (施設一覧)",
-      "updatedAt": "2026-06-27T07:16:11.871Z"
+      "updatedAt": "2026-06-29T13:57:24.242Z"
     },
     "/admin/hotels": {
       "stage": "design-spec",

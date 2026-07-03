@@ -23,12 +23,26 @@ export function createChainHotelService(apiFetch: ApiFetch) {
       assertApiSuccess(res)
       return parseApiData(ChainHotelListResponseSchema, res.data)
     },
-    async exportReport(body: Record<string, unknown>): Promise<Blob> {
-      return apiFetch<Blob>('/hotels/export-report', {
+    async exportReport(body: Record<string, unknown>): Promise<void> {
+      const res = await apiFetch<ApiResponse<{ ok: boolean }>>('/hotels/export-report', {
         method: 'POST',
-        body,
-        responseType: 'blob'
+        body
       })
+      assertApiSuccess(res)
+    },
+    async loginFromAdmin(body: { id: number }) {
+      const res = await apiFetch<ApiResponse<{
+        token: string
+        user_name: string
+        hotel_name: string
+        use_restaurant: boolean | null
+        user_id: number
+      }>>('/auth/store/login-from-admin', {
+        method: 'POST',
+        body
+      })
+      assertApiSuccess(res)
+      return res.data
     }
   }
 }

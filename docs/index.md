@@ -13,9 +13,10 @@ pnpm docs:dev
 ## Operational
 
 - [Team AI Workflow](./operational/TEAM-AI-WORKFLOW.md)
+- [Portal codegen — `portal:gen` + `portal:unit-gen`](./operational/PORTAL-CODEGEN.md)
+- [Portal unit-gen roadmap PR0–PR12](./operational/PORTAL-UNIT-GEN-ROADMAP.md)
 - [Architecture](./operational/ARCHITECTURE.md)
 - [E2E Test IDs](./operational/E2E-TESTIDS.md)
-- [Rapi Recorder — QA](./operational/RAPI-RECORDER-QA.md)
 - [Semantic UI Assertions](./operational/E2E-SEMANTIC-UI-ASSERTIONS.md)
 
 ## Onboarding (slides)

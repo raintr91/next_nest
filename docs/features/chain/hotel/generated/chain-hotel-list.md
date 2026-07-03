@@ -86,6 +86,20 @@ columns:
     render: custom
 testIds:
   module: chain-hotels
+  required:
+    - chain-hotels-page
+    - chain-hotels-search-form
+    - chain-hotels-table
+    - chain-hotels-toolbar
+    - chain-hotels-pagination
+    - chain-hotels-total-btn
+    - chain-hotels-per-page-select
+    - chain-hotels-export-month-input
+    - chain-hotels-export-report-btn
+    - chain-hotels-cell-managers
+  patterns:
+    - id: manager-login-as
+      template: chain-hotels-cell-managers-login-as-{managerId}
 toolbar:
   showTotal: true
   totalLabel: 合計

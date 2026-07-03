@@ -3,10 +3,10 @@ import { z } from 'zod'
 
 import { fields } from '~/models/common/fields'
 
-export const {{entityCamel}}CreateSchema = toTypedSchema(
-  z.object({
+export const {{entityCamel}}CreateObjectSchema = z.object({
 {{#each formFieldSchemas}}
     {{key}}: {{{zodField}}},
 {{/each}}
   })
-)
+
+export const {{entityCamel}}CreateSchema = toTypedSchema({{entityCamel}}CreateObjectSchema)

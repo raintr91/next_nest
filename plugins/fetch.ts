@@ -4,7 +4,10 @@ import { useToastStore } from '~/stores/toastStore'
 export default defineNuxtPlugin((nuxtApp) => {
   const config = useRuntimeConfig()
   // Client + SSR: cùng origin API (https://… qua gateway) — runtimeConfig.public.apiBase / NUXT_PUBLIC_API_BASE.
-  const clientApiBase = (config.public.e2e as string) === '1'
+  const isE2eClient =
+    import.meta.client &&
+    (String(config.public.e2e) === '1' || config.public.e2e === true)
+  const clientApiBase = isE2eClient
     ? window.location.origin
     : (config.public.apiBase as string)
   const baseUrl = import.meta.client

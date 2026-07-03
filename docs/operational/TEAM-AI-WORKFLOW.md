@@ -52,7 +52,7 @@ Pipeline diagram: [`FULL-CYCLE-PIPELINE-DIAGRAM.md`](./FULL-CYCLE-PIPELINE-DIAGR
 | `/api` | Pointer → `api/` repo: `/api-spec`, `/grill-api-spec`, `/api-code` |
 | `/grill-api` | After `/api-code`, check Laravel implementation vs spec (Portal skill) |
 | `/wire` | `.cursor/skills/wire/` |
-| `/test` | `.cursor/skills/test/` |
+| `/test` | `.cursor/skills/test/` — diagram: [TEST-PHASE-DIAGRAM](./TEST-PHASE-DIAGRAM.md) |
 | `/grill-test` | `.cursor/skills/grill-test/` |
 | `/unit` | `.cursor/skills/unit/` |
 | `/grill-unit` | `.cursor/skills/grill-unit/` |
@@ -66,14 +66,16 @@ pnpm docs:render
 pnpm docs:dev
 ```
 
-Codegen from spec (Handlebars stubs):
+Codegen from spec (Handlebars stubs) + unit tests:
 
 ```bash
 pnpm portal:gen --spec docs/features/admin/hotel/admin-hotel-list.spec.yaml
 pnpm portal:gen:dry --spec docs/features/.../feature.spec.yaml
+pnpm portal:unit-gen --spec docs/features/.../feature.spec.yaml   # sau portal:gen
+pnpm testcase:gen --feature chain/hotel                              # E2E — sau testcase YAML
 ```
 
-See `.cursor/extracts/portal-codegen-tags.md` and `docs/templates/spec.yaml` (`codegen`, `tags`).
+**Doc chính:** [`PORTAL-CODEGEN.md`](./PORTAL-CODEGEN.md) · E2E: [TEST-PHASE-DIAGRAM](./TEST-PHASE-DIAGRAM.md) · tags: `.cursor/extracts/portal-codegen-tags.md`, `.cursor/extracts/portal-unit-test-tags.md`, `.cursor/extracts/portal-e2e-semantic-tags.md` · template: `docs/templates/spec.yaml`, `docs/templates/testcase.yaml`.
 
 ---
 
@@ -87,7 +89,9 @@ See `.cursor/extracts/portal-codegen-tags.md` and `docs/templates/spec.yaml` (`c
 | `spec-split-by-function.md` | Một spec = một child function |
 | `agent-discipline.md` | Scope, simplicity, surgical edits |
 | `verify-gate.md` | Verify trước khi claim done |
-| `portal-codegen-tags.md` | Spec hashtags + `pnpm portal:gen` |
+| `portal-codegen-tags.md` | Spec hashtags + `pnpm portal:gen` — hub: `docs/operational/PORTAL-CODEGEN.md` |
+| `portal-unit-test-tags.md` | Unit hashtags + `pnpm portal:unit-gen` |
+| `portal-unit-test-common.md` | Baseline tests repo + mock rules (legacy ref) |
 | `grill-docs-roles.md` | BQA vs Dev vs full grill ownership |
 | `spec-incremental-blocks.md` | `/spec` multi-turn `ui.blocks` |
 | `spec-update-delta.md` | `/update-spec` patch matrix |
@@ -97,6 +101,7 @@ See `.cursor/extracts/portal-codegen-tags.md` and `docs/templates/spec.yaml` (`c
 | `grill-tech-debt.md` | `#tech-debt:{id}` defer across phases |
 | `feature-lifecycle-status.md` | `featureStatus`, `wireCount`, `specRevision` |
 | `portal-test-readiness.md` | Gate sau `/prototype`, trước `/test` — testcase, testIds, session, mocks |
+| `portal-e2e-semantic-tags.md` | `#e2e:*` bundles + `assertions.semantic` — PR13a |
 
 Không cài Superpowers/Karpathy/Matt Pocock/Learn Harness clone — nội dung đã rút gọn trong extracts + team skills.
 
@@ -170,7 +175,7 @@ Backend (repo `api/`): `/api-spec` → `/grill-api-spec` → `/api-code` — xem
   skills/
     spec, legacy-spec, grill-with-docs, prototype, grill-prototype
     model, api, grill-api, wire, test, grill-test, unit, grill-unit
-    portal-base, portal-rapi-playwright
+    portal-base
     design/                 # deprecated pointer only
   rules/
     portal-invariants.mdc

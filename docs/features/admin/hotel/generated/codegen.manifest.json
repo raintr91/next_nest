@@ -1,0 +1,37 @@
+{
+  "generatedAt": "2026-06-29T09:51:30.905Z",
+  "specFile": "docs/features/admin/hotel/hotel-create.spec.yaml",
+  "profile": "create",
+  "entity": "admin-hotel",
+  "module": "hotels",
+  "shell": "DataFormPage",
+  "shellVariant": "standard",
+  "commonSpecRef": "docs/features/common/common-list-page.spec.yaml",
+  "designRegistry": "/home/vutv/workspace/portal/shared/portal-design.registry.json",
+  "slotBindings": [],
+  "componentFiles": {},
+  "files": [
+    {
+      "layer": "composable",
+      "path": "composables/admin-hotel/useAdminHotelForm.ts",
+      "template": "create/useForm.ts.hbs"
+    },
+    {
+      "layer": "validation",
+      "path": "validations/admin-hotel/schemas.ts",
+      "template": "create/validation.ts.hbs"
+    }
+  ],
+  "tags": [
+    "#shell: DataFormPage",
+    "#pattern: CRUD",
+    "#style: shadcn/ui",
+    "#style: compact",
+    "#style: flat",
+    "#skip-codegen: page"
+  ],
+  "skipped": [
+    "composables/admin-hotel/useAdminHotelForm.ts",
+    "validations/admin-hotel/schemas.ts"
+  ]
+}

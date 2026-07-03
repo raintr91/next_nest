@@ -9,7 +9,8 @@
 ```mermaid
 flowchart TD
   P0["1 Design prep\nlegacy-spec · spec · prototype"] --> GS["grill-spec"]
-  GS --> T["2a Tests"] --> GT["grill-test"]
+  GS --> T["2a Tests\ntestcase:gen · /test"]
+  T --> GT["grill-test"]
   GS --> A["2b API"] --> GA["grill-api"]
   GT --> W["3 Wire"]
   GA --> W
@@ -27,7 +28,7 @@ flowchart TD
 | Phase | Đại diện | Detail |
 |-------|----------|--------|
 | 1 Design | legacy-spec · spec · prototype → grill-spec | [DESIGN-PHASE-DIAGRAM](./DESIGN-PHASE-DIAGRAM) |
-| 2a Tests | testcase · grill-test | [TEST-PHASE-DIAGRAM](./TEST-PHASE-DIAGRAM) *(TBD)* |
+| 2a Tests | testcase · `testcase:gen` · grill-test | [TEST-PHASE-DIAGRAM](./TEST-PHASE-DIAGRAM) |
 | 2b API | api-spec · grill-api · api-code | [BACKEND-PHASE-DIAGRAM](./BACKEND-PHASE-DIAGRAM) |
 | 3 Wire | wire · grill-wire | [WIRE-PHASE-DIAGRAM](./WIRE-PHASE-DIAGRAM) *(TBD)* |
 | 4 Ship | review · merge · deploy | — |

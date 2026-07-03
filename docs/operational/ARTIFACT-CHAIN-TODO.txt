@@ -1,0 +1,362 @@
+# ARTIFACT CHAIN + FEATURE IR — TODO
+# Status: DRAFT → ARTIFACT-CHAIN-STANDARD v1
+# Last updated: 2026-07-03
+# Nguyên tắc: mỗi cải tiến = 1 todo; phase rõ; không trùng concern giữa các phase.
+# Chốt kiến trúc: bundle (SSOT) → split → ir/{spec,legacy,design} + trace module + md render
+
+================================================================================
+CHÍNH SÁCH — "feature cũ" nghĩa là gì?
+================================================================================
+Rule alwaysApply: .cursor/rules/portal-ai-platform.mdc
+Skill: .cursor/skills/portal-ai-platform/SKILL.md (/portal-ai-platform)
+
+Feature docs trong repo (hotel, chain, common/*.spec.yaml, generated/) =
+  CHUỘT BẠCH thử nghiệm artifact chain. Base đang xây — KHÔNG giữ tương thích
+  ngược path/layout cũ. Sai thì đập, xóa, replace; cản trở thì delete.
+
+App code (pages, components, services, …) = base kỹ thuật đã xong;
+  chỉ sửa khi user yêu cầu feature/app — mặc định session tối ưu AI layer.
+
+AI infra (skills, extracts, rules .cursor/) =
+  refactor có chủ đích — cập nhật skill/extract trong cùng PR với đổi path;
+  không cần symlink/re-export flat paths lâu nếu gây rối.
+
+Legacy code bên ngoài repo (mairy-backend, …) =
+  không xóa — chỉ đọc 1 lần vào trace. Khác với feature docs trong portal.
+
+================================================================================
+QUY TẮC CHUNG (đọc trước — tránh conflict)
+================================================================================
+[ ] Một concern = một nguồn sự thật:
+      legacy fact     → _legacy.trace.yaml + bundle.legacy / ir/legacy.yaml
+      portal UI       → bundle.design / ir/design.yaml
+      codegen         → ir/spec.yaml
+      BA prose        → bundle.review → md/
+      agent policy    → extract bundle theo command
+[ ] Không tạo thêm: analysis.yaml, manifest.yaml, generation.yaml, #evidence: tag
+[ ] Không duplicate: trace slice + ir/legacy full; manifest + design (chỉ design+zones)
+[ ] knowledge.level: observed | normalized | canonical — KHÔNG reuse status: draft
+[ ] Pipeline giữ: legacy-spec|spec → bqa-grill → dev-grill → [grill-with-docs] → prototype
+
+================================================================================
+PHASE 0 — INIT (hạ tầng + thay layout docs/features ngay)
+================================================================================
+
+## 0.1 Cấu trúc docs/features — tách yaml / md (layout duy nhất)
+[ ] Tạo docs/features/yaml/ (source + IR)
+[ ] Tạo docs/features/md/ (output BA)
+[ ] Layout chuẩn (không song song path cũ):
+      yaml/{role}/{domain}/{function}/
+        *.bundle.yaml
+        ir/spec.yaml, ir/legacy.yaml, ir/design.yaml
+        *.test.yaml
+      yaml/{role}/{domain}/_legacy.trace.yaml
+      yaml/_patterns/admin-crud.pattern.yaml
+      md/{role}/{domain}/{function}/*.md + testcases/
+[ ] Xóa layout cũ sau khi chuyển xong từng module pilot:
+      docs/features/admin/hotel/*.spec.yaml
+      docs/features/admin/hotel/generated/
+      docs/features/chain/hotel/... (tương tự)
+[ ] Không giữ docs/features/{role}/{domain}/ flat lẫn yaml/ — một layout
+
+## 0.1b Chuột bạch — thứ tự rewrite feature docs
+[ ] Pilot: yaml/admin/hotel/list/hotel-list.bundle.yaml (convert từ hotel-list.spec.yaml)
+[ ] spec:split → ir/*; docs:render → md/; portal:gen:dry trên ir/spec.yaml
+[ ] Pass pilot → xóa ngay hotel-list.spec.yaml + generated/ tương ứng
+[ ] _legacy.trace.yaml cho admin/hotel module
+[ ] Rewrite admin/hotel functions còn lại hoặc delete spec thừa / lỗi
+[ ] Rewrite chain/hotel hoặc delete nếu không cần
+[ ] Rewrite yaml/common/*.bundle.yaml — xóa common/*.spec.yaml sau convert
+[ ] Cập nhật link docs/common-ui/, VitePress index → path md/ mới
+
+## 0.2 Templates
+[ ] docs/templates/feature.bundle.yaml
+[ ] docs/templates/legacy-trace.yaml
+[ ] docs/templates/ir-spec.yaml
+[ ] docs/templates/ir-legacy.yaml
+[ ] docs/templates/ir-design.yaml
+[ ] docs/templates/entity-manifest.delta.yaml (inherits + delta — optional)
+
+## 0.3 Scripts (glob chỉ path mới — không dual glob lâu)
+[ ] scripts/spec/split-bundle.mjs
+[ ] scripts/spec/merge-bundle.mjs
+[ ] package.json: pnpm spec:split
+[ ] package.json: pnpm spec:merge
+[ ] package.json: pnpm spec:split --check (CI)
+[ ] scripts/legacy-trace-validate.mjs (optional)
+[ ] package.json: pnpm legacy-trace:validate (optional)
+[ ] scripts/docs/render-docs.mjs — glob yaml/**/*.bundle.yaml → md/
+[ ] scripts/portal-gen — glob yaml/**/ir/spec.yaml (cập nhật trong PHASE 0)
+
+## 0.4 Extracts — tách folder + registry
+[ ] Tạo .cursor/extracts/core/agent-discipline.md (move từ flat)
+[ ] Tạo .cursor/extracts/legacy/legacy-api-migration.md (rename từ legacy-blade-to-api.md)
+[ ] Tạo .cursor/extracts/legacy/project-config.md (tách từ legacy-config.md)
+[ ] Tạo .cursor/extracts/legacy/evidence.md (pointer, legacy://, no snippets)
+[ ] Tạo .cursor/extracts/spec/split.md (move spec-split-by-function.md)
+[ ] Tạo .cursor/extracts/grill/validation.md (Spec Validation + Decision Resolution)
+[ ] Tạo .cursor/extracts/grill/roles.md (move grill-docs-roles.md)
+[ ] Tạo .cursor/extracts/codegen/readiness.md (move portal-codegen-readiness.md)
+[ ] Tạo .cursor/extracts/codegen/tags.md (move portal-codegen-tags.md)
+[ ] Tạo .cursor/extracts/test/readiness.md (move portal-test-readiness.md)
+[ ] Tạo .cursor/extracts/extract-registry.json (bundle id → file paths)
+[ ] Tạo .cursor/extracts/artifact-graph.md (artifact load per phase)
+[ ] Tạo .cursor/extracts/artifact-chain.md (hub doc — layout yaml/md duy nhất)
+[ ] Tạo .cursor/extracts/crud-inheritance.md
+[ ] Tạo .cursor/extracts/legacy-trace.md
+[ ] Cập nhật skill paths trong cùng PR — bỏ flat extract khi skill đã trỏ folder mới
+[ ] pnpm extracts:validate — skill extractBundle ⊆ registry (optional)
+
+## 0.5 Design registry hashtags
+[ ] shared/portal-design.registry.json — thêm tagPrefixes: #legacy:, #behavior:, #token:
+[ ] Ghi rule: #behavior: business flow; #pattern: UI interaction
+[ ] Ghi rule: list → #shell: DataListPage — KHÔNG #ui: DataTable
+
+## 0.6 Doc chuẩn
+[ ] docs/operational/ARTIFACT-CHAIN-STANDARD.md (chốt sau hotel-list pilot + USER CHECK)
+
+================================================================================
+PHASE 1 — DESIGN (chuẩn YAML + render BA; /spec requirement)
+================================================================================
+
+## 1.1 Bundle schema (SSOT authoring)
+[ ] schema: portal-feature-bundle/v1
+[ ] Top-level: id, title, specOrigin, spec, legacy, design, review, openQuestions, _meta
+[ ] specOrigin: legacy | requirement
+[ ] grillStatus: bqaFacts, bqaOpen, dev, full
+[ ] spec section — design v1 only (chưa gen-ready):
+      [ ] actors, entities, relationships, requirements
+      [ ] ui.routes, ui screens hoặc design.zones (structured)
+      [ ] api query/response
+      [ ] acceptance
+      [ ] KHÔNG codegen, ui.filters, ui.columns, tags gen
+[ ] legacy section — legacyEvidence first-class:
+      [ ] behaviors[]: id, fact, source[], confidence
+      [ ] fields[]: name, source[], confidence
+      [ ] ui[]: pattern, source[]
+      [ ] evidence: [{ file, symbol, lines }] — pointer only
+      [ ] refs: { "legacy://...": { file, symbol, summary[] } }
+      [ ] legacyRef → trace#slice khi module đã có _legacy.trace.yaml
+[ ] design section — normalized portal intent:
+      [ ] inherits: admin-crud (optional)
+      [ ] shell, patterns, zones[], components[role+tag+label+hint]
+      [ ] behavior: create/update/delete verb blocks
+      [ ] tokens (optional), deviations (#legacy-global-ui-violation)
+[ ] review section — CHỈ prose cho BA (không split sang ir):
+      [ ] summary, layoutNotes
+[ ] origin / confidence per section (optional)
+
+## 1.2 Cách viết YAML (template style)
+[ ] Flat concerns; max depth ~3; list of objects
+[ ] Structured thay prose layout:
+      toolbar.position.after, actions.order, behavior.clickable
+[ ] Cấm description: > blob thay cho cây zones/components
+[ ] Skill output rule: "YAML only per schema. No explanation. No markdown."
+
+## 1.3 Split IR từ bundle
+[ ] pnpm spec:split → ir/spec.yaml (phần spec + meta id)
+[ ] pnpm spec:split → ir/legacy.yaml (phần legacy)
+[ ] pnpm spec:split → ir/design.yaml (phần design)
+[ ] Split strip review — review chỉ ở bundle
+[ ] SSOT authoring = bundle; sửa bundle → chạy lại split
+[ ] ir/*.yaml commit + CI split --check (đề xuất — chốt USER CHECK)
+
+## 1.4 docs:render — markdown đầy đủ cho no-tech
+[ ] Glob chỉ docs/features/yaml/**/*.bundle.yaml
+[ ] Render đọc bundle (IR + review) — đủ thông tin nhất
+[ ] Template render: ui.zones → bảng (thay dump ```yaml```)
+[ ] Template render: behavior → bảng CRUD
+[ ] Output → docs/features/md/{role}/{domain}/{function}/
+[ ] Xóa generated/ cũ khi md/ đã có cho function đó
+
+## 1.5 /spec command (requirement — member bullets)
+[ ] Output *.bundle.yaml với specOrigin: requirement
+[ ] Incremental ui.blocks → normalize thành design.zones khi đủ block
+[ ] extractBundle: spec-requirement (core + spec/* + common-ui — NO legacy/*)
+[ ] Handoff → /bqa-grill-docs (không legacy-spec)
+
+================================================================================
+PHASE 2 — LEGACY-SPEC (Legacy IR — archaeology 1 lần / module)
+================================================================================
+
+## 2.1 Module trace
+[ ] Viết yaml/{role}/{domain}/_legacy.trace.yaml
+[ ] schema: portal-legacy-trace/v1
+[ ] Meta: legacy.repo, legacy.commit, tracedAt
+[ ] index: functionId → slice, legacyRoute, controller
+[ ] slices per child function: route, server, queryParams, permissions, rules, ui
+[ ] legacy:// URI map trong trace
+[ ] evidence pointer only — KHÔNG snippet 200 dòng
+
+## 2.2 Per-function bundle từ legacy
+[ ] Viết *.bundle.yaml: spec + legacy (+ design thô nếu có)
+[ ] legacy slice: behaviors, fields, ui — confidence per item
+[ ] ir/legacy.yaml dùng legacyRef: trace#slice — không duplicate controller
+[ ] Deprecate notes.inferredFromCode prose → migrate legacyEvidence / trace
+[ ] Testcase round 1 + pnpm spec:split + pnpm docs:render
+
+## 2.2 Không làm ở legacy-spec (giữ rule hiện tại)
+[ ] KHÔNG output codegen, ui.filters, ui.columns, tags portal-gen
+[ ] KHÔNG quyết định canonical registry tags
+[ ] KHÔNG prose dài trong spec — summary ngắn + review nếu cần
+
+## 2.3 legacy-spec skill
+[ ] extractBundle: legacy-spec (core + legacy/* + spec/split)
+[ ] Load: viết trace + bundle.legacy
+[ ] KHÔNG load: codegen/*, test/*, prototype rules
+[ ] Handoff → /bqa-grill-docs (không nhảy grill-with-docs)
+
+================================================================================
+PHASE 3 — GRILL (validation — KHÔNG reconstruct domain)
+================================================================================
+
+## 3.1 Mindset chung
+[ ] Đổi tên mục tiêu: "Spec Validation + Decision Resolution" (không Interview)
+[ ] Step A fact-lock → Step B open-pass
+[ ] Rule: chưa grillStatus.bqaFacts: done → không thêm openQuestions mới
+[ ] Câu hỏi: spec ↔ legacyEvidence conflict; thiếu decision; codegen constraint
+[ ] KHÔNG hỏi: "legacy đang làm gì?" (đã có IR)
+[ ] KHÔNG load: legacy repo source, models/, generated md (trừ session BA riêng)
+
+## 3.2 /bqa-grill-docs
+[ ] Load: ir/design.yaml, ir/legacy (ui slice), common/*.yaml, bundle.review (open-pass)
+[ ] KHÔNG load: ir/spec codegen, legacy source, trace full module
+[ ] specOrigin legacy: đối chiếu design vs legacy.ui evidence vs common UI
+[ ] specOrigin requirement: complete zones + common — không legacy
+[ ] extractBundle: bqa-grill (core + grill/validation + grill/roles + common-ui/*)
+[ ] Set grillStatus.bqaFacts → bqaOpen → handoff dev-grill
+
+## 3.3 /dev-grill-docs
+[ ] Load: ir/design, ir/legacy (behaviors, fields), codegen/*, legacy/api-migration
+[ ] KHÔNG load: legacy source, models/
+[ ] Derive → GHI ir/spec.yaml: codegen, ui.filters/columns/composition, api.action, tags
+[ ] Giữ #needs-component, #manual-composable, #skip-codegen trong ir/spec tags
+[ ] Gate: pnpm portal:gen:dry --spec ir/spec.yaml
+[ ] extractBundle: dev-grill (core + grill/roles + codegen/* + legacy/api-migration)
+[ ] Set grillStatus.dev: done
+
+## 3.4 /grill-with-docs (optional — chỉ khi BQA↔Dev mâu thuẫn)
+[ ] KHÔNG default sau legacy-spec
+[ ] Reconcile + codegen gate lại
+[ ] extractBundle: grill-with-docs (core + grill/* + codegen/*)
+[ ] KHÔNG legacy-config, KHÔNG models, KHÔNG archaeology lại
+
+## 3.5 /update-spec-legacy (patch — không full legacy-spec)
+[ ] Load: trace slice + bundle.legacy delta
+[ ] Micro-read evidence pointer chỉ khi #legacy-recheck
+[ ] extractBundle: update-spec-legacy
+
+================================================================================
+PHASE 4 — PROTOTYPE + CODEGEN
+================================================================================
+
+## 4.1 portal:gen
+[ ] Chỉ đọc ir/spec.yaml (path mới) — không bundle, legacy, design
+[ ] Cập nhật docs/scripts khi glob path mới (PHASE 7)
+[ ] HANDOFF.md / codegen.manifest vẫn cạnh feature dir
+
+## 4.2 /prototype skill
+[ ] Load artifact: ir/spec.yaml only
+[ ] extractBundle: prototype (core + codegen/tags + common-ui + legacy/api-migration)
+[ ] Mock theo api contract — không sửa legacy IR
+
+## 4.3 Registry promote (sau prototype — giữ DESIGN-REGISTRY-PROMOTION)
+[ ] Load: ir/design.yaml + code đã implement
+[ ] canonical tags promote SAU prototype + reuse — không promote sớm trong grill
+
+================================================================================
+PHASE 5 — TEST / UNIT / API (artifact + extract tối thiểu)
+================================================================================
+
+## 5.1 /test + /grill-test
+[ ] Load: *.test.yaml + ir/spec (testIds)
+[ ] extractBundle: test (core + test/readiness + verify-gate)
+[ ] KHÔNG legacy-api-migration
+
+## 5.2 /unit + /grill-unit
+[ ] Load: ir/spec + unit.manifest
+[ ] extractBundle: unit (core + test/* ONLY)
+[ ] KHÔNG legacy/*, KHÔNG codegen/readiness full
+
+## 5.3 /model, /api, /grill-api
+[ ] /model: core + legacy/project-config (cross-repo only)
+[ ] /grill-api: core + legacy/api-migration only
+
+================================================================================
+PHASE 6 — CRUD INHERIT (sau hotel-list pilot normalized)
+================================================================================
+
+## 6.1 Pattern tầng 2
+[ ] Tạo yaml/_patterns/admin-crud.pattern.yaml
+[ ] defaultTags, defaultBehavior, commonSpecs refs
+[ ] knowledge: normalized (chưa canonical cho entity mới)
+
+## 6.2 Entity delta (Customer, Supplier, ...)
+[ ] bundle.design.inherits: admin-crud
+[ ] Chỉ delta: domain, zones, fields, api — KHÔNG copy hotel bundle
+[ ] Vẫn spec-split: 1 bundle = 1 child function (list, create, ...)
+[ ] Infer shell/pattern từ pattern + registry
+[ ] Field/API/permission: trace delta hoặc member — không full legacy read
+
+## 6.3 Token kỳ vọng
+[ ] Hotel module lần 1: trace + bundle — đắt
+[ ] Entity thứ 2 cùng archetype: pattern + delta — rẻ
+[ ] Sửa 1 field: /update-spec patch — rất rẻ
+
+================================================================================
+PHASE 7 — DỌN DẸP (sau pilot — xóa phần còn sót path cũ)
+================================================================================
+
+## 7.1 Verify không còn path cũ
+[ ] Grep repo: không còn *.spec.yaml dưới docs/features/ ngoài yaml/ (trừ template)
+[ ] Grep repo: không còn docs/features/**/generated/ (trừ portal:gen HANDOFF nếu vẫn cạnh ir/)
+[ ] Cập nhật TEAM-AI-WORKFLOW, PROMPT-TEMPLATES, skills — path yaml/md mới
+
+## 7.2 HANDOFF / manifest codegen
+[ ] Chốt path generated: yaml/.../ir/generated/ hoặc giữ cạnh function dir — một quy ước
+[ ] portal:remove, testcase:gen glob path mới
+
+## 7.3 common specs
+[ ] common → yaml/common/*.bundle.yaml — xóa common/*.spec.yaml cũ sau convert
+
+================================================================================
+PHASE 8 — SKILLS (extractBundle + artifact graph)
+================================================================================
+
+[ ] legacy-spec/SKILL.md — extractBundle + output trace + bundle.legacy
+[ ] spec/SKILL.md — specOrigin branch; extractBundle spec-requirement vs spec-legacy-ref
+[ ] bqa-grill-docs/SKILL.md — validation mindset + load policy
+[ ] dev-grill-docs/SKILL.md — write ir/spec + load policy
+[ ] grill-with-docs/SKILL.md — reconcile only + bỏ models/docs
+[ ] update-spec-legacy/SKILL.md — patch slice
+[ ] prototype/SKILL.md — ir/spec only
+[ ] Thay "Shared extracts: a, b, c..." → extractBundle: <id> tất cả skills
+
+================================================================================
+USER CHECK (chốt trước ARTIFACT-CHAIN-STANDARD v1)
+================================================================================
+[ ] ir/*.yaml commit hay gitignore?
+[ ] Stale trace khi legacy commit đổi — ai trigger?
+[ ] Cross-repo path format (team-projects) trong trace
+[ ] ui.blocks (/spec incremental) vs design.zones — rule chuyển đổi
+[ ] Path HANDOFF/codegen.manifest sau khi xóa generated/ cũ
+
+================================================================================
+PR CHECKLIST (mỗi PR — không conflict)
+================================================================================
+[ ] Sửa bundle → đã pnpm spec:split?
+[ ] Sửa ir/* tay → đã spec:merge hoặc CI split --check pass?
+[ ] Grill skill không load models/legacy source?
+[ ] portal:gen chỉ ir/spec.yaml?
+[ ] Prose chỉ bundle.review và md/ — không trong ir/*?
+[ ] Legacy fact không thêm notes.inferredFromCode prose mới?
+[ ] Command dùng đúng extractBundle (unit không kéo legacy-api-migration)?
+
+================================================================================
+NEXT
+================================================================================
+1. PHASE 0: folder yaml/md + scripts glob mới + templates
+2. PHASE 0.1b: hotel-list pilot (convert → xóa spec cũ ngay khi pass dry)
+3. PHASE 1–3: bundle + grill trên pilot
+4. PHASE 7: dọn path cũ còn sót
+5. ARTIFACT-CHAIN-STANDARD.md v1

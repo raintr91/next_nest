@@ -10,6 +10,8 @@ disable-model-invocation: true
 
 # /grill-with-docs — Spec Interview + Codegen Readiness
 
+Doc hub: `docs/operational/PORTAL-CODEGEN.md`
+
 Adapted from Matt Pocock grilling: ask hard questions until the spec is unambiguous; update docs as decisions land.
 
 Shared extracts: `.cursor/extracts/legacy-config.md`, `legacy-blade-to-api.md`, `common-ui-spec.md`, `spec-split-by-function.md`, `agent-discipline.md`, `grill-docs-roles.md`, `grill-tech-debt.md`, `portal-codegen-tags.md`, `portal-codegen-readiness.md`
@@ -40,9 +42,11 @@ Enrich design v1 → post-grill shape per `portal-codegen-readiness.md` and `doc
 2. Add `ui.composition` (usually `DataListPage` for list pages).
 3. Add structured `ui.filters` from `api.query` / screen search copy.
 4. Add structured `ui.columns` from `api.response` / `importantFields`; `render: custom` where needed.
-5. Add `ui.testIds.module` aligned with action testIds.
+5. Add `ui.testIds` — `module`, `required[]` (all static ids gen will emit), `patterns[]` when dynamic (cell actions, row keys).
 6. Set `api.endpoints[].action` (`list`, `create`, …).
 7. Add `tags:` — `#needs-component`, `#wire-only`, `#skip-codegen`, `#manual-composable`, `#phase-api` as needed.
+   - List profile unit defaults (when no unit tag yet): `#gen:test-schema`, `#gen:test-service`
+   - Create profile: `#gen:test-validation`
 8. Close or tag remaining `openQuestions`.
 9. **Gate:** `pnpm portal:gen:dry --spec <spec.yaml>` must exit 0.
 

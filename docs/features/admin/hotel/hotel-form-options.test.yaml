@@ -1,0 +1,27 @@
+id: hotel-form-options
+feature: hotel-form-options
+title: Form hotel load options phụ trợ
+type: api
+priority: must
+requirementIds:
+  - REQ-HOTEL-FORM-OPTIONS-001
+route:
+  path: /hotels/create
+  auth: required
+setup:
+  session: mockAdminSession
+steps:
+  - action: request
+    method: GET
+    path: /hotels/form-options
+expected:
+  - Response có `manager_user_options`, `chain_options`, `sms_country_options`, `api_system_options`.
+  - Create mode có `code` mặc định.
+  - Japan country option có `required=true`.
+mockCases:
+  - id: form-options-create
+    title: Create options
+    expected: Có code mới và user manager chưa gán hotel.
+  - id: form-options-update
+    title: Update options
+    expected: Include manager đang gán cho hotel hiện tại và selected flag.

@@ -1,8 +1,8 @@
 # E2E — Chuẩn hóa `data-testid` (Portal Base)
 
-Tài liệu quy ước gắn **`data-testid`** trên FE và viết Playwright E2E ổn định. Áp dụng **trước khi** QA record Rapi hoặc viết Playwright.
+Tài liệu quy ước gắn **`data-testid`** trên FE và viết Playwright E2E ổn định. Grill khai báo danh sách trong **`spec.ui.testIds.required`** (+ **`patterns`** khi id động); `portal:gen` emit markup; testcase YAML mirror list trước `/test`.
 
-> **Quick link:** [Docs Home](../index.md) · [Rapi Recorder — QA](./RAPI-RECORDER-QA.md) · Helper: `utils/testId.ts`
+> **Quick link:** [Docs Home](../index.md) · Template testcase: `docs/templates/testcase.yaml` · Helper: `utils/testId.ts`
 
 ---
 

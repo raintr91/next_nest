@@ -70,7 +70,9 @@ columns:
     render: custom
 testIds:
   module: chain-hotels
-  actionPattern: chain-hotels-login-as-{userId}
+  patterns:
+    - id: manager-login-as
+      template: chain-hotels-cell-managers-login-as-{managerId}
 ```
 
 ## api

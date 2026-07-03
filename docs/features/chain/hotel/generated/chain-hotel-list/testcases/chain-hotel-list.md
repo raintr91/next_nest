@@ -16,20 +16,21 @@ Tính năng: Chain — danh sách hotel (施設一覧)
 ## Test ID
 
 - chain-hotels-page
+- chain-hotels-search-form
 - chain-hotels-table
+- chain-hotels-toolbar
+- chain-hotels-pagination
 - chain-hotels-total-btn
 - chain-hotels-per-page-select
 - chain-hotels-export-month-input
 - chain-hotels-export-report-btn
+- chain-hotels-cell-managers
 
 ## Thiết lập
 
 ```yaml
 session: mockChainAuthenticatedSession
-mocks:
-  - method: GET
-    path: /api/hotels
-    response: chainHotelListSuccess
+mocks: []
 ```
 
 ## Dữ liệu

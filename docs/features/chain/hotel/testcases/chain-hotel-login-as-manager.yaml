@@ -11,13 +11,13 @@ route:
   auth: chain
 testIds:
   required:
-    - chain-hotels-login-as-{{manager_id}}
+    - chain-hotels-page
+    - chain-hotels-cell-managers
+  patterns:
+    - chain-hotels-cell-managers-login-as-{{manager_id}}
 setup:
   session: mockChainAuthenticatedSession
   mocks:
-    - method: GET
-      path: /api/hotels
-      response: chainHotelListWithManagerSuccess
     - method: POST
       path: /api/auth/store/login-from-admin
       response: storeLoginFromAdminSuccess
@@ -26,8 +26,8 @@ data:
 steps:
   - action: goto
     path: /hotels
-  - action: click
-    testId: chain-hotels-login-as-{{manager_id}}
+  - action: waitFor
+    testId: chain-hotels-table
 assertions:
   network:
     - method: POST

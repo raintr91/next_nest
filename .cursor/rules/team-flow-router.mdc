@@ -7,6 +7,8 @@ alwaysApply: false
 
 **Opt-in** — user gọi command hoặc nói phase/feature thì agent đọc **một** skill tương ứng.
 
+**AI platform context (always):** `portal-ai-platform.mdc` — feature docs = chuột bạch; ưu tiên cải tiến `.cursor/` + workflow.
+
 → Doc: `docs/operational/TEAM-AI-WORKFLOW.md`  
 → Pipeline diagram: `docs/operational/FULL-CYCLE-PIPELINE-DIAGRAM.md`  
 → Prompt templates: `docs/operational/PROMPT-TEMPLATES.md`  
@@ -16,6 +18,12 @@ alwaysApply: false
 Extracts: `.cursor/extracts/legacy-config.md` (legacy paths, output language).
 
 Một session = **một** command. State: `.harness/progress.md`.
+
+## Meta
+
+| Command | Skill |
+|---------|-------|
+| `/portal-ai-platform` | `.cursor/skills/portal-ai-platform/SKILL.md` |
 
 ## Design lane
 

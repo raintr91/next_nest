@@ -9,7 +9,7 @@ Prerequisite: `/prototype` done, `pnpm portal:gen:dry` passed in grill, route on
 
 | Source | Purpose |
 |--------|---------|
-| `docs/features/.../*.spec.yaml` | Requirements, routes, `ui.testIds`, acceptance |
+| `docs/features/.../*.spec.yaml` | Requirements, routes, `ui.testIds.required` / `patterns`, acceptance |
 | `docs/features/.../testcases/*.yaml` | **E2E source of truth** — steps, assertions, mocks |
 | Prototype code | `data-testid`, composables, mocks |
 
@@ -20,10 +20,11 @@ Prerequisite: `/prototype` done, `pnpm portal:gen:dry` passed in grill, route on
 1. [ ] Spec split by function — `.cursor/extracts/spec-split-by-function.md`
 2. [ ] Each child function has `testcases/{role}-{page}-{function}.yaml` (or feature folder equivalent)
 3. [ ] `testcase.route.path` matches `spec.ui.routes[0].path`
-4. [ ] Every `testIds.required` exists on prototype UI (`docs/operational/E2E-TESTIDS.md`)
+4. [ ] `spec.ui.testIds.required` (+ `patterns` when dynamic) declared at grill; after `portal:gen`, every id visible on prototype UI (`docs/operational/E2E-TESTIDS.md`)
 5. [ ] `setup.session` name exists in `tests/e2e/helpers/session.ts` — or grill tagged `#needs-session-helper` and helper implemented first
 6. [ ] `setup.mocks` paths align with `api.endpoints` in spec (prototype / pre-wire)
-7. [ ] Tags `#wire-only` documented — E2E uses mock until `/wire`
+7. [ ] Semantic bundles: `#e2e:semantic-*` / `#e2e:a11y-*` or `assertions.semantic` — `.cursor/extracts/portal-e2e-semantic-tags.md`
+8. [ ] Tags `#wire-only` documented — E2E uses mock until `/wire`
 
 ## File layout (convention)
 
@@ -77,4 +78,4 @@ Re-run scoped E2E after `/wire` before `lifecycle set … wire`.
 - `.cursor/skills/test/SKILL.md`
 - `.cursor/skills/grill-test/SKILL.md`
 - `docs/operational/E2E-SEMANTIC-UI-ASSERTIONS.md` — `assertions.semantic`
-- `portal-rapi-playwright` skill — optional Rapi convert; same PO rules
+- `docs/operational/E2E-TESTIDS.md` — naming + spec `ui.testIds` contract

@@ -11,14 +11,12 @@ route:
   auth: chain
 testIds:
   required:
+    - chain-hotels-page
     - chain-hotels-export-month-input
     - chain-hotels-export-report-btn
 setup:
   session: mockChainAuthenticatedSession
   mocks:
-    - method: GET
-      path: /api/hotels
-      response: chainHotelListSuccess
     - method: POST
       path: /api/hotels/export-report
       response: chainHotelExportReportSuccess
@@ -27,6 +25,11 @@ data:
 steps:
   - action: goto
     path: /hotels
+  - action: waitFor
+    testId: chain-hotels-table
+  - action: waitFor
+    role: row
+    name: /Manager A/
   - action: fill
     testId: chain-hotels-export-month-input
     value: "{{last_month_yyyy_mm}}"

@@ -1,0 +1,124 @@
+{
+  "version": 1,
+  "description": "E2E semantic UI + axe assertion bundles for testcase:gen — separate from portal-unit-test.registry.json",
+  "tagPrefixes": {
+    "e2eBundle": "#e2e:",
+    "skipAssert": "#skip-e2e-assert:"
+  },
+  "fixture": "tests/e2e/fixtures/semantic-ui.ts",
+  "bundles": {
+    "semantic-smoke": {
+      "status": "implemented",
+      "label": "Level 1 smoke — console, scroll, images",
+      "matchers": [
+        "toHaveNoConsoleErrors",
+        "toHaveNoHorizontalScroll",
+        "toHaveNoBrokenImages"
+      ]
+    },
+    "semantic-list": {
+      "status": "implemented",
+      "label": "List page — smoke + overflow + table + overlap",
+      "extends": ["semantic-smoke"],
+      "matchers": [
+        "toHaveNoTextOverflow",
+        "toHaveValidTableLayout",
+        "toHaveNoElementOverlap"
+      ]
+    },
+    "semantic-form": {
+      "status": "implemented",
+      "label": "Form page — smoke + text overflow",
+      "extends": ["semantic-smoke"],
+      "matchers": ["toHaveNoTextOverflow"]
+    },
+    "a11y-wcag": {
+      "status": "implemented",
+      "label": "Axe WCAG A/AA scan scoped to rootTestId",
+      "matchers": ["toHaveNoA11yViolations"]
+    },
+    "a11y-presets": {
+      "status": "implemented",
+      "label": "Axe rule presets — names, aria, media, document",
+      "matchers": [
+        "toHaveValidAccessibleNames",
+        "toHaveValidAria",
+        "toHaveAccessibleMedia",
+        "toHaveValidDocumentSemantics"
+      ]
+    },
+    "a11y-full": {
+      "status": "implemented",
+      "label": "WCAG scan + axe presets",
+      "extends": ["a11y-wcag", "a11y-presets"]
+    }
+  },
+  "sections": {
+    "level1": "semantic-smoke",
+    "layout": "semantic-list",
+    "accessibility": "a11y-full",
+    "designToken": "planned"
+  },
+  "matchers": {
+    "toHaveNoConsoleErrors": {
+      "layer": "level1",
+      "scope": "page",
+      "needsConsoleErrors": true
+    },
+    "toHaveNoHorizontalScroll": {
+      "layer": "level1",
+      "scope": "page"
+    },
+    "toHaveNoBrokenImages": {
+      "layer": "level1",
+      "scope": "page"
+    },
+    "toHaveNoTextOverflow": {
+      "layer": "level1",
+      "scope": "root"
+    },
+    "toHaveNoElementOverlap": {
+      "layer": "layout",
+      "scope": "root"
+    },
+    "toHaveValidTableLayout": {
+      "layer": "layout",
+      "scope": "table"
+    },
+    "toHaveAlignedGrid": {
+      "layer": "layout",
+      "scope": "root",
+      "status": "planned"
+    },
+    "toHaveNoA11yViolations": {
+      "layer": "accessibility",
+      "scope": "page"
+    },
+    "toHaveValidAccessibleNames": {
+      "layer": "accessibility",
+      "scope": "page"
+    },
+    "toHaveValidAria": {
+      "layer": "accessibility",
+      "scope": "page"
+    },
+    "toHaveAccessibleMedia": {
+      "layer": "accessibility",
+      "scope": "page"
+    },
+    "toHaveReadableContrast": {
+      "layer": "accessibility",
+      "scope": "page",
+      "status": "planned"
+    },
+    "toHaveValidDocumentSemantics": {
+      "layer": "accessibility",
+      "scope": "page"
+    },
+    "toMatchShadcnTableToken": {
+      "layer": "designToken",
+      "scope": "table",
+      "status": "planned"
+    }
+  }
+}

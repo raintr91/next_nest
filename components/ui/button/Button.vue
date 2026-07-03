@@ -10,18 +10,25 @@ interface Props extends PrimitiveProps {
   variant?: ButtonVariants["variant"]
   size?: ButtonVariants["size"]
   class?: HTMLAttributes["class"]
+  testId?: string
 }
 
 const props = withDefaults(defineProps<Props>(), {
   as: "button",
 })
+
+const emit = defineEmits<{
+  click: [event: MouseEvent]
+}>()
 </script>
 
 <template>
   <Primitive
     :as="as"
     :as-child="asChild"
+    :data-testid="testId"
     :class="cn(buttonVariants({ variant, size }), props.class)"
+    @click="(event: MouseEvent) => emit('click', event)"
   >
     <slot />
   </Primitive>

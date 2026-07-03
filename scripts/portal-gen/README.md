@@ -1,5 +1,7 @@
 # Portal Gen
 
+> **Doc chính:** [Portal codegen (gen + unit)](../../docs/operational/PORTAL-CODEGEN.md) — đọc trước khi quên thứ tự lệnh.
+
 Generate 4-layer scaffold from feature `spec.yaml` (Handlebars templates).
 
 ## Usage

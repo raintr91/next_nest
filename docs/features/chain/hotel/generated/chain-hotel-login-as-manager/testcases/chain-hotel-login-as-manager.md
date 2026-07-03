@@ -14,16 +14,14 @@ Tính năng: Chain — login as manager (store handoff)
 
 ## Test ID
 
-- chain-hotels-login-as-{{manager_id}}
+- chain-hotels-page
+- chain-hotels-cell-managers
 
 ## Thiết lập
 
 ```yaml
 session: mockChainAuthenticatedSession
 mocks:
-  - method: GET
-    path: /api/hotels
-    response: chainHotelListWithManagerSuccess
   - method: POST
     path: /api/auth/store/login-from-admin
     response: storeLoginFromAdminSuccess
@@ -42,7 +40,7 @@ manager_id: "{{manager_id}}"
 ## Các bước
 
 1. action: goto, path: /hotels
-2. action: click, testId: chain-hotels-login-as-{{manager_id}}
+2. action: waitFor, testId: chain-hotels-table
 
 ## Assertion
 

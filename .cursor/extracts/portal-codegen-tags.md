@@ -1,5 +1,7 @@
 # Portal Codegen Tags
 
+> **Doc chính:** [`docs/operational/PORTAL-CODEGEN.md`](../../docs/operational/PORTAL-CODEGEN.md) — tổng hợp `portal:gen` + `portal:unit-gen`.
+
 Source: `pnpm portal:gen --spec docs/features/.../*.spec.yaml`  
 Templates: `scripts/portal-gen/templates/`  
 Handoff output: `{feature-dir}/generated/HANDOFF.md`
@@ -64,6 +66,20 @@ Alias: `DataListTable`, `common list` → `#shell: DataListPage`.
 
 `ui.columns[].render: custom` auto-adds `#custom-slot: cell-{key}` if not already tagged.
 
+### Unit test (`portal:unit-gen` — separate registry)
+
+| Tag | Generator behavior |
+|-----|-------------------|
+| `#gen:test-schema` | `tests/unit/models/{entity}/{entity}.schema.test.ts` |
+| `#gen:test-service` | `tests/unit/services/{entity}.service.test.ts` (list) |
+| `#gen:test-validation` | `tests/unit/validations/{entity}/schemas.test.ts` (create) |
+| `#skip-unit-test: models` \| `schema` | Skip schema unit test |
+| `#needs-unit-test: {layer}:{target}` | Planned pattern — `/unit` + registry promote |
+
+**Grill defaults (list):** `#gen:test-schema`, `#gen:test-service` when spec has no unit tag yet. **Create:** `#gen:test-validation`.
+
+Detail: `.cursor/extracts/portal-unit-test-tags.md` · `shared/portal-unit-test.registry.json`
+
 ## Commands
 
 ```bash
@@ -71,6 +87,7 @@ pnpm portal:registry   # validate shared/portal-design.registry.json
 pnpm portal:gen:dry --spec docs/features/admin/hotel/admin-hotel-list.spec.yaml  # gate after grill
 pnpm portal:gen --spec docs/features/admin/hotel/admin-hotel-list.spec.yaml
 pnpm portal:gen --spec ... --force   # overwrite existing generated targets
+pnpm portal:unit-gen --spec ...      # after portal:gen — hub: docs/operational/PORTAL-CODEGEN.md
 ```
 
 ## `/prototype` session order

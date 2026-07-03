@@ -56,14 +56,6 @@ onMounted(load)
             :test-id="'chain-hotels-export-month-input'"
           />
         </div>
-        <Button
-          variant="default"
-          :disabled="exportPending"
-          :test-id="'chain-hotels-export-report-btn'"
-          @click="exportOpenRateReport"
-        >
-          ダウンロード
-        </Button>
       </div>
     </template>
     <template #toolbar-end>
@@ -81,6 +73,15 @@ onMounted(load)
           <option :value="100">100</option>
         </select>
         <span>件</span>
+        <button
+          type="button"
+          class="inline-flex h-9 items-center justify-center rounded-md bg-primary px-4 text-sm font-medium text-primary-foreground"
+          :disabled="exportPending"
+          data-testid="chain-hotels-export-report-btn"
+          @click="exportOpenRateReport"
+        >
+          ダウンロード
+        </button>
       </div>
     </template>
     <template #cell-managers="{ row, value }">

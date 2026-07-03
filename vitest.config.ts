@@ -17,6 +17,7 @@ export default defineConfig({
   test: {
     environment: 'happy-dom',
     globals: true,
+    setupFiles: ['./tests/unit/_helpers/nuxtGlobals.ts'],
     include: ['tests/unit/**/*.{test,spec}.{ts,tsx}'],
     coverage: {
       provider: 'v8',

@@ -1,0 +1,53 @@
+id: hotel-create
+feature: hotel-create
+title: Admin tạo hotel thành công
+type: e2e
+priority: must
+requirementIds:
+  - REQ-HOTEL-CREATE-001
+  - REQ-HOTEL-CREATE-002
+route:
+  path: /hotels/create
+  auth: required
+testIds:
+  required:
+    - admin-hotel-create-page
+    - admin-hotel-name-input
+    - admin-hotel-code-input
+    - admin-hotel-phone-input
+    - admin-hotel-address-input
+    - admin-hotel-save-btn
+setup:
+  session: mockAdminSession
+data:
+  name: MAIRY Sakura Hotel
+  phone: 03-1234-5678
+  address: 1-1-1 Mairy Street
+steps:
+  - action: goto
+    path: /hotels/create
+  - action: fill
+    testId: admin-hotel-name-input
+    valueFrom: data.name
+  - action: fill
+    testId: admin-hotel-phone-input
+    valueFrom: data.phone
+  - action: fill
+    testId: admin-hotel-address-input
+    valueFrom: data.address
+  - action: click
+    testId: admin-hotel-save-btn
+assertions:
+  ui:
+    - testId: admin-hotel-success-alert
+      contains: 保存しました
+expected:
+  - Mock API nhận payload có legacy keys như `master_user_hotel`, `sms_to_countries`, `api_ids`.
+  - Sau create, UI hiển thị success và không đổi tên field contract.
+mockCases:
+  - id: create-success
+    title: Tạo thành công
+    expected: API trả id/code và assigned_user_ids.
+  - id: create-validation
+    title: Thiếu required
+    expected: Inline errors hiển thị tại field name/phone/address.

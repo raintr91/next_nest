@@ -1,0 +1,163 @@
+id: hotel-analytics
+title: Analytics toàn bộ hotel
+status: draft
+owner: portal-team
+summary: Admin xem báo cáo survey/message toàn bộ hotel theo khoảng ngày.
+actors:
+  - id: admin
+    legacyRoleCode: master
+entities:
+  - name: MessageTracking
+    table: message_trackings
+  - name: LinkSurvey
+    table: link_surveys
+  - name: HotelSetting
+    table: hotel_settings
+requirements:
+  - id: REQ-HOTEL-ANALYTICS-001
+    title: Xem analytics theo khoảng ngày
+    description: Nếu thiếu `start`/`end`, request tự default về đầu/cuối tháng hoặc suy ra tháng của ngày còn lại.
+    priority: should
+ui:
+  routes:
+    - path: /hotels/analytics
+      legacyPath: /admin/hotel/analytics
+      pageTestId: admin-hotel-analytics-page
+  screens:
+    - name: Hotel analytics
+      header:
+        title: 分析機能
+        legacyCardTitle: MAIRY survey report
+        description: Legacy `/admin/hotel/analytics` dùng `card card-transparent` trong `card-body bg-white`; filter date range nằm trên, report title và CSV/PDF nằm trong report card body.
+      layout:
+        - "Sidebar hiển thị menu `分析機能` dưới cụm `ホテル管理`."
+        - "Outer layout là `container-fluid container-fixed-lg`, card `card-transparent`, `card-body bg-white`; không render dashboard metric cards hiện đại."
+        - "Filter là GET form `has_validate mt-3` trong card-header: row đầu `justify-content-center`, `col-lg-4 form-group`, label `period`, input-daterange input-group gồm `start`, addon text `to`, `end`."
+        - "Search/Clear nằm row thứ hai căn giữa: mỗi nút trong `col-md-1 col-sm-1 form-group`; search dùng `btn btn-sm btn-block rounded btn-outline-primary`, clear dùng `btn btn-sm btn-block rounded btn-outline-secondary` và reset route `/hotels/analytics`."
+        - "Report area là card-transparent body bên dưới filter; header nội bộ có title `MAIRY survey report` pull-left, PDF/CSV primary buttons pull-right rounded `btn-cons-md btn-primary`, không nằm trong global page header."
+        - "Report body dùng `survey-table-overview mt-5`, không dùng grid metric cards; bảng overview có 8 cột bằng `.survey-col` và 3 row: label row, value row, ratio row."
+        - "Label row theo thứ tự legacy: before sent, before opened, after sent, after opened, MAIRY survey total, high, low, company survey invitation."
+        - "Value row hiển thị số hoặc `－`; rate row để trống các cột sent, hiển thị open rate/survey ratio/company survey ratio đúng vị trí legacy."
+        - Export/PDF button là action trong report title row, không là sidebar child.
+      actions:
+        - id: pdf-download
+          text: PDFダウンロード
+          icon: none
+          variant: primary
+          position: report title row pull-right, trước CSV trong DOM legacy
+          testId: admin-hotel-analytics-pdf-btn
+        - id: csv-download
+          text: CSVダウンロード
+          icon: none
+          variant: primary
+          position: report title row pull-right, sau PDF trong DOM legacy
+          testId: admin-hotel-analytics-csv-btn
+        - id: search
+          text: 検索
+          icon: Search
+          variant: outline-primary
+          position: filter second centered row, trước clear
+          testId: admin-hotel-analytics-search-btn
+        - id: clear
+          text: クリア
+          icon: RotateCcw
+          variant: outline-secondary
+          position: filter second centered row, sau search
+          testId: admin-hotel-analytics-clear-btn
+      visual:
+        filter:
+          periodLabel: period
+          rangeSeparator: to
+          startInputClass: form-control datepicker dataRange dataRange-custom
+          endInputClass: form-control datepicker dataRange dataRange-custom
+        reportTable:
+          containerClass: survey-table-overview mt-5
+          columnClass: survey-col
+          valueRowClass: fw-600 text-center fs-16
+        metricColors:
+          messageMetrics: survey-text-pink
+          surveyMetrics: survey-text-blue
+        textColor:
+          reportTitle: "#191837"
+      reportColumns:
+        - key: before_sent
+          label: 宿泊前<br/>メッセージ送信数
+          colorClass: survey-text-pink
+          rateCell: empty
+        - key: before_opened
+          label: 宿泊前<br/>メッセージ開封数
+          colorClass: survey-text-pink
+          rateFormula: allBefore.opened / allBefore.sent * 100
+        - key: after_sent
+          label: 宿泊後<br/>メッセージ送信数
+          colorClass: survey-text-pink
+          rateCell: empty
+        - key: after_opened
+          label: 宿泊後<br/>メッセージ開封数
+          colorClass: survey-text-pink
+          rateFormula: allAfter.opened / allAfter.sent * 100
+        - key: survey_total
+          label: MAIRYアンケート<br/>タップ
+          colorClass: survey-text-blue
+          rateFormula: min(allSurvey.total / allAfter.opened * 100, 100)
+        - key: survey_high
+          label: MAIRYアンケート<br/>高評価タップ
+          colorClass: survey-text-blue
+          rateFormula: allSurvey.high / allSurvey.total * 100
+        - key: survey_low
+          label: MAIRYアンケート<br/>低評価タップ
+          colorClass: survey-text-blue
+          rateFormula: allSurvey.low / allSurvey.total * 100
+        - key: company_survey_invitation
+          label: 自社アンケート<br/>誘導数
+          colorClass: survey-text-blue
+          rateFormula: companySurveyInvitation / allSurvey.low * 100
+api:
+  endpoints:
+    - method: GET
+      path: /hotels/analytics
+      legacyPath: /admin/hotel/analytics
+      query:
+        start: string
+        end: string
+      response:
+        all_before:
+          sent: number|null
+          opened: number|null
+          open_rate: number|null
+        all_after:
+          sent: number|null
+          opened: number|null
+          open_rate: number|null
+        all_survey:
+          total: number|null
+          high: number|null
+          low: number|null
+        company_survey_invitation: number|null
+validation:
+  fields:
+    - key: start
+      rules: required date date_format FORMAT_DATE
+    - key: end
+      rules: required date date_format FORMAT_DATE after_or_equal:start
+acceptance:
+  - UI có date range `start`/`end` trong input-daterange centered, search và clear nằm row căn giữa như legacy.
+  - "`分析機能` là menu page admin riêng theo legacy `/admin/hotel/analytics`; không lấy message analytics của store/manager portal."
+  - Báo cáo hiển thị dạng survey overview table 8 cột, 3 row label/value/rate như legacy; không render thành metric cards.
+  - CSV/PDF button là primary rounded button trong report title row bên phải và có href/action theo filter hiện tại.
+  - Search/Clear button dùng icon + text theo `common-buttons`; search dùng `Search`, clear dùng `RotateCcw`.
+  - Các label có line break `<br/>` giống legacy và indicator square màu pink/blue trước label.
+  - Tỷ lệ hiển thị `－` khi không đủ mẫu số, và cap survey total ratio ở 100% như legacy.
+openQuestions:
+  - id: hotel-analytics-phase
+    question: Analytics toàn bộ hotel có nằm trong admin hotel management phase này hay tách sang report/dashboard phase?
+    tag: "#phase-api"
+notes:
+  - type: inferredFromCode
+    evidence:
+      - /home/vutv/workspace/mairy-backend/app/Http/Controllers/Admin/HotelController.php
+      - /home/vutv/workspace/mairy-backend/app/Http/Requests/AdminTrackingAnalyticsSearchRequest.php
+      - /home/vutv/workspace/mairy-backend/resources/views/admin/hotel/analytics.blade.php
+    detail: Legacy controller gọi `TrackerService`, `LinkSurveyService`, `HotelSettingService`, export CSV SJIS-win và render PDF landscape.
+  - type: scope
+    detail: Spec này chỉ mô tả admin hotel analytics toàn bộ hotel; các route `message-analytics` của manager/chain/store portal không thuộc scope admin.

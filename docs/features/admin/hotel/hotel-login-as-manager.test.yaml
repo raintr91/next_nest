@@ -1,0 +1,31 @@
+id: hotel-login-as-manager
+feature: hotel-login-as-manager
+title: Admin tạo handoff token theo manager trong hotel list
+type: e2e
+priority: must
+requirementIds:
+  - REQ-HOTEL-LOGIN-AS-MANAGER-001
+route:
+  path: /hotels
+  auth: required
+testIds:
+  required:
+    - admin-hotel-list-page
+    - admin-hotel-login-as-action
+setup:
+  session: mockAdminSession
+steps:
+  - action: goto
+    path: /hotels
+  - action: click
+    testId: admin-hotel-login-as-action
+expected:
+  - API trả `token`, `user_name`, `hotel_name`, `use_restaurant`, `user_id`, `redirect_url`.
+  - Admin UI nhận response và thực hiện handoff; không assert UI portal đích.
+mockCases:
+  - id: login-as-success
+    title: Tạo handoff token thành công
+    expected: Action feedback hiển thị token ready hoặc mở URL mock.
+  - id: login-as-failed
+    title: Tạo handoff token lỗi
+    expected: UI hiển thị error alert và không mở URL.

@@ -1,5 +1,7 @@
 # Portal Design Registry
 
+> **Hub:** [`docs/operational/PORTAL-CODEGEN.md`](../../docs/operational/PORTAL-CODEGEN.md) (`portal:gen` UI registry)
+
 **File:** `shared/portal-design.registry.json`  
 **Commands:** `pnpm portal:registry` · `pnpm portal:gen:dry`
 

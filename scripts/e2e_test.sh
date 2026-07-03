@@ -53,7 +53,7 @@ echo "--- Playwright E2E tests -> playwright-report/ ---"
 rm -rf "$ROOT_DIR/playwright-report" "$ROOT_DIR/test-results"
 
 set +e
-pnpm exec playwright test
+pnpm exec playwright test "$@"
 PLAYWRIGHT_EXIT=$?
 set -e
 

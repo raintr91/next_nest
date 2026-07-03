@@ -19,7 +19,7 @@ Detail checklist in `.cursor/skills/prototype/SKILL.md` — verify:
 - Mock pagination ≥2 pages when list spec applies
 - Auth bypass on prototype routes (`PAGE-LIFECYCLE.md`); no real backend calls
 - `DataListPage` / registry shell fit; composable mock boundary
-- **testId:** every id in linked testcase `testIds.required` visible on UI
+- **testId:** `spec.ui.testIds.required` (+ `patterns`) declared; after `/prototype` gen, every id visible on UI
 
 **Do not** run full Playwright or Vitest in this command.
 
@@ -30,11 +30,12 @@ Copy into handoff notes (Vietnamese):
 1. **Route:** `{path}` · lifecycle stage · auth bypass yes/no
 2. **Spec files:** list `docs/features/.../*.spec.yaml` for this route
 3. **Testcase files:** list `testcases/*.yaml` (E2E only — one per function split)
-4. **testIds.required:** table ok / missing (fix prototype before `/test`)
-5. **Session:** `setup.session` values — helper exists in `session.ts` yes/no
-6. **Mocks:** `setup.mocks` vs spec `api.endpoints` — aligned yes/no
-7. **#wire-only** tags — list scenarios deferred to `/wire`
-8. **Open issues** — blockers for `/test`
+4. **testIds.required:** from `spec.ui.testIds` — table ok / missing (fix spec or prototype before `/test`)
+5. **testIds.patterns:** dynamic templates documented — sample id visible when mock data has row (e.g. manager pill)
+6. **Session:** `setup.session` values — helper exists in `session.ts` yes/no
+7. **Mocks:** `setup.mocks` vs spec `api.endpoints` — aligned yes/no
+8. **#wire-only** tags — list scenarios deferred to `/wire`
+9. **Open issues** — blockers for `/test`
 
 ## Out of scope
 

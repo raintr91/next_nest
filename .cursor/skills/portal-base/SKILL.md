@@ -3,9 +3,9 @@ name: portal-base
 description: >-
   Develop Portal Base (Nuxt 4): 4-layer architecture (composables → services →
   stores → models), UI component tiers, data-testid for Playwright E2E, and
-  layout integrity checks, or Rapi Recorder to Playwright conversion. Use when adding
-  pages, forms, modules, shared UI, E2E specs, converting QA Rapi scripts, or when
-  the user mentions portal base, testId, data-testid, Rapi, or portal conventions.
+  layout integrity checks. Use when adding
+  pages, forms, modules, shared UI, E2E specs, testcase YAML, or when
+  the user mentions portal base, testId, data-testid, or portal conventions.
 disable-model-invocation: true
 ---
 
@@ -17,11 +17,11 @@ Auth-first Nuxt 4 portal. Stack: Vue 3, Pinia, vee-validate + Zod, shadcn-vue, T
 
 **Legacy:** khi user nhắc `legacy`, resolve qua `team-projects` hoặc `legacy-projects` JSON trước; không tự đoán path.
 
-**Docs in repo:** `docs/operational/ARCHITECTURE.md`, `docs/operational/E2E-TESTIDS.md`, `docs/operational/RAPI-RECORDER-QA.md`, `README.md`
+**Docs in repo:** `docs/operational/ARCHITECTURE.md`, `docs/operational/E2E-TESTIDS.md`, `README.md`
 
 **Cursor rules (fallback):** `portal-invariants.mdc`, `portal-contract-naming.mdc`, `portal-base-*.mdc`, `portal-code-size.mdc`, `portal-component-split.mdc`
 
-**Rapi → Playwright (Dev/AI):** `.cursor/skills/portal-rapi-playwright/`
+**E2E:** `.cursor/skills/test/SKILL.md` — testcase YAML → Playwright (Page Object, `getByTestId`)
 
 ---
 
@@ -202,7 +202,7 @@ Hoặc dùng `utils/testId.ts` → `testIdAttr(testId)`, `testIdSuffix(testId, '
 
 ## 4. Playwright E2E
 
-Quy trình: **prototype mock (phase 1)** → QA record Rapi (phase 1.5) → Dev convert Playwright (phase 2.5~3). Xem `docs/operational/RAPI-RECORDER-QA.md` (QA) và skill `portal-rapi-playwright` (convert).
+Quy trình: **grill** khai báo `ui.testIds.required` (+ `patterns` khi dynamic) → **prototype** `portal:gen` emit `data-testid` → **QA** viết `testcases/*.yaml` → **/test** Playwright từ testcase. Xem `docs/operational/E2E-TESTIDS.md` và skill `test`.
 
 Trong `/prototype`, không chạy full E2E/unit. Nếu cần, chỉ tạo smoke skeleton cho happy path, luồng chính hoặc validation message và handoff sang `/test`/`/unit`.
 

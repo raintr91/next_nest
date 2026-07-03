@@ -1,0 +1,140 @@
+# Tạo nhanh manager user trong form hotel
+
+- **Testcase:** [Tạo nhanh manager user trong hotel form](./hotel-create-manager-user/testcases/hotel-create-manager-user.md)
+- **Screen:** `# /hotels/create` · `admin-hotel-create-page`
+
+Admin mở quick-create inline panel trong form hotel để tạo user manager mới rồi chọn vào `master_user_hotel`.
+
+## status
+
+draft
+
+## owner
+
+portal-team
+
+## actors
+
+```yaml
+- id: admin
+  legacyRoleCode: master
+```
+
+## entities
+
+```yaml
+- name: User
+  table: users
+```
+
+## requirements
+
+```yaml
+- id: REQ-HOTEL-CREATE-MANAGER-001
+  title: Tạo user manager qua inline panel
+  description: Inline panel nhận `email_user`, `password_user`, `full_name_user`,
+    `address_user`; backend tạo user active với role manager khi email chưa tồn
+    tại.
+  priority: should
+```
+
+## ui
+
+```yaml
+routes:
+  - path: /hotels/create
+    legacyPath: /admin/hotel/create
+    pageTestId: admin-hotel-create-page
+  - path: /hotels/:id
+    legacyPath: /admin/hotel/update/{id}
+    pageTestId: admin-hotel-detail-page
+  - path: /hotels/:id/edit
+    legacyPath: /admin/hotel/update/{id}
+    pageTestId: admin-hotel-edit-page
+screens:
+  - name: Hotel manager quick-create panel
+    layout:
+      - Plus button cạnh `master_user_hotel[]` mở inline panel ngay dưới field
+        manager trong cột phải của form hotel.
+      - Panel nằm trong cùng card/form hiện tại, không dùng modal legacy để
+        tránh modal chồng modal và giảm blocking interaction.
+      - Panel có các field `email_user`, `password_user`, `full_name_user`,
+        `address_user`, action `登録` và `キャンセル`; button action dùng icon + text
+        theo `common-buttons`.
+      - Error field hiển thị inline sát field; global error hiển thị trong
+        panel, không mở alert modal.
+    actions:
+      - id: create-manager
+        text: 登録
+        icon: Plus
+        variant: complete
+        position: inline panel footer
+        testId: admin-hotel-manager-create-btn
+      - id: cancel-manager
+        text: キャンセル
+        icon: X
+        variant: outline-secondary
+        position: inline panel footer
+        testId: admin-hotel-manager-cancel-btn
+```
+
+## api
+
+```yaml
+endpoints:
+  - method: POST
+    path: /hotels/manager-users
+    legacyPath: /admin/hotel/create-hotel-user
+    request:
+      email_user: string
+      password_user: string
+      full_name_user: string
+      address_user: string
+      role: manager
+    response:
+      status: success|error
+      data:
+        id: number
+        email: string
+        full_name: string
+      message: string
+```
+
+## validation
+
+```yaml
+fields:
+  - key: email_user
+    rules: required email max:255 unique users.email where deleted_at null
+  - key: password_user
+    rules: required min:12 max:30 PasswordRule
+  - key: full_name_user
+    rules: required string max:255
+  - key: address_user
+    rules: required string max:255
+```
+
+## openQuestions
+
+`#`
+
+## notes
+
+```yaml
+- type: inferredFromCode
+  evidence:
+    - /home/vutv/workspace/mairy-backend/resources/views/admin/hotel/form.blade.php
+    - /home/vutv/workspace/mairy-backend/resources/views/admin/user/modal.blade.php
+    - /home/vutv/workspace/mairy-backend/app/Http/Requests/UserStoreAjaxRequest.php
+    - /home/vutv/workspace/mairy-backend/app/Services/UserService.php
+  detail: Legacy modal reused admin user modal; service có nhánh tạo chain user
+    nếu role khác manager, nhưng spec admin hotel mới giới hạn modal này ở
+    manager user để tránh kéo chức năng chain vào hotel.
+- type: decision
+  detail: "#legacy-global-ui-violation Legacy dùng `admin.user.modal`; UI mới dùng
+    inline quick-create panel theo `common-flat-design` và rule không modal
+    chồng modal."
+- type: scope
+  detail: Tạo user chain thuộc cụm admin users/chain, không thuộc admin hotel
+    create form.
+```

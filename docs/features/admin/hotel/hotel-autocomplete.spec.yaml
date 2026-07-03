@@ -1,0 +1,35 @@
+id: hotel-autocomplete
+title: Hotel name autocomplete
+status: draft
+owner: portal-team
+summary: API autocomplete trả danh sách tên hotel theo term để các màn hình admin dùng lookup.
+actors:
+  - id: admin
+    legacyRoleCode: master
+entities:
+  - name: Hotel
+    table: hotels
+requirements:
+  - id: REQ-HOTEL-AUTOCOMPLETE-001
+    title: Tìm hotel name theo term
+    description: Khi `term` có ít nhất 1 ký tự, API trả danh sách `{label,value}` từ hotel name match like.
+    priority: should
+api:
+  endpoints:
+    - method: GET
+      path: /hotels/autocomplete
+      legacyPath: /admin/hotel/autocomplete
+      query:
+        term: string
+      response:
+        - label: string
+          value: string
+acceptance:
+  - Term rỗng hoặc trim rỗng trả mảng rỗng.
+  - Kết quả sort theo `name` và preserve exact `name`.
+notes:
+  - type: inferredFromCode
+    evidence:
+      - /home/vutv/workspace/mairy-backend/app/Http/Controllers/Admin/HotelController.php
+      - /home/vutv/workspace/mairy-backend/app/Repositories/HotelRepository.php
+    detail: Legacy `autocomplete()` trim `term`, gọi `searchNamesByTerm()`, trả `label`/`value`.

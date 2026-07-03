@@ -52,7 +52,11 @@ ui:
   #   component: MoStatusChip # optional — auto-wires cell slot (Nuxt auto-import)
   #   componentProp: label # prop bound from slot `value` (default: value)
   testIds:
-    module: feature # kebab-case prefix for data-testid
+    module: feature # kebab-case prefix — portal:gen emits {module}-page, -table, …
+    required: [] # canonical E2E ids — grill fills; testcase mirrors this list
+    # patterns: # dynamic ids from gen (e.g. cell slot buttons)
+    #   - id: action-login-as
+    #     template: "{module}-cell-managers-login-as-{managerId}"
   form: {}
   # create profile only:
   #   fields:

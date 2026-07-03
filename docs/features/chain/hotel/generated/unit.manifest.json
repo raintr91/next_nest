@@ -1,0 +1,32 @@
+{
+  "generatedAt": "2026-06-29T09:45:00.622Z",
+  "specFile": "docs/features/chain/hotel/chain-hotel-list.spec.yaml",
+  "phase": "wire",
+  "profile": "list",
+  "entity": "chain-hotel",
+  "module": "chain-hotels",
+  "codegenManifest": "generated/codegen.manifest.json",
+  "unitRegistry": "shared/portal-unit-test.registry.json",
+  "files": [
+    {
+      "layer": "service",
+      "path": "tests/unit/services/chain-hotel.service.wire.test.ts",
+      "pattern": "service.wireDelta",
+      "reqIds": [
+        "REQ-CHAIN-HOTEL-LIST-001",
+        "REQ-CHAIN-HOTEL-LIST-002",
+        "REQ-CHAIN-HOTEL-LIST-003",
+        "REQ-CHAIN-HOTEL-LIST-004"
+      ]
+    }
+  ],
+  "written": [],
+  "skipped": [
+    {
+      "path": "tests/unit/services/chain-hotel.service.wire.test.ts",
+      "reason": "exists (use --force)"
+    }
+  ],
+  "skippedPatterns": [],
+  "needsUnit": []
+}

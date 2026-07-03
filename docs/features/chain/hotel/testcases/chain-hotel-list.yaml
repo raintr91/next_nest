@@ -3,6 +3,8 @@ feature: chain-hotel
 title: Chain xem danh sách hotel
 type: e2e
 priority: must
+tags:
+  - "#e2e:semantic-smoke"
 requirementIds:
   - REQ-CHAIN-HOTEL-LIST-001
   - REQ-CHAIN-HOTEL-LIST-002
@@ -13,17 +15,18 @@ route:
 testIds:
   required:
     - chain-hotels-page
+    - chain-hotels-search-form
     - chain-hotels-table
+    - chain-hotels-toolbar
+    - chain-hotels-pagination
     - chain-hotels-total-btn
     - chain-hotels-per-page-select
     - chain-hotels-export-month-input
     - chain-hotels-export-report-btn
+    - chain-hotels-cell-managers
 setup:
   session: mockChainAuthenticatedSession
-  mocks:
-    - method: GET
-      path: /api/hotels
-      response: chainHotelListSuccess
+  mocks: []
 data: {}
 steps:
   - action: goto

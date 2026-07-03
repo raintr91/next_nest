@@ -3,6 +3,13 @@ feature: feature-slug
 title: Main flow succeeds
 type: e2e
 priority: must
+tags:
+  - "#e2e:semantic-smoke"
+  # List page after prototype:
+  # - "#e2e:semantic-list"
+  # - "#e2e:a11y-wcag"
+  # Opt-out one matcher:
+  # - "#skip-e2e-assert:toHaveNoElementOverlap"
 requirementIds:
   - REQ-FEATURE-001
 route:
@@ -25,11 +32,19 @@ assertions:
   semantic:
     ready:
       rootTestId: feature-page
+      waitForTestIds:
+        - feature-table
       waitForFonts: true
       waitForImages: visible
+    # Explicit matchers (union with #e2e:* bundle tags):
     level1:
       - toHaveNoConsoleErrors
       - toHaveNoHorizontalScroll
-      - toHaveNoBrokenImages
+    layout:
+      - toHaveValidTableLayout
+    accessibility:
+      - toHaveNoA11yViolations
+    layoutOptions:
+      skipOverlap: false
 expected:
   - Main success state is visible.

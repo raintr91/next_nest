@@ -1,0 +1,53 @@
+id: hotel-list
+feature: hotel-list
+title: Admin xem và tìm kiếm danh sách hotel
+type: e2e
+priority: must
+requirementIds:
+  - REQ-HOTEL-LIST-001
+  - REQ-HOTEL-LIST-002
+route:
+  path: /hotels
+  auth: required
+testIds:
+  required:
+    - admin-hotel-list-page
+    - admin-hotel-search-name-input
+    - admin-hotel-search-code-input
+    - admin-hotel-table
+setup:
+  session: mockAdminSession
+data:
+  hotelName: MAIRY Sakura Hotel
+  hotelCode: BHT123
+steps:
+  - action: goto
+    path: /hotels
+  - action: fill
+    testId: admin-hotel-search-name-input
+    valueFrom: data.hotelName
+  - action: fill
+    testId: admin-hotel-search-code-input
+    valueFrom: data.hotelCode
+  - action: click
+    testId: admin-hotel-search-submit-btn
+assertions:
+  ui:
+    - testId: admin-hotel-table
+      contains: MAIRY Sakura Hotel
+expected:
+  - API mock nhận query `name`, `code`, sort mặc định `created_at desc`.
+  - Row có manager login-as, crawl setting và action delete theo `can_delete`.
+mockCases:
+  - id: list-data
+    title: Có dữ liệu hotel
+    expected: Table render hotel name/phone/code/chain/manager đúng.
+  - id: list-empty
+    title: Không có dữ liệu
+    expected: UI hiển thị empty state.
+  - id: list-loading
+    title: Loading
+    expected: UI hiển thị skeleton và không crash.
+  - id: list-error
+    title: Lỗi tải danh sách
+    expected: UI hiển thị error alert.

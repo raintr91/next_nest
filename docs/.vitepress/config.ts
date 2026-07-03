@@ -45,7 +45,9 @@ export default withMermaid(defineConfig({
         items: [
           { text: 'Full cycle (overview)', link: '/operational/FULL-CYCLE-PIPELINE-DIAGRAM' },
           { text: 'Design phase (detail)', link: '/operational/DESIGN-PHASE-DIAGRAM' },
-          { text: 'Test phase (TBD)', link: '/operational/TEST-PHASE-DIAGRAM' },
+          { text: 'Test phase (E2E)', link: '/operational/TEST-PHASE-DIAGRAM' },
+          { text: 'E2E semantic bundles', link: '/operational/TEST-PHASE-DIAGRAM#semantic-bundles' },
+          { text: 'Unit registry promotion', link: '/operational/UNIT-REGISTRY-PROMOTION' },
           { text: 'API phase (detail)', link: '/operational/BACKEND-PHASE-DIAGRAM' },
           { text: 'Wire phase (TBD)', link: '/operational/WIRE-PHASE-DIAGRAM' },
           { text: 'Update spec flow', link: '/operational/UPDATE-SPEC-FLOW' },
@@ -54,12 +56,14 @@ export default withMermaid(defineConfig({
         ],
       },
           { text: 'Team AI Workflow', link: '/operational/TEAM-AI-WORKFLOW' },
+          { text: 'Portal codegen (gen + unit)', link: '/operational/PORTAL-CODEGEN' },
+          { text: 'Unit phase — dev lane', link: '/operational/UNIT-PHASE-DIAGRAM' },
+          { text: 'Portal unit-gen roadmap', link: '/operational/PORTAL-UNIT-GEN-ROADMAP' },
           { text: 'Architecture', link: '/operational/ARCHITECTURE' },
           { text: 'Design Registry Promotion', link: '/operational/DESIGN-REGISTRY-PROMOTION' },
           { text: 'Page Lifecycle', link: '/operational/PAGE-LIFECYCLE' },
           { text: 'E2E Test IDs', link: '/operational/E2E-TESTIDS' },
-          { text: 'Semantic UI Assertions', link: '/operational/E2E-SEMANTIC-UI-ASSERTIONS' },
-          { text: 'Rapi Recorder QA', link: '/operational/RAPI-RECORDER-QA' }
+          { text: 'Semantic UI Assertions', link: '/operational/E2E-SEMANTIC-UI-ASSERTIONS' }
         ]
       },
       {

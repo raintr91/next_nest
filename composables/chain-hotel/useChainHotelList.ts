@@ -86,16 +86,35 @@ export function useChainHotelList() {
   async function exportOpenRateReport() {
     exportPending.value = true
     try {
-      // Prototype: wire POST /hotels/export-report on /wire
-      await service.exportReport?.({ month: exportMonth.value })
+      await service.exportReport({ month: exportMonth.value })
+    } catch (error) {
+      console.error('exportOpenRateReport failed', error)
+      throw error
     } finally {
       exportPending.value = false
     }
   }
 
   async function loginAsStoreManager(manager: { id: number }) {
-    // Prototype: wire POST /auth/store/login-from-admin on /wire
-    console.info('loginAsStoreManager', manager.id)
+    const auth = useAuth()
+    try {
+      const data = await service.loginFromAdmin({ id: manager.id })
+      if (!import.meta.client) return
+
+      const params = new URLSearchParams({
+        hotel_name: String(data.hotel_name ?? ''),
+        token: String(data.token ?? ''),
+        user_name: String(data.user_name ?? ''),
+        id_admin: String(auth.user?.id ?? ''),
+        use_restaurant: String(data.use_restaurant ?? ''),
+        user_id: String(data.user_id ?? manager.id)
+      })
+      window.open(`${window.location.origin}/store/?${params.toString()}`, '_blank')
+    } catch {
+      if (import.meta.client) {
+        window.alert('ストアとしてのログインに失敗しました。')
+      }
+    }
   }
 
   return {

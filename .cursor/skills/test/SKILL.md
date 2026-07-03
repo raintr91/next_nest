@@ -2,7 +2,7 @@
 name: test
 description: >-
   /test command for Portal Playwright E2E. Use when implementing Playwright from
-  testcase YAML, Page Objects, or converting Rapi recordings. Testcase YAML is
+  testcase YAML, Page Objects. Testcase YAML is
   E2E only — not unit tests.
 disable-model-invocation: true
 ---
@@ -64,5 +64,3 @@ Report exit code (`verify-gate.md`).
 ## Done
 
 Scoped Playwright pass or failure with root cause → `/grill-test` → optional `pnpm portal:lifecycle set {route} test`.
-
-Optional Rapi path: skill `portal-rapi-playwright` — same PO and `getByTestId` rules.

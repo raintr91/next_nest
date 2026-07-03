@@ -1,0 +1,117 @@
+{
+  "version": 1,
+  "description": "Portal unit-test codegen patterns — separate from portal-design.registry.json (UI/code).",
+  "tagPrefixes": {
+    "genTest": "#gen:test-",
+    "needsUnit": "#needs-unit-test:",
+    "skipUnit": "#skip-unit-test:",
+    "testMock": "#test-mock:"
+  },
+  "defaults": {
+    "mockBoundary": "apiFetch",
+    "phasePrototype": ["schema", "service", "composable"],
+    "phaseCreate": ["schema", "validation", "service", "composable"],
+    "phaseWire": ["service"]
+  },
+  "commonBaselines": {
+    "description": "Repo-wide tests — không gen lại per feature; tham chiếu khi /unit gap",
+    "portal": [
+      "tests/unit/services/apiResponse.test.ts",
+      "tests/unit/services/parseApiData.test.ts",
+      "tests/unit/utils/fetchUtils.test.ts",
+      "tests/unit/plugins/fetch.test.ts",
+      "tests/unit/molecules/form/autocompleteFieldLogic.test.ts",
+      "tests/unit/molecules/layout/dataTableLogic.test.ts",
+      "tests/unit/composables/useRouteGuard.test.ts"
+    ],
+    "legacyReference": {
+      "v2-mairy-admin": "tests/unit/services/auth.service.test.ts — apiFetch mock + assert path/method",
+      "v2-mairy-chain": "tests/unit/models/user.schema.test.ts",
+      "saas-admin-tentant": "tests/unit/validations/admin/schemas.test.ts"
+    }
+  },
+  "patterns": {
+    "schema.parseListColumns": {
+      "status": "implemented",
+      "template": "models/schema.test.ts.hbs",
+      "profiles": ["list", "create", "edit", "detail"],
+      "layer": "models",
+      "output": "tests/unit/models/{entity}/{entity}.schema.test.ts"
+    },
+    "validation.createRequiredFields": {
+      "status": "implemented",
+      "template": "validations/schemas.test.ts.hbs",
+      "profiles": ["create", "edit"],
+      "layer": "validations",
+      "output": "tests/unit/validations/{entity}/schemas.test.ts",
+      "fallbackTag": "#needs-unit-test:validation:{entity}"
+    },
+    "service.searchGet": {
+      "status": "implemented",
+      "template": "services/service.search.test.ts.hbs",
+      "profiles": ["list"],
+      "layer": "service",
+      "when": "list endpoint GET",
+      "method": "GET",
+      "output": "tests/unit/services/{entity}.service.test.ts",
+      "fallbackTag": "#needs-unit-test:service:{entity}"
+    },
+    "service.searchPost": {
+      "status": "implemented",
+      "template": "services/service.search.test.ts.hbs",
+      "profiles": ["list"],
+      "layer": "service",
+      "when": "list endpoint POST",
+      "method": "POST",
+      "output": "tests/unit/services/{entity}.service.test.ts",
+      "fallbackTag": "#needs-unit-test:service:{entity}"
+    },
+    "service.exportReport": {
+      "status": "implemented",
+      "template": "services/service.export.test.ts.hbs",
+      "profiles": ["list"],
+      "layer": "service",
+      "when": "api.endpoints action export",
+      "output": "tests/unit/services/{entity}.service.export.test.ts",
+      "fallbackTag": "#needs-unit-test:service-export:{entity}"
+    },
+    "service.wireDelta": {
+      "status": "implemented",
+      "template": "services/service.wire.test.ts.hbs",
+      "profiles": ["list", "create", "edit"],
+      "layer": "service",
+      "phase": "wire",
+      "output": "tests/unit/services/{entity}.service.wire.test.ts",
+      "fallbackTag": "#needs-unit-test:service-wire:{entity}"
+    },
+    "service.create": {
+      "status": "implemented",
+      "template": "services/service.create.test.ts.hbs",
+      "profiles": ["create", "edit"],
+      "layer": "service",
+      "when": "api.endpoints action create",
+      "output": "tests/unit/services/{entity}.service.create.test.ts",
+      "fallbackTag": "#needs-unit-test:service-create:{entity}"
+    },
+    "composable.useList": {
+      "status": "implemented",
+      "template": "composables/use-list.test.ts.hbs",
+      "profiles": ["list"],
+      "layer": "composable",
+      "output": "tests/unit/composables/{entity}/use{EntityPascal}List.test.ts",
+      "fallbackTag": "#needs-unit-test:composable:use{EntityPascal}List"
+    },
+    "composable.useForm": {
+      "status": "implemented",
+      "template": "composables/use-form.test.ts.hbs",
+      "profiles": ["create", "edit"],
+      "layer": "composable",
+      "output": "tests/unit/composables/{entity}/use{EntityPascal}Form.test.ts",
+      "fallbackTag": "#needs-unit-test:composable:use{EntityPascal}Form"
+    }
+  },
+  "fixtures": {
+    "mockApiFetch": "tests/unit/_helpers/mockApiFetch.ts"
+  },
+  "promotedFeatures": ["chain-hotel-list"]
+}

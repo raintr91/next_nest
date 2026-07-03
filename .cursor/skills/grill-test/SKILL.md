@@ -23,7 +23,8 @@ For each `docs/features/.../testcases/*.yaml`:
 | Playwright spec | `tests/e2e/{module}/{testcase-id}.spec.ts` exists |
 | Page Object | `tests/e2e/pages/{module}/*Page.ts` used by spec |
 | `requirementIds` | Covered by assertions or documented gap |
-| `testIds.required` | Used in PO/spec; all present on UI |
+| `testIds.required` | Mirrors `spec.ui.testIds.required`; used in PO/spec; all present on UI after gen |
+| `testIds.patterns` | Step `testId` matches spec `ui.testIds.patterns` template |
 
 ## Scenario coverage (by profile)
 

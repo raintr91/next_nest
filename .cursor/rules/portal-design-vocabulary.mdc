@@ -8,7 +8,8 @@ alwaysApply: false
 
 **Source of truth:** `shared/portal-design.registry.json`  
 **Validate:** `pnpm portal:registry`  
-**Gen reads registry:** `portal:gen` / `portal:gen:dry`
+**Gen reads registry:** `portal:gen` / `portal:gen:dry`  
+**Hub (gen + unit):** `docs/operational/PORTAL-CODEGEN.md`
 
 ## Canonical system
 

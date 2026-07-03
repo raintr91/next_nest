@@ -26,11 +26,10 @@ pnpm portal:remove --spec docs/features/.../feature.spec.yaml
 | Path | Stage | Auth | Spec | Title | Updated |
 |------|-------|------|------|-------|---------|
 | /admin/hotels | design-spec | bypass | `docs/features/admin/hotel/admin-hotel-list.spec.yaml` | Admin hotel list | 2026-06-27 |
-| /hotels | prototype | bypass | `docs/features/chain/hotel/chain-hotel-list.spec.yaml` | Chain — danh sách hotel (施設一覧) | 2026-06-27 |
+| /hotels | test | bypass | `docs/features/chain/hotel/chain-hotel-list.spec.yaml` | Chain — danh sách hotel (施設一覧) | 2026-06-29 |
 
 ## Liên quan
 
 - Auth bypass: mọi stage **trừ** `wire` — `middleware/auth.global.ts`
 - Xóa code: `pnpm portal:remove --spec <file>`
 - Session handoff: `.harness/progress.md`
-- Design registry promotion (sau prototype): [DESIGN-REGISTRY-PROMOTION.md](./DESIGN-REGISTRY-PROMOTION.md)

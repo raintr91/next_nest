@@ -1,0 +1,32 @@
+---
+description: Portal AI platform — team base context; feature docs are guinea pigs; optimize AI flow first
+alwaysApply: true
+---
+
+# Portal AI platform (team base)
+
+## Bối cảnh dự án
+
+- **App code** (Nuxt, `pages/`, `components/`, `services/`, …): base kỹ thuật team — **đã dựng xong**. Chỉ sửa khi user yêu cầu rõ feature/app, không phải mặc định mỗi session.
+- **AI support layer** (ưu tiên mặc định): `.cursor/rules`, `.cursor/skills`, `.cursor/extracts`, `docs/operational/` workflow, scripts phục vụ spec/render/split (`scripts/spec/`, `scripts/docs/`, …).
+
+## Feature docs & sample (hotel, chain, common specs)
+
+- **Chuột bạch** để thử artifact chain + team AI flow — **không** coi là production baggage.
+- **Không** giữ tương thích ngược path/layout spec cũ khi cải tiến AI flow. Sai → đập, xóa, replace; cản trở → delete.
+- Legacy **code ngoài repo** (backend Blade/PHP): chỉ đọc vào trace — khác với feature yaml/md trong portal.
+
+## Khi user tối ưu AI flow (mặc định hiểu như vậy nếu không nói khác)
+
+- Tập trung: skills, rules, extracts, artifact chain, extract bundles, `ARTIFACT-CHAIN-TODO.txt`.
+- `docs/features/**`, `pages/**`, generated cũ: **tham chiếu / pilot** — validate pipeline, không sacred.
+- Không do dự "feature cũ vẫn chạy", migration kéo dài, dual glob path cũ+mới trừ khi user yêu cầu.
+
+## Khi user làm app/feature thật
+
+- Áp dụng `portal-invariants`, `portal-base`, team-flow-* như bình thường.
+- Rule này **không** cấm implement UI/API — chỉ đặt **ưu tiên mặc định**.
+
+## Skill chi tiết
+
+Explicit AI-platform work → `.cursor/skills/portal-ai-platform/SKILL.md` hoặc user gõ `/portal-ai-platform`.

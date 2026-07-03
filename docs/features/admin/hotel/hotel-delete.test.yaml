@@ -1,0 +1,38 @@
+id: hotel-delete
+feature: hotel-delete
+title: Admin xoá hotel có guard booking
+type: e2e
+priority: must
+requirementIds:
+  - REQ-HOTEL-DELETE-001
+route:
+  path: /hotels
+  auth: required
+testIds:
+  required:
+    - admin-hotel-list-page
+    - admin-hotel-delete-action
+    - admin-hotel-bulk-delete-btn
+setup:
+  session: mockAdminSession
+steps:
+  - action: goto
+    path: /hotels
+  - action: click
+    testId: admin-hotel-delete-action
+  - action: confirm
+    value: true
+assertions:
+  ui:
+    - testId: admin-hotel-action-success
+      contains: 削除
+expected:
+  - Row có `can_delete=false` không hiện checkbox/delete.
+  - Bulk delete gửi `arrId` và fail nếu có hotel có booking.
+mockCases:
+  - id: delete-allowed
+    title: Hotel chưa có booking
+    expected: Delete thành công và row biến mất.
+  - id: delete-blocked
+    title: Hotel có booking
+    expected: Delete action không enable hoặc API trả fail.

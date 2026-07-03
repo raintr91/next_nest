@@ -14,6 +14,7 @@ Tính năng: Chain — tải báo cáo 開封率データ
 
 ## Test ID
 
+- chain-hotels-page
 - chain-hotels-export-month-input
 - chain-hotels-export-report-btn
 
@@ -22,9 +23,6 @@ Tính năng: Chain — tải báo cáo 開封率データ
 ```yaml
 session: mockChainAuthenticatedSession
 mocks:
-  - method: GET
-    path: /api/hotels
-    response: chainHotelListSuccess
   - method: POST
     path: /api/hotels/export-report
     response: chainHotelExportReportSuccess
@@ -43,8 +41,10 @@ month: "{{last_month_yyyy_mm}}"
 ## Các bước
 
 1. action: goto, path: /hotels
-2. action: fill, testId: chain-hotels-export-month-input, value: {{last_month_yyyy_mm}}
-3. action: click, testId: chain-hotels-export-report-btn
+2. action: waitFor, testId: chain-hotels-table
+3. action: waitFor, role: row, name: /Manager A/
+4. action: fill, testId: chain-hotels-export-month-input, value: {{last_month_yyyy_mm}}
+5. action: click, testId: chain-hotels-export-report-btn
 
 ## Assertion
 
