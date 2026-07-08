@@ -41,3 +41,12 @@ pnpm docs:render
 # API repo:
 pnpm api:gen:dry --spec docs/features/.../01-backend-spec.yaml
 ```
+
+## Liên kết (phase này)
+
+| Doc | Nội dung |
+|-----|----------|
+| [TECH-DEBT-FLOW](./TECH-DEBT-FLOW.md) | `deferTo: api` từ grill |
+| [UPDATE-SPEC-FLOW](./UPDATE-SPEC-FLOW.md) | `/api-update-spec` delta |
+| [WIRE-PHASE-DIAGRAM](./WIRE-PHASE-DIAGRAM.md) | Sau `/api-code` |
+| [PORTAL-CODEGEN](./PORTAL-CODEGEN.md) | Portal `ir/spec` contract |

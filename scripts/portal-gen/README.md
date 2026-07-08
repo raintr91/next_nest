@@ -8,8 +8,8 @@ Generate 4-layer scaffold from feature `spec.yaml` (Handlebars templates).
 
 ```bash
 pnpm portal:registry   # validate shared/portal-design.registry.json
-pnpm portal:gen --spec docs/features/admin/hotel/admin-hotel-list.spec.yaml
-pnpm portal:gen:dry --spec docs/features/.../feature.spec.yaml
+pnpm portal:gen --spec docs/features/yaml/admin/hotel/list/ir/spec.yaml
+pnpm portal:gen:dry --spec docs/features/.../ir/spec.yaml
 pnpm portal:gen --spec ... --force
 ```
 
@@ -32,7 +32,7 @@ Copy `docs/templates/spec.yaml`. Required:
 - `codegen.namespace` (optional) — when `module` differs from admin entity paths (e.g. `chain-hotels` → files under `chain-hotel/`)
 - `ui.routes`, `ui.columns` (list), `ui.filters` (optional)
 - `api.endpoints` with `action: list` or `create`
-- `tags` — see `.cursor/extracts/portal-codegen-tags.md`
+- `tags` — see `.cursor/extracts/codegen/tags.md`
 
 **List default tags (grill):**
 

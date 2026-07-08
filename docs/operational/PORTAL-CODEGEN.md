@@ -1,6 +1,7 @@
 # Portal codegen — `portal:gen` + `portal:unit-gen`
 
-> **Doc chính (đọc file này trước).** Chi tiết tag: `.cursor/extracts/portal-codegen-tags.md`, `.cursor/extracts/portal-unit-test-tags.md`, `.cursor/extracts/portal-unit-test-common.md`, `.cursor/extracts/portal-e2e-semantic-tags.md`.  
+> **Doc chính (đọc file này trước).** Lệnh tra cứu: [FEATURE-ARTIFACT-COMMANDS](./FEATURE-ARTIFACT-COMMANDS.md) · Flow: [FEATURE-ARTIFACT-FLOWS](./FEATURE-ARTIFACT-FLOWS.md).  
+> Chi tiết tag: `.cursor/extracts/codegen/tags.md`, `.cursor/extracts/portal-unit-test-tags.md`, …  
 > **Dev lane Vitest:** [UNIT-PHASE-DIAGRAM](./UNIT-PHASE-DIAGRAM.md) · **E2E lane:** [TEST-PHASE-DIAGRAM](./TEST-PHASE-DIAGRAM.md)
 
 Hai pipeline app + unit **tách script**, **tách registry** — E2E `testcase:gen` pipeline thứ ba (Playwright only):
@@ -16,12 +17,12 @@ Hai pipeline app + unit **tách script**, **tách registry** — E2E `testcase:g
 ## Thứ tự chạy (feature mới)
 
 ```text
-/grill-with-docs  →  spec có codegen + tags
+/dev-grill-docs  →  bundle.gen / ir/spec.yaml
        ↓
-pnpm portal:gen:dry --spec …     # gate design registry
-pnpm portal:gen --spec …         # app + codegen.manifest.json + HANDOFF.md
+pnpm portal:gen:dry --spec docs/features/yaml/.../ir/spec.yaml
+pnpm portal:gen --spec docs/features/yaml/.../ir/spec.yaml
        ↓
-/prototype  →  implement Mo* / gap từ HANDOFF
+/prototype  →  implement Mo* / gap từ {function}/generated/HANDOFF.md
        ↓
 pnpm portal:gen --force          # wire slot khi component đã có
        ↓
@@ -44,8 +45,8 @@ pnpm portal:unit-gen --spec …    # smoke — unit.manifest.json + UNIT-HANDOFF
 
 ```bash
 pnpm portal:registry                    # validate UI registry
-pnpm portal:gen:dry --spec docs/features/chain/hotel/chain-hotel-list.spec.yaml
-pnpm portal:gen --spec docs/features/chain/hotel/chain-hotel-list.spec.yaml
+pnpm portal:gen:dry --spec docs/features/yaml/chain/hotel/list/ir/spec.yaml
+pnpm portal:gen --spec docs/features/yaml/chain/hotel/list/ir/spec.yaml
 pnpm portal:gen --spec … --force        # overwrite file đã gen
 pnpm portal:remove --spec …             # xóa feature scaffold
 pnpm portal:lifecycle sync              # đồng bộ page registry
@@ -55,8 +56,8 @@ pnpm portal:lifecycle sync              # đồng bộ page registry
 
 ```bash
 pnpm portal:unit-registry               # validate unit-test registry
-pnpm portal:unit-gen:dry --spec docs/features/chain/hotel/chain-hotel-list.spec.yaml
-pnpm portal:unit-gen --spec docs/features/chain/hotel/chain-hotel-list.spec.yaml
+pnpm portal:unit-gen:dry --spec docs/features/yaml/chain/hotel/list/ir/spec.yaml
+pnpm portal:unit-gen --spec docs/features/yaml/chain/hotel/list/ir/spec.yaml
 pnpm portal:unit-gen --spec … --force
 pnpm exec vitest run tests/unit/models/chain-hotel/chain-hotel.schema.test.ts
 ```
@@ -65,8 +66,8 @@ pnpm exec vitest run tests/unit/models/chain-hotel/chain-hotel.schema.test.ts
 
 ```bash
 pnpm portal:e2e-registry
-pnpm testcase:gen:dry --testcase docs/features/chain/hotel/testcases/chain-hotel-list.yaml
-pnpm testcase:gen --feature chain/hotel
+pnpm testcase:gen:dry --testcase docs/features/yaml/admin/hotel/list/hotel-list.test.yaml
+pnpm testcase:gen --feature admin/hotel
 pnpm testcase:gen --testcase … --force
 pnpm test:e2e tests/e2e/chain-hotels/
 ```
@@ -75,7 +76,7 @@ pnpm test:e2e tests/e2e/chain-hotels/
 
 ## `portal:gen` — app scaffold
 
-**Input:** `docs/features/{slug}/*.spec.yaml` với `codegen.profile`, `ui.*`, `api.endpoints`, `tags`.
+**Input:** `docs/features/yaml/.../{function}/ir/spec.yaml` với `codegen.profile`, `ui.*`, `api.endpoints`, `tags`.
 
 **Template:** `scripts/portal-gen/templates/` (Handlebars).
 
@@ -84,8 +85,8 @@ pnpm test:e2e tests/e2e/chain-hotels/
 | Artifact | Path |
 |----------|------|
 | App layers | `models/`, `services/`, `composables/`, `pages/`, `mocks/`, `validations/` (create) |
-| Manifest | `docs/features/{slug}/generated/codegen.manifest.json` |
-| Handoff prototype | `docs/features/{slug}/generated/HANDOFF.md` |
+| Manifest | `docs/features/yaml/.../{function}/generated/codegen.manifest.json` |
+| Handoff prototype | `docs/features/yaml/.../{function}/generated/HANDOFF.md` |
 
 **Profiles:** `list` · `create` (sau này `edit` / `detail`).
 
@@ -111,8 +112,8 @@ pnpm test:e2e tests/e2e/chain-hotels/
 |----------|------|
 | Schema test (v1) | `tests/unit/models/{entity}/{entity}.schema.test.ts` |
 | Service list test (v2) | `tests/unit/services/{entity}.service.test.ts` |
-| Manifest | `docs/features/{slug}/generated/unit.manifest.json` |
-| Handoff unit | `docs/features/{slug}/generated/UNIT-HANDOFF.md` |
+| Manifest | `docs/features/yaml/.../{function}/generated/unit.manifest.json` |
+| Handoff unit | `docs/features/yaml/.../{function}/generated/UNIT-HANDOFF.md` |
 
 **Helper chung:** `tests/unit/_helpers/mockApiFetch.ts` (`#test-mock:api-fetch` — service tests PR2+).
 
@@ -160,7 +161,7 @@ Patterns **planned** (chưa gen): validation, composable, export — xem registr
 
 ---
 
-## Tags tóm tắt
+## Tag tham chiếu {#tag-tham-chieu}
 
 ### Codegen (`portal:gen`)
 
@@ -191,7 +192,7 @@ Patterns **planned** (chưa gen): validation, composable, export — xem registr
 | `#e2e:a11y-wcag` | Axe WCAG scan scoped `rootTestId` |
 | `#skip-e2e-assert:{matcher}` | Bỏ một matcher khỏi union |
 
-Chi tiết: `.cursor/extracts/portal-e2e-semantic-tags.md` · đầy đủ codegen/unit: `.cursor/extracts/portal-codegen-tags.md`, `.cursor/extracts/portal-unit-test-tags.md`
+Chi tiết: `.cursor/extracts/portal-e2e-semantic-tags.md` · tag đầy đủ: [bảng tag tham chiếu](#tag-tham-chieu) · `.cursor/extracts/codegen/tags.md`, `.cursor/extracts/portal-unit-test-tags.md`
 
 ---
 
@@ -199,13 +200,13 @@ Chi tiết: `.cursor/extracts/portal-e2e-semantic-tags.md` · đầy đủ codeg
 
 - Feature spec: `docs/templates/spec.yaml`
 - Testcase (E2E, không unit-gen): `docs/templates/testcase.yaml`
-- Readiness grill: `.cursor/extracts/portal-codegen-readiness.md`
+- Readiness grill: `.cursor/extracts/codegen/readiness.md`
 
 ---
 
 ## Workflow team
 
-- Pipeline tổng: [TEAM-AI-WORKFLOW](./TEAM-AI-WORKFLOW.md) · [FULL-CYCLE-PIPELINE-DIAGRAM](./FULL-CYCLE-PIPELINE-DIAGRAM.md)
+- Pipeline tổng: [FEATURE-ARTIFACT-FLOWS](./FEATURE-ARTIFACT-FLOWS.md) · [FULL-CYCLE-PIPELINE-DIAGRAM](./FULL-CYCLE-PIPELINE-DIAGRAM.md)
 - **Dev lane unit:** [UNIT-PHASE-DIAGRAM](./UNIT-PHASE-DIAGRAM.md) · `.cursor/skills/unit/SKILL.md` · `.cursor/skills/grill-unit/SKILL.md`
 - **E2E lane:** [TEST-PHASE-DIAGRAM](./TEST-PHASE-DIAGRAM.md) · `.cursor/skills/test/SKILL.md` · `.cursor/skills/grill-test/SKILL.md`
 - Phase prototype: `.cursor/skills/prototype/SKILL.md`
@@ -217,10 +218,10 @@ Chi tiết: `.cursor/extracts/portal-e2e-semantic-tags.md` · đầy đủ codeg
 
 ```bash
 # Sau grill + portal:gen
-pnpm portal:gen --spec docs/features/chain/hotel/chain-hotel-list.spec.yaml
+pnpm portal:gen --spec docs/features/yaml/chain/hotel/list/ir/spec.yaml
 
 # Unit schema (auto — pattern implemented)
-pnpm portal:unit-gen --spec docs/features/chain/hotel/chain-hotel-list.spec.yaml
+pnpm portal:unit-gen --spec docs/features/yaml/chain/hotel/list/ir/spec.yaml
 pnpm exec vitest run tests/unit/models/chain-hotel/chain-hotel.schema.test.ts
 
 # Đọc gap

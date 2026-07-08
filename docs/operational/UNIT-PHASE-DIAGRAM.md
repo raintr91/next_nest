@@ -88,6 +88,8 @@ flowchart TD
 | `#gen:test-*` | Force gen pattern (vd schema, wire) |
 | Base phase | Promote registry — **không** hand-write backlog vô hạn |
 
+Chi tiết promote & grill default: [UNIT-REGISTRY-PROMOTION](./UNIT-REGISTRY-PROMOTION.md) · [PORTAL-UNIT-GEN-ROADMAP](./PORTAL-UNIT-GEN-ROADMAP.md).
+
 ---
 
 ## Đọc gì / không đọc gì (`/unit`)
@@ -131,7 +133,8 @@ pnpm exec vitest run tests/unit/models/admin-hotel/ --coverage
 
 | Doc | Mục đích |
 |-----|----------|
-| [PORTAL-CODEGEN](./PORTAL-CODEGEN.md) | `portal:gen` + `portal:unit-gen` |
+| [PORTAL-CODEGEN](./PORTAL-CODEGEN.md) | `portal:gen` + `portal:unit-gen` hub |
+| [UNIT-REGISTRY-PROMOTION](./UNIT-REGISTRY-PROMOTION.md) | `#gen:test-*` · `#needs-unit-test` promote |
 | [PORTAL-UNIT-GEN-ROADMAP](./PORTAL-UNIT-GEN-ROADMAP.md) | Patterns & PR roadmap |
 | `.cursor/extracts/portal-unit-workflow.md` | Checklist token-thin cho AI |
 | `.cursor/skills/unit/SKILL.md` | `/unit` |

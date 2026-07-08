@@ -1,6 +1,6 @@
 # Portal Base Overview
 
-> Page tham khảo cho slide `Portal Team AI Workflow`.
+> Page tham khảo cho slide `Portal Feature Artifact Workflow`.
 
 ## Mục Tiêu Base
 

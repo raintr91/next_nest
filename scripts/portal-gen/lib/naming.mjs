@@ -129,11 +129,95 @@ export function zodFieldForColumn(column) {
   return 'fields.optionalNullableString'
 }
 
-export function zodFieldForFormField(field) {
-  if (field.key === 'email') return 'fields.email'
-  if (field.type === 'number') return 'z.number()'
-  if (field.required) return 'z.string().min(1)'
-  return 'fields.optionalNullableString'
+export function zodFieldForFormField(field, commonMessages = {}) {
+  const schema = buildFormFieldSchema(field, commonMessages)
+  return schema
+}
+
+function buildFormFieldSchema(field = {}, commonMessages = {}) {
+  if (field.key === 'email') return applyNullability('fields.email', field)
+
+  let schema = baseFieldSchema(field)
+  schema = applyValidation(schema, field, commonMessages)
+  schema = applyNullability(schema, field)
+  return schema
+}
+
+function baseFieldSchema(field) {
+  const kind = baseFieldKind(field)
+
+  if (kind === 'number') return 'z.coerce.number().int()'
+  if (kind === 'boolean') return 'z.boolean()'
+  if (kind === 'array') return 'z.array(z.union([z.string(), z.number()]))'
+  return 'z.string()'
+}
+
+function baseFieldKind(field) {
+  const type = String(field.type ?? '').toLowerCase()
+  const widget = String(field.widget ?? '').toLowerCase()
+
+  if (type === 'int' || widget === 'number') return 'number'
+  if (type === 'bool' || widget === 'checkbox' || widget === 'switch') return 'boolean'
+  if (type === 'array' || widget === 'multiselect') return 'array'
+  if (type === 'date') return 'string'
+  return 'string'
+}
+
+function applyValidation(schema, field, commonMessages = {}) {
+  const validation = field.validation ?? {}
+  const kind = baseFieldKind(field)
+  const requiredMessage = messageFor(field, 'required', commonMessages)
+
+  let out = schema
+
+  if (field.required && kind === 'string') {
+    out = `z.string().min(1${requiredMessage ? `, { message: ${JSON.stringify(requiredMessage)} }` : ''})`
+  }
+
+  if (typeof validation.minLength === 'number' && kind === 'string') {
+    const msg = messageFor(field, 'minLength', commonMessages)
+    out = `${out}.min(${validation.minLength}${msg ? `, { message: ${JSON.stringify(msg)} }` : ''})`
+  }
+
+  if (typeof validation.maxLength === 'number' && kind === 'string') {
+    const msg = messageFor(field, 'maxLength', commonMessages)
+    out = `${out}.max(${validation.maxLength}${msg ? `, { message: ${JSON.stringify(msg)} }` : ''})`
+  }
+
+  if (typeof validation.pattern === 'string' && kind === 'string') {
+    const msg = messageFor(field, 'pattern', commonMessages)
+    out = `${out}.regex(new RegExp(${JSON.stringify(validation.pattern)})${msg ? `, { message: ${JSON.stringify(msg)} }` : ''})`
+  }
+
+  if (typeof validation.min === 'number' && (kind === 'number' || kind === 'array')) {
+    const msg = messageFor(field, 'min', commonMessages)
+    out = `${out}.min(${validation.min}${msg ? `, { message: ${JSON.stringify(msg)} }` : ''})`
+  }
+
+  if (typeof validation.max === 'number' && (kind === 'number' || kind === 'array')) {
+    const msg = messageFor(field, 'max', commonMessages)
+    out = `${out}.max(${validation.max}${msg ? `, { message: ${JSON.stringify(msg)} }` : ''})`
+  }
+
+  if (field.required && kind === 'array') {
+    const minMsg = requiredMessage ? `, { message: ${JSON.stringify(requiredMessage)} }` : ''
+    out = `${out}.min(1${minMsg})`
+  }
+
+  return out
+}
+
+function applyNullability(schema, field) {
+  let out = schema
+  if (field.nullable) out += '.nullable()'
+  if (!field.required) out += '.optional()'
+  return out
+}
+
+function messageFor(field, key, commonMessages = {}) {
+  const fieldMessages = field.messages ?? {}
+  const value = fieldMessages[key] ?? commonMessages[key]
+  return typeof value === 'string' && value.trim() ? value.trim() : ''
 }
 
 export function listEndpoint(spec) {

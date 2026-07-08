@@ -25,7 +25,7 @@ pnpm dev
 
 - [Docs hub](docs/index.md)
 - [Architecture](docs/operational/ARCHITECTURE.md)
-- [Team AI workflow](docs/operational/TEAM-AI-WORKFLOW.md)
+- [Feature artifact flows](docs/operational/FEATURE-ARTIFACT-FLOWS.md)
 - [Common UI](docs/common-ui/index.md)
 - [Docker / WSL](docs/dev-environment/DOCKER-DEV-LIGHT.md) · [Cursor perf](docs/dev-environment/WSL-CURSOR-PERF.md)
 
@@ -37,8 +37,4 @@ API client (`$apiFetch`) dùng prefix **`/api/auth/*`**.
 
 ## Team AI harness
 
-Commands và skills: [docs/operational/TEAM-AI-WORKFLOW.md](docs/operational/TEAM-AI-WORKFLOW.md). Gỡ vendor AI cũ (nếu từng cài):
-
-```bash
-bash scripts/remove-ai-harness-vendor.sh
-```
+Commands và skills: [docs/operational/FEATURE-ARTIFACT-FLOWS.md](docs/operational/FEATURE-ARTIFACT-FLOWS.md) · [docs/operational/PROMPT-TEMPLATES.md](docs/operational/PROMPT-TEMPLATES.md). AI harness hiện nằm trong `.cursor/extracts/` và `.cursor/skills/`.

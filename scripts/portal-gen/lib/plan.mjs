@@ -82,6 +82,7 @@ export function buildCodegenContext(spec, specFile) {
   const columns = spec.ui?.columns ?? []
   const filters = spec.ui?.filters ?? []
   const formFields = spec.ui?.form?.fields ?? []
+  const commonValidationMessages = spec.ui?.validationMessages ?? {}
 
   const parsedTags = parseTags(spec.tags ?? [])
   parsedTags.customSlots = mergeCustomSlots(columns, parsedTags)
@@ -104,7 +105,7 @@ export function buildCodegenContext(spec, specFile) {
 
   const formFieldSchemas = formFields.map((field) => ({
     ...field,
-    zodField: zodFieldForFormField(field)
+    zodField: zodFieldForFormField(field, commonValidationMessages)
   }))
 
   const useCustomShell =
@@ -151,6 +152,7 @@ export function buildCodegenContext(spec, specFile) {
     filters,
     formFields,
     formFieldSchemas,
+    commonValidationMessages,
     listEndpoint: listEp,
     createEndpoint: createEp,
     exportEndpoint: exportEp,

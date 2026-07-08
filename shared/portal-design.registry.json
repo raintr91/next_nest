@@ -21,7 +21,10 @@
     "shape": "#shape:",
     "pattern": "#pattern:",
     "style": "#style:",
-    "needsUi": "#needs-ui:"
+    "needsUi": "#needs-ui:",
+    "legacy": "#legacy:",
+    "behavior": "#behavior:",
+    "token": "#token:"
   },
   "shells": {
     "DataListPage": {
@@ -54,7 +57,7 @@
         "composableSuffix": "List",
         "layers": ["models", "service", "composable", "page", "mock"]
       },
-      "commonSpecRef": "docs/features/common/common-list-page.spec.yaml",
+      "commonSpecRef": "docs/features/yaml/common/list-page/common-list-page.bundle.yaml",
       "includes": {
         "organisms": ["DataListPage"],
         "molecules": ["MoSearchForm", "MoDataTable", "MoPaginationBar", "MoAppBar"],
@@ -345,12 +348,12 @@
     "flat": {
       "canonical": "flat",
       "tags": ["#style: flat"],
-      "portalRef": "docs/features/common/common-flat-design.spec.yaml"
+      "portalRef": "docs/features/yaml/common/flat-design/common-flat-design.bundle.yaml"
     },
     "compact": {
       "canonical": "compact",
       "tags": ["#style: compact"],
-      "portalRef": "docs/features/common/common-list-page.spec.yaml"
+      "portalRef": "docs/features/yaml/common/list-page/common-list-page.bundle.yaml"
     },
     "comfortable": {
       "canonical": "comfortable",

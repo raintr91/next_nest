@@ -31,7 +31,7 @@ function parseArgs(argv) {
 
   if (!options.spec) {
     throw new Error(
-      'Usage: pnpm portal:unit-gen --spec docs/features/.../feature.spec.yaml [--dry-run] [--force] [--phase prototype|wire] [--write-spec-tags]'
+      'Usage: pnpm portal:unit-gen --spec docs/features/.../ir/spec.yaml [--dry-run] [--force] [--phase prototype|wire] [--write-spec-tags]'
     )
   }
 

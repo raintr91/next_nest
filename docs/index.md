@@ -12,16 +12,16 @@ pnpm docs:dev
 
 ## Operational
 
-- [Team AI Workflow](./operational/TEAM-AI-WORKFLOW.md)
-- [Portal codegen — `portal:gen` + `portal:unit-gen`](./operational/PORTAL-CODEGEN.md)
-- [Portal unit-gen roadmap PR0–PR12](./operational/PORTAL-UNIT-GEN-ROADMAP.md)
 - [Architecture](./operational/ARCHITECTURE.md)
+- [Full cycle (overview)](./operational/FULL-CYCLE-PIPELINE-DIAGRAM.md)
+- [Feature artifact flows](./operational/FEATURE-ARTIFACT-FLOWS.md)
+- [Prompt templates](./operational/PROMPT-TEMPLATES.md)
 - [E2E Test IDs](./operational/E2E-TESTIDS.md)
 - [Semantic UI Assertions](./operational/E2E-SEMANTIC-UI-ASSERTIONS.md)
 
 ## Onboarding (slides)
 
-- [Team AI Workflow Slides](./onboarding/team-ai-workflow-slides.md) — training; giữ `/design`
+- [Feature Artifact Workflow Slides](./onboarding/team-ai-workflow-slides.md) — training; giữ `/design`
 - [YAML/Markdown workflow](./onboarding/yaml-markdown-ai-workflow.md)
 - [Portal Base overview](./onboarding/portal-base-overview.md)
 - [E2E automation (QA)](./onboarding/e2e-automation-playwright.md)

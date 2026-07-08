@@ -6,7 +6,30 @@ import { defineConfig } from 'vitepress'
 import type { DefaultTheme } from 'vitepress'
 
 const docsRoot = resolve(dirname(fileURLToPath(import.meta.url)), '..')
+const TOP_LEVEL_FEATURE_ORDER = ['admin', 'chain']
+const FEATURE_FUNCTION_ORDER = [
+  'list',
+  'create',
+  'detail',
+  'show',
+  'edit',
+  'update',
+  'duplicate',
+  'delete-multiple',
+  'delete',
+  'login-as-manager',
+  'create-manager-user',
+  'form-options',
+  'crawl-setting',
+  'autocomplete',
+  'analytics-download-pdf',
+  'analytics-export',
+  'analytics',
+  'export-report',
+]
 const featureSidebarItems = buildFeatureSidebar()
+const commonSidebarItems = buildCommonSidebar()
+const flowTraceSidebarItems = buildFlowTraceSidebar()
 
 export default withMermaid(defineConfig({
   title: 'Portal Docs',
@@ -32,56 +55,29 @@ export default withMermaid(defineConfig({
     nav: [
       { text: 'Home', link: '/' },
       { text: 'Features', link: '/common-ui/generated' },
-      { text: 'Workflow', link: '/operational/TEAM-AI-WORKFLOW' }
+      { text: 'Feature artifact', link: '/operational/FEATURE-ARTIFACT-FLOWS' }
     ],
     sidebar: [
       {
         text: 'Operational',
         collapsed: false,
         items: [
-      {
-        text: 'Diagrams & flows',
-        collapsed: false,
-        items: [
-          { text: 'Full cycle (overview)', link: '/operational/FULL-CYCLE-PIPELINE-DIAGRAM' },
-          { text: 'Design phase (detail)', link: '/operational/DESIGN-PHASE-DIAGRAM' },
-          { text: 'Test phase (E2E)', link: '/operational/TEST-PHASE-DIAGRAM' },
-          { text: 'E2E semantic bundles', link: '/operational/TEST-PHASE-DIAGRAM#semantic-bundles' },
-          { text: 'Unit registry promotion', link: '/operational/UNIT-REGISTRY-PROMOTION' },
-          { text: 'API phase (detail)', link: '/operational/BACKEND-PHASE-DIAGRAM' },
-          { text: 'Wire phase (TBD)', link: '/operational/WIRE-PHASE-DIAGRAM' },
-          { text: 'Update spec flow', link: '/operational/UPDATE-SPEC-FLOW' },
-          { text: 'Tech debt flow', link: '/operational/TECH-DEBT-FLOW' },
-          { text: 'Needs component flow', link: '/operational/NEEDS-COMPONENT-FLOW' },
-        ],
-      },
-          { text: 'Team AI Workflow', link: '/operational/TEAM-AI-WORKFLOW' },
-          { text: 'Portal codegen (gen + unit)', link: '/operational/PORTAL-CODEGEN' },
-          { text: 'Unit phase — dev lane', link: '/operational/UNIT-PHASE-DIAGRAM' },
-          { text: 'Portal unit-gen roadmap', link: '/operational/PORTAL-UNIT-GEN-ROADMAP' },
           { text: 'Architecture', link: '/operational/ARCHITECTURE' },
+          { text: 'Full cycle (overview)', link: '/operational/FULL-CYCLE-PIPELINE-DIAGRAM' },
+          { text: 'Feature artifact (index)', link: '/operational/FEATURE-ARTIFACT-FLOWS' },
+          { text: 'Prompt templates', link: '/operational/PROMPT-TEMPLATES' },
           { text: 'Design Registry Promotion', link: '/operational/DESIGN-REGISTRY-PROMOTION' },
-          { text: 'Page Lifecycle', link: '/operational/PAGE-LIFECYCLE' },
-          { text: 'E2E Test IDs', link: '/operational/E2E-TESTIDS' },
-          { text: 'Semantic UI Assertions', link: '/operational/E2E-SEMANTIC-UI-ASSERTIONS' }
+          { text: 'Page Lifecycle', link: '/operational/PAGE-LIFECYCLE' }
         ]
       },
       {
         text: 'Onboarding',
         collapsed: true,
         items: [
-          { text: 'Team AI Workflow Slides', link: '/onboarding/team-ai-workflow-slides' },
+          { text: 'Feature Artifact Workflow Slides', link: '/onboarding/team-ai-workflow-slides' },
           { text: 'YAML/Markdown AI Workflow', link: '/onboarding/yaml-markdown-ai-workflow' },
           { text: 'Portal Base Overview', link: '/onboarding/portal-base-overview' },
           { text: 'E2E Automation Playwright', link: '/onboarding/e2e-automation-playwright' }
-        ]
-      },
-      {
-        text: 'Common UI',
-        collapsed: true,
-        items: [
-          { text: 'Common UI patterns', link: '/common-ui/' },
-          { text: 'Generated feature docs', link: '/common-ui/generated' }
         ]
       },
       {
@@ -96,9 +92,23 @@ export default withMermaid(defineConfig({
       {
         text: 'Features',
         collapsed: false,
+        items: featureSidebarItems
+      },
+      {
+        text: 'Common',
+        collapsed: false,
         items: [
-          { text: 'Feature index', link: '/common-ui/generated' },
-          ...featureSidebarItems
+          ...(commonSidebarItems.length ? commonSidebarItems : []),
+          { text: 'Common UI patterns', link: '/common-ui/' },
+          { text: 'Generated feature docs', link: '/common-ui/generated' }
+        ]
+      },
+      {
+        text: 'Flow trace',
+        collapsed: false,
+        items: [
+          { text: 'Index', link: '/flow-trace/' },
+          ...flowTraceSidebarItems
         ]
       }
     ],
@@ -109,41 +119,94 @@ export default withMermaid(defineConfig({
 }))
 
 function buildFeatureSidebar() {
-  const featuresRoot = join(docsRoot, 'features')
+  const featuresRoot = join(docsRoot, 'features', 'md')
   if (!existsSync(featuresRoot)) return []
 
   return listFeatureGroups(featuresRoot)
 }
 
-function listFeatureGroups(dir: string): DefaultTheme.SidebarItem[] {
-  return readdirSync(dir, { withFileTypes: true })
-    .filter((entry) => entry.isDirectory())
-    .map((entry) => {
-      const entryPath = join(dir, entry.name)
-      const specItems = listDirectGeneratedSpecs(entryPath).map((file) => ({
-        text: readTitle(file),
-        link: specLink(file)
-      }))
-      const childGroups = listFeatureGroups(entryPath)
+function buildCommonSidebar(): DefaultTheme.SidebarItem[] {
+  const commonRoot = join(docsRoot, 'common', 'md')
+  if (!existsSync(commonRoot)) return []
 
-      return {
-        text: titleCase(entry.name),
-        collapsed: true,
-        items: [...specItems, ...childGroups]
-      }
-    })
-    .filter((group) => group.items.length > 0)
-    .sort((a, b) => a.text.localeCompare(b.text))
+  return listFeatureGroups(commonRoot)
 }
 
-function listDirectGeneratedSpecs(dir: string): string[] {
-  const generatedDir = join(dir, 'generated')
-  if (!existsSync(generatedDir)) return []
+function buildFlowTraceSidebar(): DefaultTheme.SidebarItem[] {
+  const flowTraceRoot = join(docsRoot, 'flow-trace')
+  if (!existsSync(flowTraceRoot)) return []
 
-  return readdirSync(generatedDir, { withFileTypes: true })
-    .filter((item) => item.isFile() && item.name.endsWith('.md'))
-    .map((item) => join(generatedDir, item.name))
-    .sort()
+  return readdirSync(flowTraceRoot, { withFileTypes: true })
+    .filter((entry) => entry.isFile() && entry.name.endsWith('.md') && entry.name !== 'index.md')
+    .map((entry) => join(flowTraceRoot, entry.name))
+    .sort((a, b) => a.localeCompare(b))
+    .map((file) => ({
+      text: readTitle(file),
+      link: specLink(file)
+    }))
+}
+
+function listFeatureGroups(dir: string): DefaultTheme.SidebarItem[] {
+  const entries = readdirSync(dir, { withFileTypes: true })
+    .filter((entry) => !entry.name.startsWith('.'))
+
+  const files = entries
+    .filter((entry) => entry.isFile() && entry.name.endsWith('.md') && entry.name !== 'README.md')
+    .map((entry) => join(dir, entry.name))
+    .sort(sidebarPathSort)
+
+  const groups = entries
+    .filter((entry) => entry.isDirectory() && entry.name !== 'testcases')
+    .map((entry) => {
+      const childItems = listFeatureGroups(join(dir, entry.name))
+      return {
+        name: entry.name,
+        item: {
+          text: titleCase(entry.name),
+          collapsed: true,
+          items: childItems
+        }
+      }
+    })
+    .filter(({ item }) => item.items.length > 0)
+    .sort((a, b) => compareSidebarNames(a.name, b.name))
+    .map(({ item }) => item)
+
+  return [
+    ...files.map((file) => ({
+      text: readTitle(file),
+      link: specLink(file)
+    })),
+    ...groups
+  ]
+}
+
+function sidebarPathSort(a: string, b: string) {
+  return compareSidebarNames(a, b)
+}
+
+function compareSidebarNames(aPath: string, bPath: string) {
+  const a = aPath.split('/').pop() ?? aPath
+  const b = bPath.split('/').pop() ?? bPath
+  const aRank = sidebarRank(a)
+  const bRank = sidebarRank(b)
+
+  if (aRank !== bRank) return aRank - bRank
+  return a.localeCompare(b)
+}
+
+function sidebarRank(value: string) {
+  const normalized = value.toLowerCase().replace(/\.md$/, '')
+
+  const topLevelRank = TOP_LEVEL_FEATURE_ORDER.indexOf(normalized)
+  if (topLevelRank >= 0) return topLevelRank
+
+  const functionRank = FEATURE_FUNCTION_ORDER.findIndex((keyword) => {
+    return normalized === keyword || normalized.startsWith(`${keyword}-`) || normalized.includes(keyword)
+  })
+  if (functionRank >= 0) return 100 + functionRank
+
+  return 1000
 }
 
 function readTitle(file: string) {

@@ -1,6 +1,6 @@
-# Team AI Workflow
+# Feature Artifact Workflow
 
-> **Slide vs operational doc:** Deck training này **cố ý giữ `/design`** làm tên phase “design lane”. Doc vận hành: [`TEAM-AI-WORKFLOW.md`](../operational/TEAM-AI-WORKFLOW.md): `/design` deprecated → **`/spec`** + **`/prototype`**.
+> **Slide vs operational doc:** Deck training này **cố ý giữ `/design`** làm tên phase “design lane”. Doc vận hành: [`FEATURE-ARTIFACT-FLOWS.md`](../operational/FEATURE-ARTIFACT-FLOWS.md) · [`PROMPT-TEMPLATES.md`](../operational/PROMPT-TEMPLATES.md): `/design` deprecated → **`/spec`** + **`/prototype`**.
 
 ---
 

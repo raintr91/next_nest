@@ -1,6 +1,6 @@
-# Prompt Templates — Team AI Workflow
+# Prompt Templates — Team AI Flow
 
-> Copy/paste vào Cursor Agent. Thay placeholder `{...}`. Chi tiết command: [`TEAM-AI-WORKFLOW.md`](TEAM-AI-WORKFLOW.md) · Skills: `.cursor/skills/`
+> Copy/paste vào Cursor Agent. Thay placeholder `{...}`. Chi tiết command: [`FEATURE-ARTIFACT-FLOWS.md`](FEATURE-ARTIFACT-FLOWS.md) · Skills: `.cursor/skills/`
 
 **Quy tắc:** một session = một command · chat mới khi đổi phase · cập nhật `.harness/progress.md` trước khi đóng session.
 
@@ -37,7 +37,7 @@ flowchart LR
 | `{role}` | `admin` |
 | `{page}` | `hotel` |
 | `{function}` | `list`, `create`, `update` |
-| Spec path | `docs/features/{role}/{page}/{slug}.spec.yaml` |
+| Spec path | `docs/features/yaml/{role}/{domain}/{function}/{id}.bundle.yaml` |
 | Testcase path | `docs/features/{role}/{page}/{slug}.test.yaml` |
 
 ---
@@ -48,7 +48,7 @@ flowchart LR
 Một session = một command. Chỉ làm đúng scope command này.
 
 Feature slug: {admin-hotel-list}
-Spec: docs/features/{role}/{page}/{slug}.spec.yaml
+Spec: docs/features/yaml/{role}/{domain}/{function}/{id}.bundle.yaml
 Testcase: docs/features/{role}/{page}/{slug}.test.yaml
 
 Ràng buộc:
@@ -82,7 +82,7 @@ Scope:
 - Tách spec theo spec-split-by-function (1 spec = 1 child function)
 
 Output:
-- docs/features/{role}/{page}/{slug}.spec.yaml
+- docs/features/yaml/{role}/{domain}/{function}/{id}.bundle.yaml
 - docs/features/{role}/{page}/{slug}.test.yaml (round 1)
 - pnpm docs:render
 - Evidence: inferredFromCode | openQuestion — không bịa business intent
@@ -105,7 +105,7 @@ Slug: {admin-hotel-list}
 Requirement: {mô tả ngắn: list + search + pagination + row actions delete/edit}
 
 Tham chiếu:
-- docs/features/common/*.spec.yaml (common UI)
+- docs/features/yaml/common/*/common-*.bundle.yaml (common UI)
 - spec-split-by-function: chỉ 1 function (list), không gộp create/update
 
 Scope IN: docs/features/**, harness notes
@@ -180,7 +180,7 @@ Sau khi chốt: ghi ADR docs/adr/{slug}-permission-model.md cho quyết định 
 /prototype
 
 Slug: {admin-hotel-list}
-Spec: docs/features/admin/hotel/admin-hotel-list.spec.yaml
+Spec: docs/features/yaml/admin/hotel/list/ir/spec.yaml
 
 Order:
 1. Read spec tags — `#needs-component` inventory (Mo* names from grill)
@@ -240,7 +240,7 @@ setup.session + mocks vs spec api, #wire-only list, open issues → /test
 /model
 
 Slug: {admin-hotel-list}
-Spec: docs/features/admin/hotel/admin-hotel-list.spec.yaml
+Spec: docs/features/yaml/admin/hotel/list/ir/spec.yaml
 
 Scope: CHỈ models/{entity}/
 - Zod API contract + z.infer types
@@ -260,7 +260,7 @@ Handoff: /wire hoặc /unit (parser) sau khi có API thật
 /api
 
 Feature: {admin-hotel-list}
-Portal spec: docs/features/admin/hotel/admin-hotel-list.spec.yaml
+Portal spec: docs/features/yaml/admin/hotel/list/ir/spec.yaml
 
 Resolve backend từ team-projects — stop nếu thiếu config.
 Đọc spec + testcase; align key với Portal models/.
@@ -286,7 +286,7 @@ Handoff Portal: /grill-api → /wire
 /api-spec
 
 Portal slug: {admin-hotel-list}
-Input: docs/features/.../admin-hotel-list.spec.yaml (đọc từ portal qua team-projects path)
+Input: docs/features/.../yaml/admin/hotel/list/ir/spec.yaml (đọc từ portal qua team-projects path)
 
 Output:
 - Backend spec + OpenAPI
@@ -393,11 +393,11 @@ Slug: {admin-hotel-list}
 Scenario focus: {hotel-list-empty} (1 testcase YAML / session)
 
 Inputs (only — không legacy):
-- docs/features/.../admin-hotel-list.spec.yaml
+- docs/features/.../yaml/admin/hotel/list/ir/spec.yaml
 - docs/features/.../testcases/*.yaml (E2E only; không map unit)
 - Prototype UI + composables
 
-Readiness: .cursor/extracts/portal-test-readiness.md
+Readiness: .cursor/extracts/test/readiness.md
 
 Rules:
 - Testcase YAML = E2E source of truth (1 file ≈ 1 tests/e2e/{module}/{function}.spec.ts)
@@ -419,7 +419,7 @@ Done: /grill-test → pnpm portal:lifecycle set {route} test
 /test
 
 Implement Playwright từ testcase {chain-hotel-list.yaml}
-Spec: docs/features/chain/hotel/chain-hotel-list.spec.yaml
+Spec: docs/features/yaml/chain/hotel/list/ir/spec.yaml
 Rules: getByTestId only, Page Object, storageState, Faker khi data.dynamic
 Ref: docs/templates/testcase.yaml · .cursor/skills/test/SKILL.md
 ```
@@ -562,4 +562,4 @@ Session mới: *"Đọc .harness/progress.md, tiếp tục /wire create cho admi
 | Scaffold | `pnpm portal:gen --spec ...` trước `/prototype`; agent chỉ HANDOFF + diff |
 | Registry | Sau prototype: promote reusable UI → `shared/portal-design.registry.json` — [DESIGN-REGISTRY-PROMOTION.md](./DESIGN-REGISTRY-PROMOTION.md) |
 
-Chi tiết codegen: [`PORTAL-CODEGEN.md`](./PORTAL-CODEGEN.md) · `.cursor/extracts/portal-codegen-tags.md` · mục **Rules vs skills — token budget** trong [`TEAM-AI-WORKFLOW.md`](TEAM-AI-WORKFLOW.md).
+Chi tiết codegen: [`PORTAL-CODEGEN.md`](./PORTAL-CODEGEN.md) · `.cursor/extracts/codegen/tags.md` · token budget: `.cursor/extracts/artifact-graph.md`.

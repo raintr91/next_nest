@@ -1,6 +1,6 @@
 # E2E Automation Với Playwright
 
-> Page tham khảo cho slide `Portal Team AI Workflow`.
+> Page tham khảo cho slide `Portal Feature Artifact Workflow`.
 
 ## E2E Là Gì?
 

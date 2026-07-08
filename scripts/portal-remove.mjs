@@ -32,7 +32,7 @@ async function main() {
 
   if (!options.spec && !options.route) {
     throw new Error(
-      'Usage: pnpm portal:remove --spec docs/features/.../feature.spec.yaml [--dry-run]\n' +
+      'Usage: pnpm portal:remove --spec docs/features/.../ir/spec.yaml [--dry-run]\n' +
         '       pnpm portal:remove --route /hotels [--dry-run]'
     )
   }

@@ -1,4 +1,5 @@
 import { spawnSync } from 'node:child_process'
+import { readdir } from 'node:fs/promises'
 import path from 'node:path'
 import { fileURLToPath } from 'node:url'
 
@@ -10,29 +11,63 @@ import { renderTemplate } from './lib/render.mjs'
 import { renderHandoffMarkdown, writeGeneratedMeta, writeOutputs } from './lib/write-files.mjs'
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '../..')
+const yamlRootFlag = process.argv.includes('--yaml-root')
+  ? process.argv[process.argv.indexOf('--yaml-root') + 1]
+  : null
+const IR_SPEC_GLOB_ROOT = path.resolve(yamlRootFlag ?? path.join(root, 'docs/features/yaml'))
 
 function parseArgs(argv) {
-  const options = { dryRun: false, force: false, spec: null }
+  const options = { dryRun: false, force: false, spec: null, all: false }
 
   for (let i = 0; i < argv.length; i++) {
     const arg = argv[i]
     if (arg === '--dry-run' || arg === '--dry') options.dryRun = true
     else if (arg === '--force') options.force = true
+    else if (arg === '--all') options.all = true
     else if (arg === '--spec') options.spec = argv[++i]
+    else if (arg === '--yaml-root') i++
     else if (!arg.startsWith('-') && !options.spec) options.spec = arg
-  }
-
-  if (!options.spec) {
-    throw new Error('Usage: pnpm portal:gen --spec docs/features/.../feature.spec.yaml [--dry-run] [--force]')
   }
 
   return options
 }
 
-async function main() {
-  const options = parseArgs(process.argv.slice(2))
-  const registry = await loadDesignRegistry(root)
-  const { spec, specFile, featureDir } = await readSpecFile(options.spec)
+async function listIrSpecFiles(dir) {
+  const files = []
+  let entries = []
+  try {
+    entries = await readdir(dir, { withFileTypes: true })
+  } catch {
+    return files
+  }
+
+  for (const entry of entries) {
+    const entryPath = path.join(dir, entry.name)
+    if (entry.isDirectory()) {
+      files.push(...(await listIrSpecFiles(entryPath)))
+      continue
+    }
+    if (entry.isFile() && entry.name === 'spec.yaml' && entryPath.includes(`${path.sep}ir${path.sep}`)) {
+      files.push(entryPath)
+    }
+  }
+
+  return files.sort()
+}
+
+async function resolveSpecPaths(options) {
+  if (options.spec) return [path.resolve(options.spec)]
+  const discovered = await listIrSpecFiles(IR_SPEC_GLOB_ROOT)
+  if (!discovered.length) {
+    throw new Error(
+      'No ir/spec.yaml under docs/features/yaml/. Pass --spec <path> or add bundles + pnpm spec:split.'
+    )
+  }
+  return discovered
+}
+
+async function generateOne(options, registry, specPath) {
+  const { spec, specFile, featureDir } = await readSpecFile(specPath)
   let ctx = buildCodegenContext(spec, specFile)
   ctx = applyRegistryToContext(ctx, registry, { validate: true })
   ctx = await enrichCodegenContext(ctx, root)
@@ -93,6 +128,7 @@ async function main() {
   for (const s of skipped) {
     console.log(`  skip: ${s.relativePath} (${s.reason})`)
   }
+
   if (!options.dryRun) {
     const pageWritten = written.find((w) => w.relativePath?.startsWith('pages/') && w.relativePath.endsWith('.vue'))
     if (pageWritten) {
@@ -106,10 +142,37 @@ async function main() {
     }
 
     await syncPageLifecycleFromManifests(root)
-
     console.log(`  handoff: ${path.relative(root, meta.handoffPath)}`)
-    runDocsRender()
   }
+
+  return { specFile, wrotePage: !options.dryRun && written.some((w) => w.relativePath?.startsWith('pages/')) }
+}
+
+async function main() {
+  const options = parseArgs(process.argv.slice(2))
+  const registry = await loadDesignRegistry(root)
+  const specPaths = await resolveSpecPaths(options)
+
+  if (specPaths.length > 1) {
+    console.log(`portal-gen: ${specPaths.length} ir/spec.yaml file(s)`)
+  }
+
+  let docsRenderNeeded = false
+  let failed = 0
+
+  for (const specPath of specPaths) {
+    try {
+      const result = await generateOne(options, registry, specPath)
+      if (result.wrotePage) docsRenderNeeded = true
+      if (specPaths.length > 1) console.log('')
+    } catch (error) {
+      failed++
+      console.error(`portal-gen: FAIL ${path.relative(root, specPath)}: ${error.message ?? error}`)
+    }
+  }
+
+  if (!options.dryRun && docsRenderNeeded) runDocsRender()
+  process.exit(failed > 0 ? 1 : 0)
 }
 
 /** Cập nhật spec.md (hashtags, Screen link). Script local — không tốn AI token. */

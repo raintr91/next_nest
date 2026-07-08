@@ -1,5 +1,9 @@
-# Moved → `docs/features/admin/hotel/`
+# Moved → `docs/features/yaml/admin/hotel/`
 
-Hotel admin specs đã chuyển sang [`../admin/hotel/`](../admin/hotel/README.md).
+Hotel admin bundles: `docs/features/yaml/admin/hotel/{function}/*.bundle.yaml`
 
-Code gen: `pnpm portal:gen --spec docs/features/admin/hotel/hotel-create.spec.yaml`
+BA markdown: `docs/features/md/admin/hotel/{function}/*.md`
+
+Code gen: `pnpm portal:gen:dry --spec docs/features/yaml/admin/hotel/list/ir/spec.yaml`
+
+Hub: `docs/operational/FEATURE-ARTIFACT-FLOWS.md`

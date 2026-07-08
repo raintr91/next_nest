@@ -3,9 +3,7 @@ import { fileURLToPath } from 'node:url'
 
 import Handlebars from 'handlebars'
 
-import { listFeatureTestcases } from './lib/list-feature-testcases.mjs'
-import { buildTestcaseContext } from './lib/plan.mjs'
-import { readTestcaseFile } from './lib/read-testcase.mjs'
+import { listFeatureTestcases, readTestcaseFile } from './lib/read-testcase.mjs'
 import { renderTemplate } from './lib/render.mjs'
 import { resolveSemanticPlan } from './lib/semantic-plan.mjs'
 import { writeOutputs } from './lib/write-files.mjs'

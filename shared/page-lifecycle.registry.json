@@ -3,16 +3,28 @@
   "routes": {
     "/hotels": {
       "stage": "test",
-      "spec": "docs/features/chain/hotel/chain-hotel-list.spec.yaml",
+      "spec": "docs/features/yaml/admin/chain/login-as/ir/spec.yaml",
       "title": "Chain — danh sách hotel (施設一覧)",
-      "updatedAt": "2026-06-29T13:57:24.242Z"
+      "updatedAt": "2026-07-08T07:31:07.535Z"
     },
     "/admin/hotels": {
       "stage": "design-spec",
-      "spec": "docs/features/admin/hotel/admin-hotel-list.spec.yaml",
+      "spec": "docs/features/yaml/admin/hotel/list/ir/spec.yaml",
       "title": "Admin hotel list",
       "updatedAt": "2026-06-27T07:11:05.638Z",
       "note": "Prototype page removed — sync demoted to design-spec."
+    },
+    "/admin/chains/create": {
+      "stage": "prototype",
+      "spec": "docs/features/yaml/admin/chain/form/ir/spec.yaml",
+      "title": "Tạo / cập nhật chain admin",
+      "updatedAt": "2026-07-08T07:31:07.534Z"
+    },
+    "/admin/chains": {
+      "stage": "prototype",
+      "spec": "docs/features/yaml/admin/chain/list/ir/spec.yaml",
+      "title": "Quản lý chain admin",
+      "updatedAt": "2026-07-08T07:31:07.534Z"
     }
   }
 }

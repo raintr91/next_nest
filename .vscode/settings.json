@@ -31,8 +31,7 @@
     "**/storybook-static": true,
     "**/--host": true
   },
-
-  "typescript.tsserver.maxTsServerMemory": 4096,
-
-  "cursor.general.enableShadowWorkspace": false
+  "js/ts.tsserver.maxMemory": 4096,
+  "cursor.general.enableShadowWorkspace": false,
+    "json.schemaDownload.enable": true
 }

@@ -1,6 +1,6 @@
 # Common UI Spec (Portal)
 
-Follow `docs/features/common/*.spec.yaml` before copying legacy UI ad hoc.
+Follow `docs/features/yaml/common/*/common-*.bundle.yaml` before copying legacy UI ad hoc.
 
 - **Design registry:** `shared/portal-design.registry.json` — shadcn canonical; list default `#shell: DataListPage`. `.cursor/extracts/portal-design-registry.md`. Promotion: `docs/operational/DESIGN-REGISTRY-PROMOTION.md`.
 - If legacy violates project common UI, design to common global and note `#legacy-global-ui-violation` with legacy evidence.

@@ -4,18 +4,38 @@ import { parse, stringify } from 'yaml'
 import { resolveDevAppBaseUrl } from './lib/load-dev-base-url.mjs'
 import { MD_NONE } from './lib/markdown-table.mjs'
 import { renderSpecMarkdown } from './lib/render-spec-markdown.mjs'
+import {
+  bundleMarkdownOutputPath,
+  bundleSlug,
+  bundleTestcaseDir,
+  renderBundleMarkdown
+} from './lib/render-bundle-markdown.mjs'
 
 const projectRoot = process.cwd()
 const docsDir = path.resolve('docs')
 const featuresDir = path.join(docsDir, 'features')
+
+function cliFlag(name) {
+  const i = process.argv.indexOf(`--${name}`)
+  return i >= 0 ? process.argv[i + 1] : undefined
+}
+function cliBool(name) {
+  return process.argv.includes(`--${name}`)
+}
+
+const yamlRoot = cliFlag('yaml-root') ? path.resolve(cliFlag('yaml-root')) : path.join(featuresDir, 'yaml')
+const mdRoot = cliFlag('md-root') ? path.resolve(cliFlag('md-root')) : path.join(featuresDir, 'md')
+const legacyRoot = cliFlag('legacy-root') ? path.resolve(cliFlag('legacy-root')) : featuresDir
+const writeIndex = !cliBool('no-index')
 const devAppBaseUrl = resolveDevAppBaseUrl(projectRoot)
 
 async function main() {
   const started = Date.now()
-  const specs = await listSpecFiles(featuresDir)
+  const specs = await listSpecFiles(legacyRoot)
+  const bundles = await listBundleFiles(yamlRoot)
 
-  if (!specs.length) {
-    console.error('docs:render: no *.spec.yaml under docs/features/')
+  if (!specs.length && !bundles.length) {
+    console.error('docs:render: no *.spec.yaml or yaml/**/*.bundle.yaml under docs/features/')
     process.exit(1)
   }
 
@@ -24,27 +44,41 @@ async function main() {
 
   for (const specFile of specs) {
     try {
-      testcaseCount += await renderFeature(specFile)
+      testcaseCount += await renderLegacySpec(specFile)
     } catch (error) {
       failed++
       console.error(`docs:render: FAIL ${path.relative(projectRoot, specFile)}: ${error.message ?? error}`)
     }
   }
 
+  const bundleMdLinks = []
+  for (const bundleFile of bundles) {
+    try {
+      testcaseCount += await renderBundleFeature(bundleFile)
+      const mdPath = bundleMarkdownOutputPath(bundleFile, docsDir, yamlRoot, mdRoot)
+      const rel = path.relative(docsDir, mdPath).split(path.sep).join('/')
+      const bundle = await readYaml(bundleFile)
+      bundleMdLinks.push(`- [${bundle.title ?? bundleSlug(bundleFile)}](/${rel.replace(/\.md$/, '')})`)
+    } catch (error) {
+      failed++
+      console.error(`docs:render: FAIL ${path.relative(projectRoot, bundleFile)}: ${error.message ?? error}`)
+    }
+  }
+
   if (failed > 0) {
-    console.error(`docs:render: aborted index — ${failed} spec(s) failed`)
+    console.error(`docs:render: aborted index — ${failed} file(s) failed`)
     process.exit(1)
   }
 
-  await renderFeatureIndex(specs)
+  if (writeIndex) await renderFeatureIndex(specs, bundleMdLinks)
 
   const elapsed = ((Date.now() - started) / 1000).toFixed(1)
   console.log(
-    `docs:render: ${specs.length} spec(s) → ${specs.length} *.md, ${testcaseCount} testcase(s) [${elapsed}s]`
+    `docs:render: ${specs.length} legacy spec(s), ${bundles.length} bundle(s) → ${testcaseCount} testcase(s) [${elapsed}s]`
   )
 }
 
-async function renderFeature(specFile) {
+async function renderLegacySpec(specFile) {
   const featureDir = path.dirname(specFile)
   const slug = featureSlug(specFile)
   const output = featureOutputPaths(specFile, slug)
@@ -79,7 +113,53 @@ async function renderFeature(specFile) {
   return testcaseFiles.length
 }
 
-async function renderFeatureIndex(specs) {
+async function renderBundleFeature(bundleFile) {
+  const featureDir = bundleTestcaseDir(bundleFile)
+  const slug = bundleSlug(bundleFile)
+  const bundle = await readYaml(bundleFile)
+  const specShape = { ...bundleToSpecShape(bundle) }
+  const mdOut = bundleMarkdownOutputPath(bundleFile, docsDir, yamlRoot, mdRoot)
+  const mdDir = path.dirname(mdOut)
+  const mdTestcasesDir = path.join(mdDir, 'testcases')
+  const testcaseFiles = await listTestcaseFiles(featureDir, slug)
+  const testcases = []
+
+  await mkdir(mdTestcasesDir, { recursive: true })
+
+  for (const file of testcaseFiles) {
+    const testcase = await readYaml(file)
+    testcases.push({ file, data: testcase })
+    await writeFile(
+      path.join(mdTestcasesDir, testcaseMarkdownName(file)),
+      renderTestcaseMarkdown(testcase, specShape),
+      'utf8'
+    )
+  }
+
+  const output = { specFile: path.basename(mdOut), testcasesDir: 'testcases' }
+  await mkdir(mdDir, { recursive: true })
+  await writeFile(
+    mdOut,
+    renderBundleMarkdown(bundle, { testcases, output, devAppBaseUrl, projectRoot }),
+    'utf8'
+  )
+
+  return testcaseFiles.length
+}
+
+function bundleToSpecShape(bundle) {
+  return {
+    id: bundle.id,
+    title: bundle.title,
+    status: bundle.status,
+    owner: bundle.owner,
+    summary: bundle.summary ?? bundle.review?.summary,
+    ...(bundle.spec ?? {}),
+    openQuestions: bundle.openQuestions ?? []
+  }
+}
+
+async function renderFeatureIndex(specs, bundleMdLinks = []) {
   const rows = []
 
   for (const specFile of specs) {
@@ -87,6 +167,8 @@ async function renderFeatureIndex(specs) {
     const output = featureOutputPaths(specFile, featureSlug(specFile))
     rows.push(`- [${spec.title ?? featureSlug(specFile)}](${vitepressDocLink(specFile, output)})`)
   }
+
+  rows.push(...bundleMdLinks)
 
   await writeFile(
     path.join(docsDir, 'common-ui', 'generated.md'),
@@ -139,12 +221,33 @@ async function listSpecFiles(dir) {
   for (const entry of await listEntries(dir)) {
     const entryPath = path.join(dir, entry.name)
 
+    if (entry.name === 'yaml' || entry.name === 'md') continue
+
     if (entry.isDirectory()) {
       files.push(...await listSpecFiles(entryPath))
       continue
     }
 
     if (entry.isFile() && (entry.name === 'spec.yaml' || entry.name === 'spec.yml' || /\.spec\.ya?ml$/.test(entry.name))) {
+      files.push(entryPath)
+    }
+  }
+
+  return files.sort()
+}
+
+async function listBundleFiles(dir) {
+  const files = []
+
+  for (const entry of await listEntries(dir)) {
+    const entryPath = path.join(dir, entry.name)
+
+    if (entry.isDirectory()) {
+      files.push(...await listBundleFiles(entryPath))
+      continue
+    }
+
+    if (entry.isFile() && /\.bundle\.ya?ml$/.test(entry.name)) {
       files.push(entryPath)
     }
   }

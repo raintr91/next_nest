@@ -27,15 +27,15 @@ def patch_config(path: Path) -> bool:
         print(f"already patched: {path}")
         return True
 
-    # After TEAM-AI-WORKFLOW entry (common in portal sidebar)
+    # After Feature artifact (index) entry (common in portal sidebar)
     m = re.search(
-        r"(\{ text: 'Team AI workflow', link: '/operational/TEAM-AI-WORKFLOW' \},)\n",
+        r"(\{ text: 'Feature artifact flows', link: '/operational/FEATURE-ARTIFACT-FLOWS' \},)\n",
         text,
     )
     if m:
         text = text[: m.end()] + DIAGRAMS + "\n" + text[m.end() :]
         path.write_text(text, encoding="utf-8")
-        print(f"patched after TEAM-AI-WORKFLOW: {path}")
+        print(f"patched after Feature artifact flows: {path}")
         return True
 
     # After text: 'Operational' items: [

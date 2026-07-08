@@ -25,8 +25,10 @@ pnpm portal:remove --spec docs/features/.../feature.spec.yaml
 
 | Path | Stage | Auth | Spec | Title | Updated |
 |------|-------|------|------|-------|---------|
-| /admin/hotels | design-spec | bypass | `docs/features/admin/hotel/admin-hotel-list.spec.yaml` | Admin hotel list | 2026-06-27 |
-| /hotels | test | bypass | `docs/features/chain/hotel/chain-hotel-list.spec.yaml` | Chain — danh sách hotel (施設一覧) | 2026-06-29 |
+| /admin/chains | prototype | bypass | `docs/features/yaml/admin/chain/list/ir/spec.yaml` | Quản lý chain admin | 2026-07-08 |
+| /admin/chains/create | prototype | bypass | `docs/features/yaml/admin/chain/form/ir/spec.yaml` | Tạo / cập nhật chain admin | 2026-07-08 |
+| /admin/hotels | design-spec | bypass | `docs/features/yaml/admin/hotel/list/ir/spec.yaml` | Admin hotel list | 2026-06-27 |
+| /hotels | test | bypass | `docs/features/yaml/admin/chain/login-as/ir/spec.yaml` | Chain — danh sách hotel (施設一覧) | 2026-07-08 |
 
 ## Liên quan
 

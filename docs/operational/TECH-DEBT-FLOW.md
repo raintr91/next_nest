@@ -38,3 +38,11 @@ Every grill command re-asks unresolved `#tech-debt:*` items whose `deferTo` matc
 - `/bqa-grill-docs` → `deferTo: design`
 - `/dev-grill-docs` → `deferTo: prototype`, `deferTo: api`
 - `/wire` → `deferTo: wire`
+
+## Liên kết (cùng phase)
+
+| Doc | Nội dung |
+|-----|----------|
+| [FEATURE-ARTIFACT-GRILL](./FEATURE-ARTIFACT-GRILL.md) | Grill tạo / re-ask tech-debt |
+| [UPDATE-SPEC-FLOW](./UPDATE-SPEC-FLOW.md) | `#update:*` sau khi đã chốt delta |
+| [DESIGN-PHASE-DIAGRAM](./DESIGN-PHASE-DIAGRAM.md) | Gap loop trong design |

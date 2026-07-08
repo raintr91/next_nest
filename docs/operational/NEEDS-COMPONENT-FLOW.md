@@ -35,4 +35,12 @@ Example: `#needs-component:cell-status:MoStatusBadge:Status`
 3. Developer builds `Mo*` / `Data*` in `components/molecules/` or `components/organisms/`.
 4. Re-run `pnpm portal:gen` until no unresolved `#needs-component` tags remain.
 
-See [Portal codegen (gen + unit)](./PORTAL-CODEGEN.md) · `.cursor/extracts/portal-codegen-tags.md`.
+See [Portal codegen (gen + unit)](./PORTAL-CODEGEN.md) · `.cursor/extracts/codegen/tags.md`
+
+## Liên kết (cùng phase)
+
+| Doc | Nội dung |
+|-----|----------|
+| [PORTAL-CODEGEN](./PORTAL-CODEGEN.md) | `portal:gen` scan tags · HANDOFF |
+| [DESIGN-REGISTRY-PROMOTION](./DESIGN-REGISTRY-PROMOTION.md) | `#shell:` · `#widget:` promote |
+| [DESIGN-PHASE-DIAGRAM](./DESIGN-PHASE-DIAGRAM.md) | `/prototype` trong design cycle |

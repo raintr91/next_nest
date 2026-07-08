@@ -27,6 +27,14 @@ flowchart LR
 
 See `.cursor/extracts/spec-update-tags.md` and `spec-update-delta.md`.
 
+## Liên kết (cùng phase)
+
+| Doc | Nội dung |
+|-----|----------|
+| [TECH-DEBT-FLOW](./TECH-DEBT-FLOW.md) | `#tech-debt:*` — chưa chốt; khác `#update:*` |
+| [DESIGN-PHASE-DIAGRAM](./DESIGN-PHASE-DIAGRAM.md) | Gap từ grill → `/update-spec` |
+| [WIRE-PHASE-DIAGRAM](./WIRE-PHASE-DIAGRAM.md) | Clear `#update:*` tại wire |
+
 ## Rules
 
 - Spec remains source of truth — no rename-only mapping layers.

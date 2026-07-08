@@ -5,7 +5,7 @@
 
 ## `/unit` — gap + gen + file thiếu
 
-1. `docs/features/{slug}/generated/unit.manifest.json`
+1. `docs/features/yaml/.../{function}/generated/unit.manifest.json`
 2. `UNIT-HANDOFF.md` — lệnh vitest scoped
 3. Nếu chưa smoke → `pnpm portal:unit-gen --spec …` (`--phase wire` nếu cần)
 4. `needsUnit[]` / `#needs-unit-test:*`:

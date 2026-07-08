@@ -240,7 +240,7 @@ Spec `#wire-only` trong feature spec → testcase giữ mock hoặc skip cho đ�
 | `testcases/*.yaml`, spec `ui.testIds` | Legacy blade/repos |
 | `portal-e2e-test.registry.json` khi có `#e2e:*` | `portal-unit-test.registry.json` |
 | Prototype page + `Mo*` testId | Inventory toàn `tests/e2e/` |
-| `portal-test-readiness.md` | Rapi / recorder exports |
+| `test/readiness.md` | Rapi / recorder exports |
 | 1 testcase vertical slice | `portal:unit-gen` trong session E2E |
 
 ---
@@ -295,12 +295,14 @@ Chưa implement — hiện delete/confirm chỉ có spec design + `.test.yaml` d
 
 | Doc | Mục đích |
 |-----|----------|
+| [PORTAL-CODEGEN](./PORTAL-CODEGEN.md) | `testcase:gen` · `ui.testIds` · registry E2E |
 | [PORTAL-UNIT-GEN-ROADMAP](./PORTAL-UNIT-GEN-ROADMAP.md) PR12–13 | Roadmap codegen E2E |
+| [E2E-TESTIDS](./E2E-TESTIDS.md) | Contract `data-testid` |
 | `scripts/testcase-gen/README.md` | CLI + steps supported |
 | `shared/portal-e2e-test.registry.json` | Bundle + matcher registry |
 | [E2E-SEMANTIC-UI-ASSERTIONS](./E2E-SEMANTIC-UI-ASSERTIONS.md) | Matcher design + levels |
 | `.cursor/extracts/portal-e2e-semantic-tags.md` | Hashtag cheat sheet |
-| `.cursor/extracts/portal-test-readiness.md` | Gate trước `/test` |
+| `.cursor/extracts/test/readiness.md` | Gate trước `/test` |
 | `.cursor/skills/test/SKILL.md` | `/test` |
 | `.cursor/skills/grill-test/SKILL.md` | `/grill-test` |
 | [UNIT-PHASE-DIAGRAM](./UNIT-PHASE-DIAGRAM.md) | Vitest lane (tách biệt) |

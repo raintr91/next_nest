@@ -34,7 +34,7 @@ A. E2E lane (/test, /grill-test) — DONE (2026-06-27)
     - Không chạy Playwright trong grill-prototype
 
 [x] Cập nhật docs/operational/PROMPT-TEMPLATES.md (testing lane)
-[x] Cập nhật docs/operational/TEAM-AI-WORKFLOW.md — thêm extract portal-test-readiness vào bảng
+[x] Cập nhật docs/operational/FEATURE-ARTIFACT-FLOWS.md — thêm extract portal-test-readiness vào bảng
 [x] Cập nhật .cursor/rules/team-flow-phase3-e2e.mdc — pointer portal-test-readiness
 
 [ ] (Optional) Script pnpm test:readiness --spec … — lint testcase vs spec testIds
