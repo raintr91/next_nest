@@ -15,7 +15,7 @@
 |-------|---------------------------|
 | `/grill-with-docs` | Ghi `tags:` — `#needs-component: slot:MoName:prop`, `#needs-ui: Widget` (inventory; tên Mo* rõ) |
 | `/prototype` | **Implement** `Mo*` / shell; **promote registry** nếu common; domain-only giữ trong feature |
-| `portal:gen` | Scaffold layers + shell từ registry; slot chưa có file → **placeholder** + HANDOFF *Prototype next* — **không** emit stub `.vue` |
+| `portal:gen` | Scaffold layers + shell từ registry; slot chưa có file → **placeholder** + HANDOFF *Prototype next* — **không** emit stub component |
 
 ---
 

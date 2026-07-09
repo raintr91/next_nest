@@ -10,7 +10,8 @@ const defaultRepoRoot = path.join(path.dirname(fileURLToPath(import.meta.url)), 
 export function resolveCodegenContext(spec) {
   const codegen = spec.codegen ?? {}
   const primaryModule = spec.modules?.[0]
-  const primaryEntity = primaryModule?.entities?.[0]
+  const flatEntity = spec.entities?.[0]
+  const primaryEntity = primaryModule?.entities?.[0] ?? flatEntity
 
   return {
     module: codegen.module ?? primaryModule?.name ?? 'App',
@@ -73,18 +74,22 @@ export function buildFilePlan(spec, options = {}) {
     add('deleteHandler', `${commandsBase}/delete-${entityKebab}.handler.ts`, 'commands/delete.handler.ts.hbs', 'handler')
   }
 
-  if (ctx.orm === 'typeorm' || ctx.orm === 'prisma') {
+  if (ctx.orm === 'prisma') {
     add('entityOrm', `${base}/${entityKebab}.entity.ts`, `orm/${ctx.orm}.entity.ts.hbs`, 'orm')
+    add(
+      'prismaModel',
+      `apps/api/prisma/models/${entityKebab}.prisma`,
+      'orm/prisma.model.prisma.hbs',
+      'orm'
+    )
+  } else if (ctx.orm === 'typeorm') {
+    add('entityOrm', `${base}/${entityKebab}.entity.ts`, 'orm/typeorm.entity.ts.hbs', 'orm')
   }
 
-  add(
-    'prismaModel',
-    `apps/api/prisma/models/${entityKebab}.prisma`,
-    'orm/prisma.model.prisma.hbs',
-    'orm'
-  )
-
-  const searchEndpoint = spec.api?.endpoints?.find((e) => e.action === 'search')
+  const searchEndpoint =
+    spec.api?.endpoints?.find((e) => e.action === 'search') ??
+    spec.api?.endpoints?.find((e) => e.action === 'list') ??
+    spec.api?.endpoints?.find((e) => /search|list/i.test(e.path ?? ''))
   const rawPath = searchEndpoint?.path ?? `/${entityKebab}s`
   const searchPath = rawPath.replace(/^\//, '')
 

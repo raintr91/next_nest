@@ -22,7 +22,7 @@ SSOT: `shared/portal-design.registry.json` · `pnpm portal:registry` · hub: `PO
 
 List default grill: `#shell: DataListPage`, `#pattern: CRUD`, `#style: shadcn/ui`, `compact`, `flat`.
 
-Custom list: keep `#shell: DataListPage` + `overrideCommonPattern: true` → `page.custom.vue.hbs`.
+Custom list: keep `#shell: DataListPage` + `overrideCommonPattern: true` → `page.custom.tsx.hbs`.
 
 ## Grill
 

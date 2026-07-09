@@ -1,60 +1,55 @@
-# Nuxt dev/build outputs
+# Next.js
+apps/web/.next/
+out/
+
+# Legacy Nuxt (safe to delete if present)
 .output
 .data
 .nuxt
 .nitro
-.cache
-dist
+.nuxt-e2e
 
-# Some local runs created by CLI flags (Nuxt có thể coi tên này là rootDir nếu truyền sai cờ)
---host/
---port/
-
-# Node dependencies
+# Node
 node_modules
 .pnpm-store
 
-# Accidental Nuxt CLI output (wrong flags)
+# Accidental CLI output
 --host/
 --port/
 
-# Logs
+# Logs & test artifacts
 logs
 *.log
+playwright-report/
+test-results/
+apps/web/playwright-report/
+apps/web/test-results/
+blob-report/
+playwright/.cache/
+coverage/
+
+# Storybook (legacy Vue — remove if folder returns)
+storybook-static
+stories/auto/
 
 # Misc
 .DS_Store
 .fleet
 .idea
+.cache
+dist
 
-# Storybook
-storybook-static
-
-# Generated stories (keep hand-written stories in /stories)
-stories/auto/
-
-# Cypress artifacts
-playwright-report/
-test-results/
-blob-report/
-playwright/.cache/
-
-# Nuxt E2E build dir (tách khỏi .nuxt dev)
-.nuxt-e2e
-
-# Local env files
+# Env
 .env
 .env.*
 !.env.example
 !docker/.env.example
-node_modules
+!apps/web/.env.example
 docker/.env
 
-# Local legacy source mappings for AI workflow
+# Local AI mappings
 .cursor/legacy-projects.local.json
 .cursor/team-projects.local.json
-
-# Legacy vendor install paths (removed — use .cursor/extracts/ instead)
 .cursor/skills/vendor/
 .cursor/rules-vendor/
 .cursor/skills-vendor/

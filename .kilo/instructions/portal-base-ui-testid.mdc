@@ -1,6 +1,6 @@
 ---
 description: Portal Base — UI components và data-testid cho Playwright
-globs: pages/**/*,components/**/*
+globs: apps/web/src/app/**/*,apps/web/src/components/**/*
 alwaysApply: false
 ---
 
@@ -8,9 +8,9 @@ alwaysApply: false
 
 ## Page layout
 
-```vue
-<DataPageHeader test-id="{module}-page" :title="..." />
-<MoBreadcrumbNav test-id="{module}-breadcrumb" :items="..." />
+```tsx
+<DataPageHeader testId="{module}-page-header" title="..." />
+<MoBreadcrumbNav testId="{module}-breadcrumb" items={...} />
 ```
 
 ## Naming (kebab-case, English)
@@ -31,18 +31,17 @@ Auth: `auth-login-*`, `auth-reset-*`
 
 ## Prop `testId` trên shared UI
 
-Gắn **một lần** ở `Button`, `Input`, `FormField`, `DataPageHeader`, `ConfirmDialog`, `BreadcrumbNav`… Page chỉ truyền `test-id="..."`.
+Gắn **một lần** ở `Button`, `Input`, `DataPageHeader`, `ConfirmDialog`, `MoBreadcrumbNav`… Page chỉ truyền `testId="..."`.
 
 **Không** dùng `id` HTML / class CSS làm selector E2E.
 
 ## Primitive mới
 
-```vue
-defineProps<{ testId?: string }>()
-<input :data-testid="testId" />
+```tsx
+<input data-testid={testId} />
 ```
 
-Helper: `utils/testId.ts`
+Helper: `apps/web/src/lib/test-id.ts`
 
 ## Checklist page mới
 

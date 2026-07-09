@@ -1,7 +1,7 @@
 import { describe, expect, it, vi } from 'vitest'
 
-import { create{{entityPascal}}Service } from '~/services/{{entity}}.service'
-import { mockApiFetch } from '~/tests/unit/_helpers/mockApiFetch'
+import { create{{entityPascal}}Service } from '@/services/{{entity}}.service'
+import { mockApiFetch } from '../_helpers/mockApiFetch'
 
 describe('services/{{entity}}.service wire', () => {
   const validRow = {{{validRowJson}}} as const

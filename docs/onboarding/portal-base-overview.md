@@ -6,40 +6,38 @@
 
 Portal Base giúp team và AI làm nhanh hơn nhưng vẫn giữ pattern.
 
-- Nuxt 4 auth-first portal.
-- shadcn-vue primitives.
+- Next.js 15 auth-first portal (`apps/web`).
+- shadcn/ui primitives.
 - Molecules/organisms dùng lại.
 - 4 tầng rõ ràng.
-- Storybook để review component.
 - VitePress để review docs.
 - Playwright để E2E.
 
 ## Stack Chính
 
-- [Nuxt 4](https://nuxt.com/): framework Vue, routing, SSR/SPA.
-- [shadcn-vue](https://www.shadcn-vue.com/): UI primitive, Tailwind token.
+- [Next.js 15](https://nextjs.org/): React App Router, SSR/SPA.
+- [shadcn/ui](https://ui.shadcn.com/): UI primitive, Tailwind token.
 - Vitest: unit test logic.
 - Playwright: E2E browser automation.
-- Storybook: UI catalog/review component.
 - VitePress: docs site local cho Markdown.
 
 ## Kiến Trúc 4 Tầng
 
 ```text
-pages/components
+app/ + components/
   ↓
-composables
+hooks/
   ↓
 services + stores
   ↓
 models + validations
   ↓
-$apiFetch
+apiFetch
 ```
 
 Rule quan trọng:
 
-- Page/component không gọi `$apiFetch` trực tiếp.
+- Page/component không gọi `apiFetch` trực tiếp.
 - Service chịu trách nhiệm API.
 - Model giữ API contract/types.
 - Validation giữ form schema chặt hơn API.
@@ -47,10 +45,10 @@ Rule quan trọng:
 ## UI Tiers
 
 ```text
-components/ui/          shadcn primitives
-components/molecules/   Mo*
-components/organisms/   Data*, OrGlobal*
-pages/                  orchestration only
+apps/web/src/components/ui/          shadcn primitives
+apps/web/src/components/molecules/   mo-*
+apps/web/src/components/organisms/   data-*
+apps/web/src/app/(dashboard)/        orchestration only
 ```
 
 Lợi ích:
@@ -62,28 +60,12 @@ Lợi ích:
 
 ## Common Helpers
 
-- `$apiFetch` wrapper.
-- `models/`: API contract + types.
+- `apiFetch` wrapper (`apps/web/src/lib/api-client.ts`).
+- `@portal/models`: API contract + types.
 - `validations/`: form validation schema.
-- `useApiForm`: map validation + API error.
+- `react-hook-form` + zod resolver.
 - testId helpers.
 - Semantic UI E2E helpers.
-
-## Storybook
-
-Storybook dùng để xem component độc lập:
-
-```bash
-pnpm storybook
-pnpm storybook:build
-pnpm storybook:gen
-```
-
-Dùng tốt cho:
-
-- default/loading/error/disabled state
-- molecules/organisms preview
-- review UI trước khi vào page thật
 
 ## VitePress Docs
 

@@ -5,10 +5,10 @@ import { fileURLToPath } from 'node:url'
 
 import {
   REGISTRY_REL,
-  folderToPascalCase,
   loadDesignRegistry,
   lookupAlias
 } from './lib/design-registry.mjs'
+import { findMoleculeComponent } from './lib/component-resolve.mjs'
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '../..')
 
@@ -52,8 +52,7 @@ async function main() {
         ? `components/ui/${String(portal.ui).replace(/([A-Z])/g, '-$1').toLowerCase().replace(/^-/, '')}`
         : null
     if (portal.status === 'implemented' && portal.molecule) {
-      const base = portal.molecule.replace(/^Mo/, '')
-      const found = await findMolecule(root, base)
+      const found = await findMoleculeComponent(root, portal.molecule)
       if (!found) {
         errors.push(`fieldWidget ${name}: molecule ${portal.molecule} not found`)
       }
@@ -90,29 +89,8 @@ async function main() {
 }
 
 async function findMolecule(root, baseName) {
-  const { readdir } = await import('node:fs/promises')
-  const moleculesDir = path.join(root, 'components/molecules')
-
-  async function walk(dir) {
-    let entries = []
-    try {
-      entries = await readdir(dir, { withFileTypes: true })
-    } catch {
-      return null
-    }
-    for (const entry of entries) {
-      const entryPath = path.join(dir, entry.name)
-      if (entry.isDirectory()) {
-        const found = await walk(entryPath)
-        if (found) return found
-      } else if (entry.isFile() && entry.name === `${baseName}.vue`) {
-        return entryPath
-      }
-    }
-    return null
-  }
-
-  return walk(moleculesDir)
+  const moName = baseName.startsWith('Mo') ? baseName : `Mo${baseName}`
+  return findMoleculeComponent(root, moName)
 }
 
 main().catch((error) => {

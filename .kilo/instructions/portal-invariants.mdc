@@ -1,24 +1,24 @@
 ---
-description: Nuxt 4 layers, UI tiers, E2E testid, import alias — pointers to glob rules
+description: Next.js layers, UI tiers, E2E testid, import alias — pointers to glob rules
 alwaysApply: true
 ---
 
 # Portal Invariants
 
-Nuxt 4 auth-first. Detail: `docs/operational/ARCHITECTURE.md`, `E2E-TESTIDS.md`, `portal-base` skill.
+Next.js 15 auth-first (`apps/web`). Detail: `docs/operational/ARCHITECTURE.md`, `E2E-TESTIDS.md`, `portal-base` skill.
 
 ## Layers (bắt buộc)
 
-`pages/components` → `composables` → `services` + `stores` → `models` + `validations` → `$apiFetch`
+`app/` + `components/` → `hooks/` → `services/` + `stores/` → `validations/` + `@portal/models` → `apiFetch`
 
-- No `$apiFetch` in page/component · no reverse import from `models/`
-- Form: `useApiForm` + `validations/` + `models/` · contract: `portal-contract-naming.mdc`
-- Add feature: `models` → `services` → `stores?` → `composables` → `validations` → `pages` + `testId`
+- No `apiFetch` in page/component · no reverse import from `models/`
+- Form: `react-hook-form` + `validations/` + `models/` · contract: `portal-contract-naming.mdc`
+- Add feature: `models` → `services` → `stores?` → `hooks` → `validations` → `app/` + `testId`
 
 ## UI · size · E2E · imports
 
-- Tiers: `ui/` → `molecules/Mo*` → `organisms/Data*|OrGlobal*` · dashboard = `layouts/dashboard.vue` shadcn only
+- Tiers: `ui/` → `molecules/mo-*` → `organisms/data-*` · dashboard = `app/(dashboard)/layout.tsx` shadcn only
 - Registry: `shared/portal-design.registry.json` · `#shell: DataListPage` · `portal-design-vocabulary.mdc` (glob)
 - ~200 lines/file · ~20 lines/fn → `portal-code-size.mdc` (glob)
 - Playwright + `data-testid` before spec → `portal-base-ui-testid.mdc`, `portal-base-e2e.mdc` (glob)
-- Imports: `@/` `~/` `#` — no `../` → `portal-import-alias.mdc` (glob)
+- Imports: `@/` trong `apps/web/src` — no `../` → `portal-import-alias.mdc` (glob)

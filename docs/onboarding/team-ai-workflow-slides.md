@@ -488,8 +488,8 @@ Example prompt:
 
 Portal Base là nền để AI gen nhanh hơn và ít lệch pattern hơn.
 
-- Nuxt 4 auth-first portal
-- shadcn-vue + molecules + organisms
+- Next.js 15 auth-first portal (`apps/web`)
+- shadcn/ui + molecules + organisms
 - 4 tầng: page → composable → service/store → model/validation
 - Storybook để xem component
 - VitePress để review docs
@@ -526,7 +526,7 @@ List có pagination phải mock đủ ít nhất 2 page. Grill UI check cả tex
 
 Legacy Blade/HTML phải được chuyển đổi sang SPA/API contract mới, không bê nguyên flow server-render.
 
-Dynamic detail/edit route dùng `pages/{module}/[id]/index.vue` và `pages/{module}/[id]/edit.vue`, không tạo `pages/{module}/[id].vue`.
+Dynamic detail/edit route dùng `app/(dashboard)/{module}/[id]/page.tsx` và `app/(dashboard)/{module}/[id]/edit/page.tsx`.
 
 Phase `/design` không chạy full E2E/unit. Nếu cần thì chỉ code smoke skeleton cho happy path, luồng chính, validation message và để `/test`/`/unit` hoàn thiện sau.
 

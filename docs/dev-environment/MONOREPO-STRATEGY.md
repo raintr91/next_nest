@@ -8,13 +8,13 @@ Mục tiêu: dev nhẹ, release khả thi, module/package **chỉ chứa source*
 
 | Thành phần | Vị trí |
 |------------|--------|
-| Nuxt 4 | **Root** repo (chưa move `apps/portal`) |
+| Next.js 15 FE | `apps/web` (`@portal/web`) |
 | Nest API | `apps/api` (`@portal/api`) |
 | Zod contracts | `packages/models` (`@portal/models`) |
 | `pnpm-workspace` | `.`, `packages/*`, `apps/*` |
 
 **Local Docker:** `docker/docker-compose.yml` — `frontend-node` + `api-node`  
-**Prod:** Nest image từ `docker/api/Dockerfile` · Nuxt build static → S3/CloudFront (member chọn SPA/SSG)
+**Prod:** Nest image từ `docker/api/Dockerfile` · Next build (`apps/web`) → Node standalone hoặc static host (member chọn)
 
 ---
 
@@ -24,9 +24,9 @@ Mục tiêu: dev nhẹ, release khả thi, module/package **chỉ chứa source*
 
 ```
 portal/
-├── package.json              # Nuxt + orchestration scripts
+├── package.json              # orchestration scripts
 ├── pnpm-workspace.yaml
-├── pages/, services/, …      # Nuxt at root
+├── apps/web/                 # Next.js — app/, hooks/, services/, components/
 ├── apps/api/                 # NestJS + CQRS
 ├── packages/models/          # @portal/models — contract:gen
 └── docker/
@@ -36,8 +36,9 @@ Chạy từ root:
 
 ```bash
 pnpm install
-pnpm dev                      # Nuxt
+pnpm dev                      # Next @ apps/web
 pnpm dev:api                  # Nest :4000
+pnpm --filter @portal/web build
 pnpm --filter @portal/api build
 ```
 
@@ -45,9 +46,9 @@ Codegen & phase diagrams: [BACKEND-CODEGEN](../operational/BACKEND-CODEGEN.md) �
 
 ### Migration tiếp theo (optional)
 
-1. ~~Tách `models/` → `packages/models`~~ — bắt đầu; root `models/` giữ tạm cho app cũ
-2. Move Nuxt → `apps/portal` khi cần Docker/CI tách hẳn
-3. Tách `components/ui` → `packages/ui` nếu nhiều app
+1. ~~Tách `models/` → `packages/models`~~ — done (`@portal/models`)
+2. ~~Move FE → `apps/web`~~ — done
+3. Tách shared UI package chỉ khi có app FE thứ hai
 
 ---
 
@@ -63,30 +64,6 @@ api/
 
 Module = code + `composer.json` optional (path repo). **Không** nhân `vendor/` per module.
 
-Multi-tenant products (saas-admin, saas-store): có thể **cùng một** `api/src` + module, khác `.env` / `API_STACK_PREFIX` — không cần clone cả api.
-
----
-
-## Hướng C — Turborepo (khi nhiều app FE)
-
-Nếu sau này có `portal`, `admin-chain`, `admin-store`:
-
-```json
-// turbo.json
-{
-  "tasks": {
-    "build": { "dependsOn": ["^build"] },
-    "dev": { "cache": false, "persistent": true }
-  }
-}
-```
-
-```bash
-turbo dev --filter=portal
-```
-
-Vẫn **một** `node_modules` ở root (pnpm + turbo).
-
 ---
 
 ## Production Docker
@@ -94,7 +71,7 @@ Vẫn **một** `node_modules` ở root (pnpm + turbo).
 | App | Image |
 |-----|--------|
 | Nest API | `docker/api/Dockerfile` multi-stage |
-| Nuxt | CI build artifact → S3 (không runtime Docker) |
+| Next FE | CI build `apps/web` → Node image hoặc static host |
 
 ```dockerfile
 # docker/api/Dockerfile — chỉ api + models
@@ -105,12 +82,6 @@ RUN pnpm --filter @portal/api build
 
 ---
 
-## Hướng C — Turborepo (khi nhiều app FE)
-
-Nếu sau này có nhiều app FE — thêm `turbo.json` trên workspace hiện tại.
-
----
-
 ## Không nên
 
 | Anti-pattern | Lý do |
@@ -118,7 +89,6 @@ Nếu sau này có nhiều app FE — thêm `turbo.json` trên workspace hiện 
 | Mỗi module copy full `package.json` + `pnpm install` | N× node_modules |
 | `.pnpm-store` trong từng app | 60k+ files × N |
 | Dev host + dev Docker cùng app | 2× RAM + watcher |
-| `make up-all` khi chỉ làm portal base | LocalStack + 2 MySQL không cần thiết |
 
 ---
 
@@ -126,7 +96,7 @@ Nếu sau này có nhiều app FE — thêm `turbo.json` trên workspace hiện 
 
 | Câu hỏi | Trả lời |
 |---------|---------|
-| Nuxt ở đâu? | **Root** (tạm) — `apps/portal` sau |
+| Next FE ở đâu? | `apps/web` (`@portal/web`) |
 | Nest API? | `apps/api` — prod Docker riêng |
 | Zod SSOT? | `packages/models` — `contract:gen` |
-| Prod Nuxt? | S3 + CloudFront — SPA/SSG do member chọn |
+| Prod FE? | Next build artifact — runtime do member chọn |

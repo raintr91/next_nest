@@ -31,7 +31,7 @@ async function registerPartials() {
 }
 
 /**
- * @param {string} templateRel e.g. list/page.vue.hbs
+ * @param {string} templateRel e.g. list/page.tsx.hbs
  * @param {Record<string, unknown>} context
  */
 export async function renderTemplate(templateRel, context) {

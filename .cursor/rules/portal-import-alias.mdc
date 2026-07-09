@@ -1,11 +1,11 @@
 ---
-description: Absolute import aliases for hand-written Portal app code
-globs: "{pages,layouts,composables,services,stores,models,validations,components/molecules,components/organisms}/**/*.{vue,ts}"
+description: Import alias — @/ trong apps/web/src
+globs: apps/web/src/**/*
 alwaysApply: false
 ---
 
-# Import Alias
+# Import alias
 
-- Local imports: `@/`, `~/`, `#...`, or package aliases such as `#scripts/*`.
-- Do not apply to `components/ui/`, `.nuxt/`, `stories/auto/`, or shadcn-generated files.
-- No new relative imports `../foo` or `./foo` in hand-written app code.
+- Use `@/` → `apps/web/src` (no `../` between layers)
+- `@portal/models` for shared Zod contracts
+- Do not apply to generated shadcn files under `components/ui/` unless editing intentionally

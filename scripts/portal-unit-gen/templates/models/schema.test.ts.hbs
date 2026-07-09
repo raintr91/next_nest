@@ -1,15 +1,15 @@
 import { describe, expect, it } from 'vitest'
 
 import {
-  {{entityPascal}}Schema,
+  {{entityPascal}}ReadSchema,
   {{entityPascal}}ListResponseSchema
-} from '@portal/models/{{entity}}/{{entity}}.schema'
+} from '@portal/models/{{entity}}'
 
-describe('models/{{entity}}/{{entity}}.schema', () => {
+describe('models/{{entity}}', () => {
   const validRow = {{{validRowJson}}} as const
 
   it('parses a valid row', () => {
-    expect({{entityPascal}}Schema.parse(validRow)).toEqual(validRow)
+    expect({{entityPascal}}ReadSchema.parse(validRow)).toEqual(validRow)
   })
 
   it('parses list response envelope', () => {
@@ -19,6 +19,6 @@ describe('models/{{entity}}/{{entity}}.schema', () => {
 
   it('rejects row missing required field', () => {
     const { {{failField}}: _removed, ...incomplete } = validRow
-    expect(() => {{entityPascal}}Schema.parse(incomplete)).toThrow()
+    expect(() => {{entityPascal}}ReadSchema.parse(incomplete)).toThrow()
   })
 })

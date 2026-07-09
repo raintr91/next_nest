@@ -168,7 +168,7 @@ Check:
 - Các test id quan trọng visible hoặc attached.
 - `document.fonts.ready` nếu browser hỗ trợ, để tránh đo text trước khi font load.
 - Ảnh visible `complete === true` trước khi chạy broken image/text overflow.
-- Không mặc định `networkidle` cho Nuxt app vì dễ treo với polling/analytics; chỉ bật khi page cần.
+- Không mặc định `networkidle` cho Next app vì dễ treo với analytics; chỉ bật khi page cần.
 
 Options:
 
@@ -554,7 +554,7 @@ await expect(page).toHaveValidDocumentSemantics()
 
 Rule:
 
-- Với Nuxt app, `document-title` và `html-has-lang` nên chạy ở smoke public/auth page.
+- Với Next app, `document-title` và `html-has-lang` nên chạy ở smoke public/auth page.
 - `duplicate-id` nên chạy mọi page có form/dialog/table vì dễ gây lỗi assistive technology.
 - `heading-order` có thể warning trước rồi nâng lên fail khi legacy page đã sạch.
 
@@ -730,7 +730,7 @@ Testcase decorator:
 
 Mục tiêu: component quan trọng không lệch token màu, spacing, radius, font.
 
-Portal đang dùng shadcn-vue + Tailwind token theo CSS variables. Nguồn token hiện tại:
+Portal dùng shadcn/ui + Tailwind token theo CSS variables. Nguồn token hiện tại:
 
 - `assets/css/main.css`: khai báo `:root`, `.dark`, `.tailwind-admin-theme`, `.sb-dashboard-preview`.
 - `tailwind.config.ts`: map shadcn token sang Tailwind color/radius:

@@ -6,6 +6,7 @@ import { fileURLToPath } from 'node:url'
 import { buildCodegenContext, buildFilePlan, enrichCodegenContext, applyRegistryToContext } from './lib/plan.mjs'
 import { loadDesignRegistry } from './lib/design-registry.mjs'
 import { upsertPageLifecycle, syncPageLifecycleFromManifests } from './lib/page-lifecycle.mjs'
+import { isNextPagePath } from './lib/web-paths.mjs'
 import { readSpecFile } from './lib/read-spec.mjs'
 import { renderTemplate } from './lib/render.mjs'
 import { renderHandoffMarkdown, writeGeneratedMeta, writeOutputs } from './lib/write-files.mjs'
@@ -130,7 +131,7 @@ async function generateOne(options, registry, specPath) {
   }
 
   if (!options.dryRun) {
-    const pageWritten = written.find((w) => w.relativePath?.startsWith('pages/') && w.relativePath.endsWith('.vue'))
+    const pageWritten = written.find((w) => w.relativePath && isNextPagePath(w.relativePath))
     if (pageWritten) {
       const lifecycle = await upsertPageLifecycle(root, {
         routePath: ctx.route.path,
@@ -145,7 +146,7 @@ async function generateOne(options, registry, specPath) {
     console.log(`  handoff: ${path.relative(root, meta.handoffPath)}`)
   }
 
-  return { specFile, wrotePage: !options.dryRun && written.some((w) => w.relativePath?.startsWith('pages/')) }
+  return { specFile, wrotePage: !options.dryRun && written.some((w) => w.relativePath && isNextPagePath(w.relativePath)) }
 }
 
 async function main() {

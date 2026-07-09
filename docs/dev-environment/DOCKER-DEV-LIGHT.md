@@ -14,7 +14,7 @@
 | Mailpit, mock-api, StackPort | ~200–400 MB |
 | gateway nginx | nhẹ |
 
-**+ portal docker:** `node:24` + `pnpm install` + `nuxt dev`  
+**+ portal docker:** `node:24` + `pnpm install` + `pnpm dev` (Next)  
 **+ api docker:** PHP-FPM + nginx  
 **+ (tuỳ chọn)** `docker-compose.external.yml` → thêm mairy PHP/nginx/node  
 
@@ -107,11 +107,11 @@ deploy:
 
 | Layer | Dev (nặng) | Production (nhẹ) |
 |-------|------------|------------------|
-| Portal | node_modules, Storybook, Vitest, polling | `nuxt build` → `.output` standalone image ~100–200MB |
+| Portal | node_modules, Vitest, polling | `next build` (`apps/web`) → standalone image |
 | API | full `vendor/`, dev tools | `composer install --no-dev` + PHP-FPM image |
 | Gateway stack | 10+ containers | 1 ingress + managed DB (RDS) — không LocalStack |
 
-Release **không** ship `.pnpm-store`, không 2 MySQL, không chạy `nuxt dev`.
+Release **không** ship `.pnpm-store`, không 2 MySQL, không chạy `next dev` trong prod.
 
 ---
 
@@ -127,7 +127,7 @@ workspace/
   pnpm-workspace.yaml
   node_modules/         # DUY NHẤT (hoisted)
   apps/
-    portal/             # Nuxt app — package.json mỏng
+    web/                  # @portal/web — Next.js
   packages/
     ui/                 # chỉ src + package.json (peer deps)
     models/

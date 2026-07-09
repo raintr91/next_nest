@@ -2,7 +2,9 @@ import path from 'node:path'
 import { access } from 'node:fs/promises'
 
 import { buildCodegenContext } from '../../portal-gen/lib/plan.mjs'
+import { webHookPath, webServicePath, webValidationPath } from '../../portal-gen/lib/web-paths.mjs'
 import { findManifestLayerPath } from './read-codegen.mjs'
+import { resolveModelPackagePath } from './resolve-model.mjs'
 import { hasExplicitGenTag, isLayerSkipped, parseUnitTags } from './parse-tags.mjs'
 import {
   expandTagTemplate,
@@ -20,7 +22,7 @@ export function buildUnitContext(spec, specFile, codegenManifest, options = {}) 
   const ctx = buildCodegenContext(spec, specFile)
   const unitTags = parseUnitTags([...(spec.tags ?? []), ...(codegenManifest.tags ?? [])])
 
-  const failField = pickSchemaFailField(ctx.columns)
+  const failField = pickSchemaFailField(ctx.columns, ctx.mockRowsPage1[0])
   const { requiredFormFields, validFormValues } = buildFormTestContext(ctx.formFields)
   const listRoutePath = String(ctx.route?.path ?? '').replace(/\/create$/, '') || '/'
 
@@ -49,7 +51,8 @@ function buildFormTestContext(formFields = []) {
   return { requiredFormFields, validFormValues }
 }
 
-function pickSchemaFailField(columns = []) {
+function pickSchemaFailField(columns = [], validRow = {}) {
+  if (validRow && typeof validRow === 'object' && 'id' in validRow) return 'id'
   if (columns.some((c) => c.key === 'id')) return 'id'
   const first = columns[0]?.key
   return first ?? 'id'
@@ -57,7 +60,7 @@ function pickSchemaFailField(columns = []) {
 
 function defaultLayersForProfile(registry, profile) {
   if (profile === 'create' || profile === 'edit') {
-    return registry.defaults?.phaseCreate ?? ['schema', 'validation', 'composable']
+    return registry.defaults?.phaseCreate ?? ['schema', 'validation', 'hook']
   }
   return registry.defaults?.phasePrototype ?? []
 }
@@ -120,15 +123,9 @@ async function appendSchemaPlan(ctx, registry, files, needsUnit, skippedPatterns
     return
   }
 
-  const modelPath = findManifestLayerPath(ctx.codegenManifest, 'models') ??
-    `packages/models/src/${ctx.entity}/${ctx.entity}.schema.ts`
-  const absoluteModel = path.join(root, modelPath)
-
-  try {
-    await access(absoluteModel)
-  } catch {
-    throw new Error(`Model file missing: ${modelPath} — run contract:gen first`)
-  }
+  const modelPath =
+    findManifestLayerPath(ctx.codegenManifest, 'models') ??
+    (await resolveModelPackagePath(root, ctx.entity))
 
   const relativePath = resolveOutputPath(pattern.output, ctx)
 
@@ -177,7 +174,7 @@ async function appendServiceSearchPlan(ctx, registry, files, needsUnit, skippedP
   if (!explicit && !inDefault) return
 
   const servicePath =
-    findManifestLayerPath(ctx.codegenManifest, 'service') ?? `services/${ctx.entity}.service.ts`
+    findManifestLayerPath(ctx.codegenManifest, 'service') ?? webServicePath(`${ctx.entity}.service.ts`)
   const absoluteService = path.join(root, servicePath)
 
   try {
@@ -226,7 +223,7 @@ async function appendServiceExportPlan(ctx, registry, files, needsUnit, skippedP
   if (!explicit && !inDefault) return
 
   const servicePath =
-    findManifestLayerPath(ctx.codegenManifest, 'service') ?? `services/${ctx.entity}.service.ts`
+    findManifestLayerPath(ctx.codegenManifest, 'service') ?? webServicePath(`${ctx.entity}.service.ts`)
   const absoluteService = path.join(root, servicePath)
 
   try {
@@ -255,14 +252,14 @@ async function appendComposableListPlan(ctx, registry, files, needsUnit, skipped
   if (!pattern) return
   if (ctx.profile !== 'list') return
 
-  if (isLayerSkipped(ctx.unitTags, 'composable') || isLayerSkipped(ctx.unitTags, 'composable-list')) {
+  if (isLayerSkipped(ctx.unitTags, 'hook') || isLayerSkipped(ctx.unitTags, 'composable-list')) {
     skippedPatterns.push({ patternId, reason: '#skip-unit-test' })
     return
   }
 
-  const explicit = hasExplicitGenTag(ctx.unitTags, 'composable')
+  const explicit = hasExplicitGenTag(ctx.unitTags, 'hook')
   const defaultPhase = registry.defaults?.phasePrototype ?? []
-  const inDefault = defaultPhase.includes('composable')
+  const inDefault = defaultPhase.includes('hook') || defaultPhase.includes('composable')
   const profileOk = !pattern.profiles?.length || pattern.profiles.includes(ctx.profile)
 
   if (ctx.phase === 'wire' && !explicit) return
@@ -285,24 +282,24 @@ async function appendComposableListPlan(ctx, registry, files, needsUnit, skipped
     return
   }
 
-  const composablePath =
-    findManifestLayerPath(ctx.codegenManifest, 'composable') ??
-    `composables/${ctx.entity}/use${ctx.entityPascal}List.ts`
-  const absoluteComposable = path.join(root, composablePath)
+  const hookPath =
+    findManifestLayerPath(ctx.codegenManifest, 'hook') ??
+    webHookPath(`${ctx.entity}/use${ctx.entityPascal}List.ts`)
+  const absoluteHook = path.join(root, hookPath)
 
   try {
-    await access(absoluteComposable)
+    await access(absoluteHook)
   } catch {
-    throw new Error(`Composable file missing: ${composablePath} — run portal:gen first`)
+    throw new Error(`Hook file missing: ${hookPath} — run portal:gen first`)
   }
 
   const relativePath = resolveOutputPath(
-    pattern.output ?? `tests/unit/composables/${ctx.entity}/use${ctx.entityPascal}List.test.ts`,
+    pattern.output ?? `tests/unit/hooks/${ctx.entity}/use${ctx.entityPascal}List.test.ts`,
     ctx
   )
 
   files.push({
-    layer: 'composable',
+    layer: 'hook',
     patternId,
     relativePath,
     template: pattern.template,
@@ -356,7 +353,7 @@ async function appendValidationPlan(ctx, registry, files, needsUnit, skippedPatt
 
   const validationPath =
     findManifestLayerPath(ctx.codegenManifest, 'validation') ??
-    `validations/${ctx.entity}/schemas.ts`
+    webValidationPath(`${ctx.entity}/schemas.ts`)
   const absoluteValidation = path.join(root, validationPath)
 
   try {
@@ -385,14 +382,14 @@ async function appendComposableFormPlan(ctx, registry, files, needsUnit, skipped
   if (!pattern) return
   if (ctx.profile !== 'create' && ctx.profile !== 'edit') return
 
-  if (isLayerSkipped(ctx.unitTags, 'composable') || isLayerSkipped(ctx.unitTags, 'composable-form')) {
+  if (isLayerSkipped(ctx.unitTags, 'hook') || isLayerSkipped(ctx.unitTags, 'composable-form')) {
     skippedPatterns.push({ patternId, reason: '#skip-unit-test' })
     return
   }
 
-  const explicit = hasExplicitGenTag(ctx.unitTags, 'composable-form') || hasExplicitGenTag(ctx.unitTags, 'composable')
+  const explicit = hasExplicitGenTag(ctx.unitTags, 'composable-form') || hasExplicitGenTag(ctx.unitTags, 'hook')
   const defaultPhase = defaultLayersForProfile(registry, ctx.profile)
-  const inDefault = defaultPhase.includes('composable')
+  const inDefault = defaultPhase.includes('hook') || defaultPhase.includes('composable')
   const profileOk = !pattern.profiles?.length || pattern.profiles.includes(ctx.profile)
 
   if (ctx.phase === 'wire' && !explicit) return
@@ -415,24 +412,24 @@ async function appendComposableFormPlan(ctx, registry, files, needsUnit, skipped
     return
   }
 
-  const composablePath =
-    findManifestLayerPath(ctx.codegenManifest, 'composable') ??
-    `composables/${ctx.entity}/use${ctx.entityPascal}Form.ts`
-  const absoluteComposable = path.join(root, composablePath)
+  const hookPath =
+    findManifestLayerPath(ctx.codegenManifest, 'hook') ??
+    webHookPath(`${ctx.entity}/use${ctx.entityPascal}Form.ts`)
+  const absoluteHook = path.join(root, hookPath)
 
   try {
-    await access(absoluteComposable)
+    await access(absoluteHook)
   } catch {
-    throw new Error(`Composable file missing: ${composablePath} — run portal:gen first`)
+    throw new Error(`Hook file missing: ${hookPath} — run portal:gen first`)
   }
 
   const relativePath = resolveOutputPath(
-    pattern.output ?? `tests/unit/composables/${ctx.entity}/use${ctx.entityPascal}Form.test.ts`,
+    pattern.output ?? `tests/unit/hooks/${ctx.entity}/use${ctx.entityPascal}Form.test.ts`,
     ctx
   )
 
   files.push({
-    layer: 'composable',
+    layer: 'hook',
     patternId,
     relativePath,
     template: pattern.template,
@@ -469,7 +466,7 @@ async function appendServiceCreatePlan(ctx, registry, files, needsUnit, skippedP
   if (!explicit && !inDefault) return
 
   const servicePath =
-    findManifestLayerPath(ctx.codegenManifest, 'service') ?? `services/${ctx.entity}.service.ts`
+    findManifestLayerPath(ctx.codegenManifest, 'service') ?? webServicePath(`${ctx.entity}.service.ts`)
   const absoluteService = path.join(root, servicePath)
 
   try {
@@ -509,7 +506,7 @@ async function appendWirePlan(ctx, registry, files, needsUnit, skippedPatterns, 
   if (!explicit && !defaultPhase.includes('service')) return
 
   const servicePath =
-    findManifestLayerPath(ctx.codegenManifest, 'service') ?? `services/${ctx.entity}.service.ts`
+    findManifestLayerPath(ctx.codegenManifest, 'service') ?? webServicePath(`${ctx.entity}.service.ts`)
   const absoluteService = path.join(root, servicePath)
 
   try {

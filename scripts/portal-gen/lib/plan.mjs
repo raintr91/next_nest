@@ -14,6 +14,13 @@ import {
 import { applyDesignRegistry, validateSpecDesign, parseDesignTags } from './design-registry.mjs'
 import { resolveComponentFiles } from './component-resolve.mjs'
 import { buildSlotBindings, collectUniqueComponents } from './slots.mjs'
+import {
+  routeToAppPagePath,
+  webHookPath,
+  webMockPath,
+  webServicePath,
+  webValidationPath
+} from './web-paths.mjs'
 
 const TAG_PREFIX = {
   needsComponent: '#needs-component:',
@@ -78,6 +85,7 @@ export function buildCodegenContext(spec, specFile) {
   const moduleKebab = toKebabCase(module)
 
   const route = spec.ui?.routes?.[0] ?? { path: `/${moduleKebab}`, pageTestId: `${moduleKebab}-page` }
+  const listRoutePath = String(route.path ?? `/${moduleKebab}`).replace(/\/create$/, '') || `/${moduleKebab}`
   const testIdModule = spec.ui?.testIds?.module ?? moduleKebab
   const columns = spec.ui?.columns ?? []
   const filters = spec.ui?.filters ?? []
@@ -146,6 +154,7 @@ export function buildCodegenContext(spec, specFile) {
     title: spec.title ?? entityPascal,
     summary: spec.summary ?? '',
     route,
+    listRoutePath,
     pagePath: routeToPagePath(route.path),
     columns,
     columnSchemas,
@@ -293,20 +302,20 @@ export function buildFilePlan(ctx) {
   if (profile === 'list') {
     const listTemplate =
       ctx.listPageTemplate ??
-      (ctx.useCustomShell ? 'list/page.custom.vue.hbs' : 'list/page.vue.hbs')
+      (ctx.useCustomShell ? 'list/page.custom.tsx.hbs' : 'list/page.tsx.hbs')
 
-    add('service', `services/${entity}.service.ts`, 'list/service.ts.hbs')
-    add('composable', `composables/${entity}/use${entityPascal}List.ts`, 'list/useList.ts.hbs')
-    add('page', ctx.pagePath, listTemplate)
-    add('mock', `mocks/${entity}.mock.ts`, 'list/mock.ts.hbs')
+    add('service', webServicePath(`${entity}.service.ts`), 'list/service.ts.hbs')
+    add('hook', webHookPath(`${entity}/use${entityPascal}List.ts`), 'list/useList.ts.hbs')
+    add('page', ctx.pagePath ?? routeToAppPagePath(ctx.route.path), listTemplate)
+    add('mock', webMockPath(`${entity}.mock.ts`), 'list/mock.ts.hbs')
   }
 
   if (profile === 'create') {
-    add('service', `services/${entity}.service.ts`, 'create/service.ts.hbs')
-    add('composable', `composables/${entity}/use${entityPascal}Form.ts`, 'create/useForm.ts.hbs')
-    add('validation', `validations/${entity}/schemas.ts`, 'create/validation.ts.hbs')
-    add('page', ctx.pagePath, 'create/page.vue.hbs')
-    add('mock', `mocks/${entity}.mock.ts`, 'create/mock.ts.hbs')
+    add('service', webServicePath(`${entity}.service.ts`), 'create/service.ts.hbs')
+    add('hook', webHookPath(`${entity}/use${entityPascal}Form.ts`), 'create/useForm.ts.hbs')
+    add('validation', webValidationPath(`${entity}/schemas.ts`), 'create/validation.ts.hbs')
+    add('page', ctx.pagePath ?? routeToAppPagePath(ctx.route.path), 'create/page.tsx.hbs')
+    add('mock', webMockPath(`${entity}.mock.ts`), 'create/mock.ts.hbs')
   }
 
   return files

@@ -31,6 +31,10 @@ export async function readCodegenManifest(featureDir) {
  * @param {string} layer
  */
 export function findManifestLayerPath(manifest, layer) {
-  const entry = manifest.files?.find((f) => f.layer === layer)
-  return entry?.path ?? null
+  const layers = layer === 'composable' ? ['hook', 'composable'] : [layer]
+  for (const key of layers) {
+    const entry = manifest.files?.find((f) => f.layer === key)
+    if (entry?.path) return entry.path
+  }
+  return null
 }

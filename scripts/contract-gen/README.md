@@ -1,6 +1,6 @@
 # Contract codegen (`contract-gen`)
 
-Zod contract SSOT in `packages/models` — shared by Nuxt and Nest.
+Zod contract SSOT in `packages/models` — shared by Next FE and Nest.
 
 ## Input
 

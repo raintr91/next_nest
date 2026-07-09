@@ -38,7 +38,7 @@ export async function loadDesignRegistry(root) {
  * @param {Record<string, unknown>} raw
  */
 async function discoverShadcnComponents(root, raw) {
-  const uiDir = path.join(root, 'components/ui')
+  const uiDir = path.join(root, 'apps/web/src/components/ui')
   const aliases = raw.componentAliases ?? {}
   /** @type {Record<string, object>} */
   const components = {}
@@ -53,8 +53,9 @@ async function discoverShadcnComponents(root, raw) {
   const categoryByName = buildCategoryIndex(raw.componentCategories ?? {})
 
   for (const entry of entries) {
-    if (!entry.isDirectory()) continue
-    const canonical = folderToPascalCase(entry.name)
+    if (!entry.isFile() || !entry.name.endsWith('.tsx')) continue
+    const base = entry.name.replace(/\.tsx$/, '')
+    const canonical = folderToPascalCase(base)
     const extra = aliases[canonical] ?? {}
     components[canonical] = {
       canonical,
@@ -65,7 +66,7 @@ async function discoverShadcnComponents(root, raw) {
       disambiguate: extra.disambiguate,
       portal: {
         layer: 'ui',
-        path: `components/ui/${entry.name}`,
+        path: `apps/web/src/components/ui/${entry.name}`,
         status: 'implemented'
       }
     }

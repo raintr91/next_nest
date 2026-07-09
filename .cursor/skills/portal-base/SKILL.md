@@ -1,12 +1,11 @@
 ---
-name: portal-base
-description: Nuxt 4 app conventions — layers, testId, E2E; see invariants + ARCHITECTURE.md
+description: Next.js app conventions — layers, testId, E2E; see invariants + ARCHITECTURE.md
 disable-model-invocation: true
 ---
 
-# Portal Base (Nuxt 4)
+# Portal Base (Next.js 15)
 
-Auth-first Nuxt 4 · Vue 3 · Pinia · vee-validate+Zod · shadcn-vue · Playwright.
+Auth-first Next.js · React 19 · Zustand · react-hook-form+Zod · shadcn/ui · Playwright.
 
 **Rules:** `portal-invariants.mdc`, `portal-contract-naming.mdc`, glob `portal-base-*`, `portal-code-size`, `portal-component-split`.
 
@@ -16,22 +15,22 @@ Auth-first Nuxt 4 · Vue 3 · Pinia · vee-validate+Zod · shadcn-vue · Playwri
 
 ## Layers
 
-`pages/components` → `composables` → `services` + `stores` → `models` + `validations` → `$apiFetch`
+`app/` + `components/` → `hooks/` → `services/` + `stores/` → `validations/` + `@portal/models` → `apiFetch`
 
 | Tầng | Không làm |
 |------|-----------|
-| page/component | `$apiFetch` |
-| composable | HTTP chi tiết |
-| service | Pinia state |
-| models | import stores/services/composables |
+| page/component | `apiFetch` |
+| hook | HTTP chi tiết |
+| service | Zustand state |
+| models | import stores/services/hooks |
 
-**New feature order:** models → service → store? → composable → validations? → page + testId
+**New feature order:** models → service → store? → hook → validations? → page + testId
 
-**Form:** `useApiForm` + `validations/` (chặt) + `models/` (API contract lỏng).
+**Form:** `react-hook-form` + `validations/` (chặt) + `@portal/models` (API contract).
 
 ## UI tiers
 
-`ui/` → `molecules/Mo*` → `organisms/Data*|OrGlobal*` · list shell: `DataListPage` · dashboard: `layouts/dashboard.vue`
+`components/ui/` → `molecules/mo-*` → `organisms/data-*` · list shell: `DataListPage` · dashboard: `app/(dashboard)/layout.tsx`
 
 ## testId (summary)
 
@@ -42,7 +41,7 @@ Auth-first Nuxt 4 · Vue 3 · Pinia · vee-validate+Zod · shadcn-vue · Playwri
 ## E2E
 
 ```bash
-pnpm test:e2e    # NUXT_PUBLIC_E2E=1, port 3005
+pnpm test:e2e    # Next dev port 3005 + Playwright
 ```
 
 After `goto`: `assertLayoutIntegrity(page)` · specs `tests/e2e/**/*.spec.ts`

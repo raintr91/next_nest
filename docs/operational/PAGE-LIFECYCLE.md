@@ -25,13 +25,14 @@ pnpm portal:remove --spec docs/features/.../feature.spec.yaml
 
 | Path | Stage | Auth | Spec | Title | Updated |
 |------|-------|------|------|-------|---------|
-| /admin/chains | prototype | bypass | `docs/features/yaml/admin/chain/list/ir/spec.yaml` | Quản lý chain admin | 2026-07-08 |
-| /admin/chains/create | prototype | bypass | `docs/features/yaml/admin/chain/form/ir/spec.yaml` | Tạo / cập nhật chain admin | 2026-07-08 |
+| /admin/chains | design-spec | bypass | `docs/features/yaml/admin/chain/list/ir/spec.yaml` | Quản lý chain admin | 2026-07-09 |
+| /admin/chains/create | design-spec | bypass | `docs/features/yaml/admin/chain/form/ir/spec.yaml` | Tạo / cập nhật chain admin | 2026-07-09 |
 | /admin/hotels | design-spec | bypass | `docs/features/yaml/admin/hotel/list/ir/spec.yaml` | Admin hotel list | 2026-06-27 |
 | /hotels | test | bypass | `docs/features/yaml/admin/chain/login-as/ir/spec.yaml` | Chain — danh sách hotel (施設一覧) | 2026-07-08 |
+| /sample-items | prototype | bypass | `docs/features/yaml/_example/contract-pilot/ir/spec.yaml` | Contract gen pilot | 2026-07-09 |
 
 ## Liên quan
 
-- Auth bypass: mọi stage **trừ** `wire` — `middleware/auth.global.ts`
+- Auth bypass: mọi stage **trừ** `wire` — `apps/web/src/middleware.ts`
 - Xóa code: `pnpm portal:remove --spec <file>`
 - Session handoff: `.harness/progress.md`

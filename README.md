@@ -1,6 +1,6 @@
-# Portal Base (Nuxt 4)
+# Portal Base (Next.js 15)
 
-Auth-first Nuxt 4 template — shadcn dashboard, kiến trúc 4 tầng, harness AI cho feature mới.
+Auth-first Next.js monorepo — shadcn dashboard, kiến trúc 4 tầng trong `apps/web`, harness AI cho feature mới.
 
 ## Quick start
 
@@ -9,14 +9,14 @@ pnpm install
 pnpm dev
 ```
 
-`devServer` listen `0.0.0.0`. WSL ext4: watch polling tắt mặc định — bật `NUXT_WATCH_POLLING=1` khi Docker hoặc project trên `/mnt/c`.
+FE chạy tại `apps/web` (mặc định port 3000). API Nest: `pnpm dev:api`.
 
 ## Commands
 
 | Command | Mô tả |
 |---------|--------|
-| `pnpm dev` | Nuxt dev |
-| `pnpm storybook` | UI catalog (port 6006) |
+| `pnpm dev` | Next dev (`@portal/web`) |
+| `pnpm build` | Next production build |
 | `pnpm test:unit` | Vitest |
 | `pnpm test:e2e` | Playwright — đọc [E2E-TESTIDS](docs/operational/E2E-TESTIDS.md) trước |
 | `pnpm docs:dev` | VitePress (`pnpm docs:render` trước) |
@@ -31,10 +31,10 @@ pnpm dev
 
 ## Repo này
 
-Auth-first skeleton: `/auth/*`, `/password/reset/*`, `/` (protected), `404`, `forbidden`. Chi tiết route/middleware: `pages/`, `middleware/`.
+Auth-first skeleton: `/login`, `/` (protected dashboard), middleware cookie `auth_token`.
 
-API client (`$apiFetch`) dùng prefix **`/api/auth/*`**.
+API client (`apiFetch` trong `apps/web/src/lib/api-client.ts`) gọi `NEXT_PUBLIC_API_URL/api/*`.
 
 ## Team AI harness
 
-Commands và skills: [docs/operational/FEATURE-ARTIFACT-FLOWS.md](docs/operational/FEATURE-ARTIFACT-FLOWS.md) · [docs/operational/PROMPT-TEMPLATES.md](docs/operational/PROMPT-TEMPLATES.md). AI harness hiện nằm trong `.cursor/extracts/` và `.cursor/skills/`.
+Commands và skills: [docs/operational/FEATURE-ARTIFACT-FLOWS.md](docs/operational/FEATURE-ARTIFACT-FLOWS.md) · [docs/operational/PROMPT-TEMPLATES.md](docs/operational/PROMPT-TEMPLATES.md). AI harness nằm trong `.cursor/` và `.kilo/`.

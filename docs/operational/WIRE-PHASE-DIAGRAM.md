@@ -16,8 +16,8 @@ flowchart TD
   PRE_API["nest:gen + nest:unit-gen\nJest green"]
   PRE_E2E["testcase:gen\nE2E mock green"]
   W["/wire"]
-  SVC["services/*.ts\n→ $apiFetch Nest URL"]
-  MOCK["mocks/ off hoặc\nNUXT_PUBLIC_API_BASE"]
+  SVC["apps/web/src/services/*.ts\n→ apiFetch Nest URL"]
+  MOCK["mocks/ off hoặc\nNEXT_PUBLIC_API_URL"]
   PU["portal:unit-gen --phase wire"]
   E2E["test:e2e scoped"]
   GW["/grill-api\nintegration audit"]
@@ -43,7 +43,7 @@ flowchart TD
 |------|-----|------|
 | Prerequisites | dev | FE scaffold + API module + E2E mock pass |
 | **`/wire`** | dev + AI | Map `api.endpoints` → `services/` gọi `/api/...` Nest |
-| **Env** | dev | `NUXT_PUBLIC_API_BASE` hoặc proxy → `:4000` ([BACKEND-API-QUICKSTART](./BACKEND-API-QUICKSTART.md)) |
+| **Env** | dev | `NEXT_PUBLIC_API_URL` hoặc proxy → `:4000` ([BACKEND-API-QUICKSTART](./BACKEND-API-QUICKSTART.md)) |
 | **`portal:unit-gen --phase wire`** | script | Service tests mock real response shape |
 | **`pnpm test:e2e`** | dev | Playwright against integrated stack |
 | **`/grill-api`** | dev + AI | Contract keys FE↔BE, error envelope, pagination |
@@ -55,9 +55,9 @@ flowchart TD
 
 ```mermaid
 flowchart LR
-  subgraph FE["Nuxt (root)"]
-    P[pages/]
-    CO[composables/]
+  subgraph FE["apps/web — Next.js"]
+    P["app/(dashboard)/"]
+    HO[hooks/]
     SV[services/]
     MO["@portal/models"]
   end
@@ -68,7 +68,7 @@ flowchart LR
     ORM[TypeORM → MySQL]
   end
 
-  P --> CO --> SV
+  P --> HO --> SV
   SV -->|"HTTP /api/*"| CTL
   CTL --> CQRS --> ORM
   SV --> MO
@@ -123,7 +123,7 @@ Spec `#wire-only` trong testcase → giữ mock hoặc skip đến khi lifecycle
 # API running
 pnpm dev:api
 
-# Nuxt (proxy or public API base)
+# Next (proxy or public API base)
 pnpm dev
 
 # Re-gen service unit tests after wire

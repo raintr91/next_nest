@@ -1,6 +1,0 @@
-export { default as EmptyState } from '~/components/molecules/data-display/EmptyState.vue'
-export { default as DataIterator } from '~/components/molecules/data-display/DataIterator.vue'
-export { default as ConfirmEdit } from '~/components/molecules/data-display/ConfirmEdit.vue'
-export { default as SimpleTable } from '~/components/molecules/data-display/SimpleTable.vue'
-export { default as InfiniteScroll } from '~/components/molecules/data-display/InfiniteScroll.vue'
-export { default as SparklineBars } from '~/components/molecules/data-display/SparklineBars.vue'

@@ -5,7 +5,7 @@ import { mockAuthenticatedSession } from './helpers/session'
 
 test.describe('Login page', () => {
   test.beforeEach(async ({ page }) => {
-    await page.goto('/auth/login')
+    await page.goto('/login/')
   })
 
   test('shows login form fields', async ({ page }) => {
@@ -16,9 +16,9 @@ test.describe('Login page', () => {
     await assertLayoutIntegrity(page)
   })
 
-  test('shows logo and subtitle section', async ({ page }) => {
-    await expect(page.getByTestId('auth-login-logo')).toBeVisible()
-    await expect(page.getByTestId('auth-login-subtitle')).toBeVisible()
+  test('shows heading and helper text', async ({ page }) => {
+    await expect(page.getByRole('heading', { name: 'ログイン' })).toBeVisible()
+    await expect(page.getByText('アカウント情報を入力してください。')).toBeVisible()
   })
 
   test('shows email validation error for invalid email', async ({ page }) => {
@@ -62,12 +62,12 @@ test.describe('Login page', () => {
     await page.getByTestId('auth-login-email-input').fill('user@example.co.jp')
     await page.getByTestId('auth-login-password-input').fill('wrongpassword')
     await page.getByTestId('auth-login-form').evaluate((form) => (form as HTMLFormElement).requestSubmit())
-    await expect(page).toHaveURL(/\/auth\/login/)
+    await expect(page).toHaveURL(/\/login/)
   })
 
   test('redirects authenticated user away from login page', async ({ page }) => {
     await mockAuthenticatedSession(page)
-    await page.goto('/auth/login?redirect=%2F')
+    await page.goto('/login/?next=%2F')
     await expect(page).toHaveURL('/')
   })
 })

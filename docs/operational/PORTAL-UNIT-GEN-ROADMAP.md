@@ -12,7 +12,7 @@ Trạng thái tại **2026-06-27** (cập nhật khi xong từng PR).
 | **1** | Schema + manifest | ✅ Done | `schema.test.ts.hbs`, `unit.manifest.json`, `UNIT-HANDOFF.md`, `#gen:test-schema` |
 | **2** | Service list (prototype) | ✅ Done | `service.search.test.ts.hbs` GET/POST, `#gen:test-service`, default `phasePrototype: schema+service` |
 | **3** | Validation (create) | ✅ Done | `validations/schemas.test.ts.hbs`, `*CreateObjectSchema` export trong portal-gen |
-| **4** | Composable list | ✅ Done | `use-list.test.ts.hbs`, `nuxtGlobals.ts`, `defaults.phasePrototype` + composable |
+| **4** | Hook list | ✅ Done | `hooks/use-list.test.ts.hbs`, `defaults.phasePrototype` + hook |
 | **5** | Composable form + create service | ✅ Done | `use-form.test.ts.hbs`, `service.create.test.ts.hbs`, `phaseCreate` + `service` |
 | **6** | Service export / custom endpoint | ✅ Done | `service.export.test.ts.hbs` khi `action: export` |
 | **7** | Wire phase delta | ✅ Done | `--phase wire` → `service.wire.test.ts.hbs`; prototype layers skip trừ `#gen:test-*` |
@@ -58,7 +58,7 @@ Trạng thái tại **2026-06-27** (cập nhật khi xong từng PR).
 ### PR4 — Composable list
 
 - Pattern `composable.useList` → `implemented` sau khi pilot `useChainHotelList.test.ts` ổn
-- Mock **service** (không mount page, không Nuxt full)
+- Mock **service** (không mount page; hook tests dùng `renderHook` khi cần)
 - Tag fallback: `#needs-unit-test:composable:use{Entity}List` cho đến khi promote
 
 ### PR5 — Composable form + create service

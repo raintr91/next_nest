@@ -41,14 +41,13 @@ function pageCandidatesForRoute(routePath) {
   if (!normalized) return []
 
   if (normalized === '/') {
-    return ['pages/index.vue']
+    return ['apps/web/src/app/(dashboard)/page.tsx']
   }
 
   const segments = normalized.split('/').filter(Boolean)
   const joined = segments.join('/')
 
   return [
-    `pages/${joined}.vue`,
-    `pages/${joined}/index.vue`
+    `apps/web/src/app/(dashboard)/${joined}/page.tsx`
   ]
 }

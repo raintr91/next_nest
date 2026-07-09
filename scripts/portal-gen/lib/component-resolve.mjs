@@ -1,14 +1,27 @@
 import { readdir } from 'node:fs/promises'
 import path from 'node:path'
 
+import { toKebabCase } from './naming.mjs'
+
+const WEB_MOLECULES = 'apps/web/src/components/molecules'
+
 /**
- * Find existing molecule file for MoName → components/molecules/.../Name.vue
+ * MoDataTable → mo-data-table.tsx
+ * @param {string} moName
+ */
+function moleculeFileName(moName) {
+  const base = moName.replace(/^Mo/, '')
+  return `mo-${toKebabCase(base)}.tsx`
+}
+
+/**
+ * Find existing molecule file for MoName under apps/web/src/components/molecules.
  * @param {string} root
  * @param {string} moName e.g. MoStatusChip
  */
 export async function findMoleculeComponent(root, moName) {
-  const base = moName.replace(/^Mo/, '')
-  const moleculesDir = path.join(root, 'components/molecules')
+  const targetName = moleculeFileName(moName)
+  const moleculesDir = path.join(root, WEB_MOLECULES)
 
   async function walk(dir) {
     let entries = []
@@ -25,8 +38,8 @@ export async function findMoleculeComponent(root, moName) {
         if (found) return found
         continue
       }
-      if (entry.isFile() && entry.name === `${base}.vue`) {
-        return path.relative(root, entryPath)
+      if (entry.isFile() && entry.name === targetName) {
+        return path.relative(root, entryPath).replace(/\\/g, '/')
       }
     }
 
@@ -41,7 +54,7 @@ export async function findMoleculeComponent(root, moName) {
  * @param {string} moName
  */
 export function defaultComponentStubPath(moName) {
-  return `components/molecules/custom/${moName}.vue`
+  return `${WEB_MOLECULES}/custom/${moName}.tsx`
 }
 
 /**

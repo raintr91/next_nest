@@ -1,8 +1,0 @@
-export { default as OrGlobalDialog } from '~/components/organisms/OrGlobalDialog.vue'
-export { default as OrGlobalToast } from '~/components/organisms/OrGlobalToast.vue'
-export { default as FormCard } from '~/components/organisms/FormCard.vue'
-export { default as DataTablePage } from '~/components/organisms/DataTablePage.vue'
-export { default as ListPage } from '~/components/organisms/ListPage.vue'
-export { default as EmptyPage } from '~/components/organisms/EmptyPage.vue'
-export { default as AuthCard } from '~/components/organisms/AuthCard.vue'
-export { default as DataListPage } from '~/components/organisms/DataListPage.vue'

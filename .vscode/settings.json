@@ -4,9 +4,7 @@
   "files.watcherExclude": {
     "**/node_modules/**": true,
     "**/.pnpm-store/**": true,
-    "**/.nuxt/**": true,
-    "**/.nuxt-e2e/**": true,
-    "**/.output/**": true,
+    "**/apps/web/.next/**": true,
     "**/.git/objects/**": true,
     "**/coverage/**": true,
     "**/playwright-report/**": true,
@@ -23,8 +21,7 @@
   "search.exclude": {
     "**/node_modules": true,
     "**/.pnpm-store": true,
-    "**/.nuxt": true,
-    "**/.output": true,
+    "**/apps/web/.next": true,
     "**/coverage": true,
     "**/playwright-report": true,
     "**/test-results": true,

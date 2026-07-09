@@ -1,7 +1,7 @@
 import { existsSync, readFileSync } from 'node:fs'
 import { resolve } from 'node:path'
 
-const DEFAULT_NUXT_PORT = 3004
+const DEFAULT_WEB_PORT = 3000
 
 /** @param {string} [cwd] */
 export function resolveDevAppBaseUrl(cwd = process.cwd()) {
@@ -10,10 +10,10 @@ export function resolveDevAppBaseUrl(cwd = process.cwd()) {
   const explicit = (process.env.DOCS_APP_BASE_URL ?? env.DOCS_APP_BASE_URL)?.trim()
   if (explicit) return explicit.replace(/\/$/, '')
 
-  const port = (process.env.NUXT_PORT ?? env.NUXT_PORT)?.trim()
+  const port = (process.env.PORT ?? env.PORT)?.trim()
   if (port) return `http://localhost:${port}`
 
-  return `http://localhost:${DEFAULT_NUXT_PORT}`
+  return `http://localhost:${DEFAULT_WEB_PORT}`
 }
 
 /** @param {string} filePath */

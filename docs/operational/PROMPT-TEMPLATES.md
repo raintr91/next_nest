@@ -109,7 +109,7 @@ Tham chiếu:
 - spec-split-by-function: chỉ 1 function (list), không gộp create/update
 
 Scope IN: docs/features/**, harness notes
-Scope OUT: pages/, components/, mocks/, E2E, unit
+Scope OUT: `apps/web/src/app/`, `components/`, `mocks/`, E2E, unit
 
 Làm:
 1. Nếu spec.yaml đã có → verify gap (actors, fields, validation, routes, API, edge cases)
@@ -190,7 +190,7 @@ Order:
 5. HANDOFF *Prototype next* = remaining slots only; wire-only / manual-composable
 
 Scope IN: components (Mo* only if tagged), wire generated pages, mocks boundary, testId
-Scope OUT: hand-write models/service/composable/page if gen already emitted them
+Scope OUT: hand-write models/service/hook/page if gen already emitted them
 ```
 
 **Variant — chỉ một màn:**
@@ -218,7 +218,7 @@ Checklist (verify, sửa trong scope nếu rõ):
 - [ ] Khớp spec: happy path, validation message, loading/empty/error
 - [ ] Mock pagination ≥2 pages
 - [ ] Không gọi backend thật; mock đúng boundary
-- [ ] DataListPage / registry shell reuse; composable mock boundary
+- [ ] DataListPage / registry shell reuse; hook mock boundary
 - [ ] testcase testIds.required ⊆ UI (E2E-TESTIDS)
 - [ ] Auth bypass documented
 - [ ] Layout: text/icon/vị trí theo common UI
@@ -245,7 +245,7 @@ Spec: docs/features/yaml/admin/hotel/list/ir/spec.yaml
 Scope: CHỈ models/{entity}/
 - Zod API contract + z.infer types
 - Key khớp spec/API/BE; validation UI để validations/
-- Không $apiFetch; không sửa service/composable/page/test
+- Không `apiFetch`; không sửa service/hook/page/test
 
 Done: schema compile, types export, không import ngược tầng trên
 
@@ -365,10 +365,10 @@ Inputs:
 
 Order:
 1. Align models/ với API thật
-2. services/* + $apiFetch + parseApiData
-3. composables gọi service
+2. `apps/web/src/services/*` + `apiFetch` + `parseApiData`
+3. hooks gọi service
 4. validations nếu 422 cần map
-5. pages/components bind composable
+5. app/components bind hook
 6. Gỡ mock production
 7. Restore auth/guest/rbac middleware (từ grill-prototype handoff)
 8. Chạy scoped E2E liên quan
@@ -395,7 +395,7 @@ Scenario focus: {hotel-list-empty} (1 testcase YAML / session)
 Inputs (only — không legacy):
 - docs/features/.../yaml/admin/hotel/list/ir/spec.yaml
 - docs/features/.../testcases/*.yaml (E2E only; không map unit)
-- Prototype UI + composables
+- Prototype UI + hooks
 
 Readiness: .cursor/extracts/test/readiness.md
 
@@ -457,13 +457,13 @@ Không thay /test; không backend; không Vitest
 /unit
 
 Slug: {admin-hotel-list}
-Focus: {hotel list composable load + empty state} (1 behavior / session)
+Focus: {hotel list hook load + empty state} (1 behavior / session)
 
 Scope: tests/unit/ — logic only, không browser
-Good targets: validations/, service parser, composable state, store actions, pure helpers
+Good targets: validations/, service parser, hook state, store actions, pure helpers
 
 Rules:
-- Test public interface; mock $apiFetch tại service boundary
+- Test public interface; mock `apiFetch` tại service boundary
 - Vertical slice: 1 behavior → 1 test → green → tiếp
 - Không mock call-count nội bộ
 
@@ -502,7 +502,7 @@ Chỉ khi **không** fit command cụ thể (shared component, review architectu
 @portal-base skill
 
 Task: {thêm testId cho FormField suffix pattern mới}
-Scope: components/molecules/MoFormField.vue only
+Scope: `apps/web/src/components/molecules/mo-form-field.tsx` only
 Không đọc reference.md trừ khi cần template code đầy đủ
 ```
 

@@ -24,7 +24,7 @@ export function loadDotenv(cwd = process.cwd()) {
 }
 
 export function resolveE2ePort() {
-  return process.env.NUXT_E2E_PORT?.trim() || '3005'
+  return process.env.E2E_PORT?.trim() || '3005';
 }
 
 export function resolveE2eBaseUrl() {

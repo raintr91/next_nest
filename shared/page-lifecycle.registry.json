@@ -15,16 +15,24 @@
       "note": "Prototype page removed — sync demoted to design-spec."
     },
     "/admin/chains/create": {
-      "stage": "prototype",
+      "stage": "design-spec",
       "spec": "docs/features/yaml/admin/chain/form/ir/spec.yaml",
       "title": "Tạo / cập nhật chain admin",
-      "updatedAt": "2026-07-08T07:31:07.534Z"
+      "updatedAt": "2026-07-09T12:56:08.842Z",
+      "note": "Prototype page removed — sync demoted to design-spec."
     },
     "/admin/chains": {
-      "stage": "prototype",
+      "stage": "design-spec",
       "spec": "docs/features/yaml/admin/chain/list/ir/spec.yaml",
       "title": "Quản lý chain admin",
-      "updatedAt": "2026-07-08T07:31:07.534Z"
+      "updatedAt": "2026-07-09T12:56:08.842Z",
+      "note": "Prototype page removed — sync demoted to design-spec."
+    },
+    "/sample-items": {
+      "stage": "prototype",
+      "spec": "docs/features/yaml/_example/contract-pilot/ir/spec.yaml",
+      "title": "Contract gen pilot",
+      "updatedAt": "2026-07-09T12:56:08.842Z"
     }
   }
 }

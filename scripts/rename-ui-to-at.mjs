@@ -7,7 +7,7 @@ const exts = new Set(['.vue', '.ts', '.js', '.mjs'])
 
 const ignoredDirNames = new Set([
   'node_modules',
-  '.nuxt',
+  '.next',
   '.output',
   'dist',
   'storybook-static',

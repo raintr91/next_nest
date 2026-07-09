@@ -7,7 +7,7 @@ const rootDir = process.cwd()
 const allowedExts = new Set(['.ts', '.tsx', '.js', '.jsx', '.mjs', '.cjs', '.vue'])
 const ignoredDirNames = new Set([
   'node_modules',
-  '.nuxt',
+  '.next',
   '.output',
   'dist',
   'storybook-static',

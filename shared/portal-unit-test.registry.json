@@ -9,20 +9,15 @@
   },
   "defaults": {
     "mockBoundary": "apiFetch",
-    "phasePrototype": ["schema", "service", "composable"],
-    "phaseCreate": ["schema", "validation", "service", "composable"],
+    "phasePrototype": ["schema", "service", "hook"],
+    "phaseCreate": ["schema", "validation", "service", "hook"],
     "phaseWire": ["service"]
   },
   "commonBaselines": {
     "description": "Repo-wide tests — không gen lại per feature; tham chiếu khi /unit gap",
     "portal": [
-      "tests/unit/services/apiResponse.test.ts",
-      "tests/unit/services/parseApiData.test.ts",
-      "tests/unit/utils/fetchUtils.test.ts",
-      "tests/unit/plugins/fetch.test.ts",
-      "tests/unit/molecules/form/autocompleteFieldLogic.test.ts",
-      "tests/unit/molecules/layout/dataTableLogic.test.ts",
-      "tests/unit/composables/useRouteGuard.test.ts"
+      "apps/web/src/services/shared/api-response.ts",
+      "tests/unit/lib/data-table-logic.test.ts"
     ],
     "legacyReference": {
       "v2-mairy-admin": "tests/unit/services/auth.service.test.ts — apiFetch mock + assert path/method",
@@ -95,19 +90,19 @@
     },
     "composable.useList": {
       "status": "implemented",
-      "template": "composables/use-list.test.ts.hbs",
+      "template": "hooks/use-list.test.ts.hbs",
       "profiles": ["list"],
-      "layer": "composable",
-      "output": "tests/unit/composables/{entity}/use{EntityPascal}List.test.ts",
-      "fallbackTag": "#needs-unit-test:composable:use{EntityPascal}List"
+      "layer": "hook",
+      "output": "tests/unit/hooks/{entity}/use{EntityPascal}List.test.ts",
+      "fallbackTag": "#needs-unit-test:hook:use{EntityPascal}List"
     },
     "composable.useForm": {
       "status": "implemented",
-      "template": "composables/use-form.test.ts.hbs",
+      "template": "hooks/use-form.test.ts.hbs",
       "profiles": ["create", "edit"],
-      "layer": "composable",
-      "output": "tests/unit/composables/{entity}/use{EntityPascal}Form.test.ts",
-      "fallbackTag": "#needs-unit-test:composable:use{EntityPascal}Form"
+      "layer": "hook",
+      "output": "tests/unit/hooks/{entity}/use{EntityPascal}Form.test.ts",
+      "fallbackTag": "#needs-unit-test:hook:use{EntityPascal}Form"
     }
   },
   "fixtures": {

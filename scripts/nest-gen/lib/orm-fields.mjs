@@ -1,7 +1,7 @@
 import path from 'node:path'
 import { access } from 'node:fs/promises'
 
-import { toKebab } from './read-spec.mjs'
+import { toKebab, toPascal } from './read-spec.mjs'
 
 const SCALAR_TS = {
   integer: 'number',
@@ -27,12 +27,62 @@ const SCALAR_COLUMN = {
   text: 'text'
 }
 
+function entityMatches(ctx, entityNode) {
+  const name = entityNode?.name ?? ''
+  return toKebab(name) === toKebab(ctx.entity) || toPascal(name) === toPascal(ctx.entity)
+}
+
 function resolveEntityNode(spec, ctx) {
+  if (spec.entities?.length) {
+    const entityNode =
+      spec.entities.find((e) => entityMatches(ctx, e)) ?? spec.entities[0]
+    return { moduleNode: null, entityNode }
+  }
+
   const moduleNode =
-    spec.modules?.find((m) => m.name === ctx.module) ?? spec.modules?.[0]
+    spec.modules?.find((m) => toKebab(m.name) === toKebab(ctx.module)) ?? spec.modules?.[0]
   const entityNode =
-    moduleNode?.entities?.find((e) => e.name === ctx.entity) ?? moduleNode?.entities?.[0]
+    moduleNode?.entities?.find((e) => entityMatches(ctx, e)) ?? moduleNode?.entities?.[0]
   return { moduleNode, entityNode }
+}
+
+function embedTsType(key) {
+  if (key === 'id') return 'number'
+  if (key.endsWith('_at')) return 'string | Date | null'
+  return 'string | null'
+}
+
+function scalarTsType(field) {
+  const base = SCALAR_TS[field.type] ?? 'string'
+  if (field.nullable !== false && field.key !== 'id') return `${base} | null`
+  return base
+}
+
+function buildResourceContext(entityNode) {
+  const resourceScalars = []
+  const resourceRelations = []
+
+  for (const field of entityNode?.fields ?? []) {
+    if (!field?.key || field.key === 'id') continue
+
+    if (field.kind === 'relation') {
+      const embedKeys = field.contract?.read?.embed ?? ['id']
+      resourceRelations.push({
+        key: field.key,
+        embed: embedKeys.map((key) => ({ key, tsType: embedTsType(key) }))
+      })
+      continue
+    }
+
+    if (field.kind === 'fk') continue
+
+    resourceScalars.push({
+      key: field.key,
+      tsType: scalarTsType(normalizeField(field) ?? { key: field.key, type: field.type ?? 'string' })
+    })
+  }
+
+  return { resourceScalars, resourceRelations }
 }
 
 function normalizeField(field) {
@@ -49,8 +99,24 @@ function normalizeField(field) {
 export function buildOrmContext(spec, ctx, repoRoot) {
   const { entityNode } = resolveEntityNode(spec, ctx)
   const tableName = entityNode?.table ?? `${toKebab(ctx.entity)}s`
-  const rawFields = (entityNode?.fields ?? []).map(normalizeField).filter(Boolean)
-  const rawRelations = entityNode?.relationships ?? []
+  const rawFields = (entityNode?.fields ?? [])
+    .filter((field) => field.kind !== 'relation' && field.kind !== 'fk')
+    .map(normalizeField)
+    .filter(Boolean)
+  const rawRelations = [
+    ...(entityNode?.relationships ?? []),
+    ...(entityNode?.fields ?? [])
+      .filter((field) => field.kind === 'relation')
+      .map((field) => ({
+        name: field.key,
+        field: field.key,
+        type: field.persistence?.type ?? 'hasMany',
+        target: field.target ?? 'Entity',
+        cardinality: field.cardinality ?? 'many',
+        writable: field.contract?.write !== false
+      }))
+  ]
+  const { resourceScalars, resourceRelations } = buildResourceContext(entityNode)
 
   const ormColumns = []
   const seen = new Set()
@@ -164,6 +230,8 @@ export function buildOrmContext(spec, ctx, repoRoot) {
     ormRelations,
     prismaFields,
     prismaRelations,
+    resourceScalars,
+    resourceRelations,
     relationshipsMetaImport: resolveRelationshipsMetaImport(ctx, repoRoot)
   }
 }

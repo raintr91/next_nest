@@ -18,7 +18,7 @@
 |--------|------------------|
 | `#shell:` | `shells` |
 | `#pattern:` | `patterns` |
-| `#ui:` | `components` (auto-discover `components/ui/*`) |
+| `#ui:` | `components` (auto-discover `apps/web/src/components/ui/*`) |
 | `#widget:` | `fieldWidgets` |
 | `#render:` | `detailRenders` |
 | `#shape:` | `fieldWidgets` shapes |
@@ -29,9 +29,9 @@
 
 | Shell | Profile default | Gen |
 |-------|-----------------|-----|
-| `DataListPage` | `list` | `list/page.vue.hbs` hoặc `page.custom.vue.hbs` |
+| `DataListPage` | `list` | `list/page.tsx.hbs` hoặc `page.custom.tsx.hbs` |
 | `DataTablePage` | — | dashboard table đơn giản |
-| `DataFormPage` | `create`, `edit` | `create/page.vue.hbs` (planned organism) |
+| `DataFormPage` | `create`, `edit` | `create/page.tsx.hbs` (planned organism) |
 | `DataDetailPage` | `detail` | planned |
 | `custom` | override | custom template + notes |
 

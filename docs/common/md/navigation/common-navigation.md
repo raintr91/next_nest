@@ -45,9 +45,9 @@ actions:
 ## dynamicRoutes
 
 ```yaml
-detail: pages/{module}/[id]/index.vue
-edit: pages/{module}/[id]/edit.vue
-child: pages/{module}/[id]/{child}.vue
+detail: app/(dashboard)/{module}/[id]/page.tsx
+edit: app/(dashboard)/{module}/[id]/edit/page.tsx
+child: app/(dashboard)/{module}/[id]/{child}/page.tsx
 ```
 
 ## openQuestions

@@ -124,7 +124,7 @@ ui:
   #   title: Name
   #   sortable: true
   #   render: default # default | custom
-  #   component: MoStatusChip # optional — auto-wires cell slot (Nuxt auto-import)
+  #   component: MoStatusChip # optional — auto-wires cell slot in page.tsx
   #   componentProp: label # prop bound from slot `value` (default: value)
   testIds:
     module: feature # kebab-case prefix — portal:gen emits {module}-page, -table, …

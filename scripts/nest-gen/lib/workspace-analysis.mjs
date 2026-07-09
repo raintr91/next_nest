@@ -20,6 +20,9 @@ export function inferWireFromSpec(spec) {
     if (action && Object.prototype.hasOwnProperty.call(wire, action)) {
       wire[action] = true
     }
+    if (action === 'list') {
+      wire.search = true
+    }
     if (action === 'custom' && /select/i.test(endpoint.path ?? '')) {
       wire.selectItems = true
     }

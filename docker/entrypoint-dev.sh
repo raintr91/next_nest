@@ -1,5 +1,5 @@
 #!/usr/bin/env sh
-# Named volume node_modules thường root:root — chown cho HOST_UID rồi hạ quyền (setpriv) trước khi chạy pnpm/nuxt.
+# Named volume node_modules thường root:root — chown cho HOST_UID rồi hạ quyền (setpriv) trước khi chạy pnpm/next.
 set -eu
 
 UID_NUM="${HOST_UID:-1000}"

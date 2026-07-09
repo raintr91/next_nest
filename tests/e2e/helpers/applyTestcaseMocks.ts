@@ -21,7 +21,7 @@ const FIXTURE_HANDLERS: Record<string, () => unknown> = {
   storeLoginFromAdminSuccess: chainHotelFixtures.storeLoginFromAdminSuccess
 }
 
-/** testcase YAML may use `/api/...`; Nuxt `$apiFetch` often calls bare `/auth/...` on same origin. */
+/** testcase YAML may use `/api/...`; Next `apiFetch` calls `NEXT_PUBLIC_API_URL/api/...`. */
 export function expandApiPathVariants(path: string): string[] {
   if (path.startsWith('/api')) {
     const bare = path.replace(/^\/api/, '') || path

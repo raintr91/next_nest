@@ -1,6 +1,6 @@
 ---
 description: /wire API integration — replace mocks with real services
-globs: "{services,composables,models}/**/*.ts"
+globs: "apps/web/src/{services,hooks}/**/*.{ts,tsx}"
 alwaysApply: false
 ---
 
@@ -8,7 +8,7 @@ alwaysApply: false
 
 Skill: `.cursor/skills/wire/SKILL.md`
 
-- 4 tầng: models → services → composables → pages (`portal-base`)
+- 4 tầng: models → services → hooks → app (`portal-base`)
 - Source requirement: `docs/features/yaml/.../{function}/ir/spec.yaml`
 - Xóa import mock khỏi production path
 - Verify: typecheck + `npx playwright test` (scope feature)

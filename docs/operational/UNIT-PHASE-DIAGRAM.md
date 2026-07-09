@@ -98,7 +98,7 @@ Chi tiết promote & grill default: [UNIT-REGISTRY-PROMOTION](./UNIT-REGISTRY-PR
 
 | Đọc | Không đọc |
 |-----|-----------|
-| `unit.manifest.json`, `UNIT-HANDOFF.md` | `pages/`, `components/` |
+| `unit.manifest.json`, `UNIT-HANDOFF.md` | `apps/web/src/app/`, `components/` |
 | `codegen.manifest` `files[]` (logic layers) | inventory `tests/unit/` |
 | spec `requirements` filter `reqIds` manifest | E2E testcase YAML |
 | source 1 file / gap | `portal-design.registry` |
@@ -112,8 +112,8 @@ Chi tiết promote & grill default: [UNIT-REGISTRY-PROMOTION](./UNIT-REGISTRY-PR
 | `models/{entity}/*.schema.ts` | `models/{entity}/*.schema.test.ts` |
 | `validations/{entity}/schemas.ts` | `validations/{entity}/schemas.test.ts` |
 | `services/{entity}.service.ts` | `*.service.test.ts` + `*.create` / `*.export` / `*.wire` khi có method |
-| `composables/…/use*List.ts` | `use*List.test.ts` |
-| `composables/…/use*Form.ts` | `use*Form.test.ts` |
+| `hooks/…/use*List.ts` | `tests/unit/hooks/…/use*List.test.ts` |
+| `hooks/…/use*Form.ts` | `tests/unit/hooks/…/use*Form.test.ts` |
 
 `commonBaselines` trong registry — **không** gen lại per feature.
 

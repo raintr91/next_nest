@@ -2,7 +2,7 @@
 
 Tài liệu quy ước gắn **`data-testid`** trên FE và viết Playwright E2E ổn định. Grill khai báo danh sách trong **`spec.ui.testIds.required`** (+ **`patterns`** khi id động); `portal:gen` emit markup; testcase YAML mirror list trước `/test`.
 
-> **Quick link:** [Docs Home](../index.md) · Template testcase: `docs/templates/testcase.yaml` · Helper: `utils/testId.ts`
+> **Quick link:** [Docs Home](../index.md) · Template testcase: `docs/templates/testcase.yaml` · Helper: `apps/web/src/lib/test-id.ts`
 
 ---
 
@@ -21,7 +21,7 @@ Tài liệu quy ước gắn **`data-testid`** trên FE và viết Playwright E2
    - Label form (khi test cần assert text hoặc liên kết field)
 3. **Không dùng `id` HTML** làm selector chính — `id` dễ trùng, thay đổi theo form state, SSR hydration.
 4. **Ưu tiên `page.getByTestId()`** trong test; fallback `getByRole` khi semantic rõ (heading `h1`, `role="alert"`).
-5. Gắn test id **ở shared UI** (`components/ui/*`, `components/molecules/*`, `components/organisms/*`) qua prop **`testId`** — page chỉ truyền giá trị, không lặp markup.
+5. Gắn test id **ở shared UI** (`apps/web/src/components/ui/*`, `molecules/*`, `organisms/*`) qua prop **`testId`** — page chỉ truyền giá trị.
 
 ### 1.2 Quy ước đặt tên
 
@@ -68,55 +68,31 @@ customers-page                          ← DataPageHeader testId="customers-pag
 
 ### 1.3 Prop `testId` trên shared UI
 
-Prop Vue **`testId`** map sang HTML **`data-testid`**. Helper: `utils/testId.ts`.
+Prop React **`testId`** map sang HTML **`data-testid`**. Helper: `apps/web/src/lib/test-id.ts`.
 
 **Primitives đã hỗ trợ `testId`:**
 
 | Component | Path | Ghi chú |
 |-----------|------|---------|
-| `Button` | `components/ui/button/Button.vue` | Trực tiếp `data-testid={testId}` |
-| `Input` | `components/ui/input/Input.vue` | Trực tiếp trên `<input>` |
-| `Label` | `components/ui/label/Label.vue` | Label text |
-| `FormField` | `components/molecules/form/FormField.vue` | `{testId}-wrapper`, `-label`, `-error` |
-| `DialogContent` | `components/ui/dialog/DialogContent.vue` | Modal panel |
-| `AlertDialogContent` | `components/ui/alert-dialog/AlertDialogContent.vue` | Alert dialog panel |
-| `ConfirmDialog` | `components/molecules/containment/ConfirmDialog.vue` | `-title`, `-content`, `-confirm-btn`, `-cancel-btn` |
-| `BreadcrumbNav` | `components/molecules/navigation/BreadcrumbNav.vue` | `-item-{n}`, `-link-{n}`, `-current` |
-| `DataPageHeader` | `components/organisms/data/DataPageHeader.vue` | `-title`, `-description` |
-| `AlertDismissible` | `components/molecules/feedback/AlertDismissible.vue` | Alert inline |
-| `OrGlobalToast` | `components/organisms/OrGlobalToast.vue` | Cố định `app-toast-*` |
-| `OrGlobalDialog` | `components/organisms/OrGlobalDialog.vue` | Cố định `app-dialog-*` |
+| `Button` | `components/ui/button.tsx` | `data-testid={testId}` |
+| `Input` | `components/ui/input.tsx` | Trên `<input>` |
+| `Label` | `components/ui/label.tsx` | Label text |
+| `Dialog` | `components/ui/dialog.tsx` | Modal panel |
+| `MoBreadcrumbNav` | `components/molecules/mo-breadcrumb-nav.tsx` | Breadcrumb |
+| `DataPageHeader` | `components/organisms/data-page-header.tsx` | Page header |
+| `ConfirmDialog` | `components/common/confirm-dialog.tsx` | `app-dialog-*` |
+| `ToastHost` | `components/common/toast-host.tsx` | `app-toast-*` |
 
 **Ví dụ page/module:**
 
-```vue
-<!-- pages/customers/index.vue -->
-<DataPageHeader
-  test-id="customers-page"
-  :title="t('customers.title')"
->
-  <template #actions>
-    <Button test-id="customers-create-btn" @click="openCreate">
-      {{ t('common.create') }}
-    </Button>
-  </template>
-</DataPageHeader>
-
-<MoBreadcrumbNav :items="breadcrumbs" test-id="customers-breadcrumb" />
-
-<FormField test-id="customer-name" label="Name" :error="errors.name">
-  <Input v-model="name" test-id="customer-name-input" />
-</FormField>
-
-<MoConfirmDialog
-  v-model:open="deleteOpen"
-  test-id="customer-delete-dialog"
-  title="Delete customer?"
-  @confirm="onDelete"
-/>
+```tsx
+<DataPageHeader testId="customers-page-header" title="Customers" />
+<MoBreadcrumbNav testId="customers-breadcrumb" items={breadcrumbs} />
+<Button testId="customers-create-btn">Create</Button>
+<Input testId="customer-name-input" {...register('name')} />
 ```
 
-**Ví dụ auth login (reference):** `pages/auth/login.vue` — prefix `auth-login-*`.
+**Ví dụ auth login (reference):** `apps/web/src/components/auth/login-card.tsx` · route `/login/` — prefix `auth-login-*`.
 
 ### 1.4 Checklist khi thêm page mới
 
@@ -138,10 +114,10 @@ Prop Vue **`testId`** map sang HTML **`data-testid`**. Helper: `utils/testId.ts`
 ### 2.1 Chạy test
 
 ```bash
-pnpm test:e2e              # tự bật Nuxt E2E port 3005 + Playwright headless
-pnpm test:e2e:ui           # UI tương tác
-pnpm test:e2e:report       # HTML report
-PLAYWRIGHT_SKIP_WEBSERVER=1 PLAYWRIGHT_BASE_URL=http://127.0.0.1:3004 pnpm exec playwright test
+pnpm test:e2e              # Next dev port 3005 (E2E_PORT) + Playwright headless
+pnpm test:e2e:ui
+pnpm test:e2e:report
+PLAYWRIGHT_SKIP_WEBSERVER=1 PLAYWRIGHT_BASE_URL=http://127.0.0.1:3005 pnpm exec playwright test
 ```
 
 ### 2.2 Selector `getByTestId`

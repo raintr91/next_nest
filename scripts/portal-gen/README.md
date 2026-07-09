@@ -2,7 +2,7 @@
 
 > **Doc chính:** [Portal codegen (gen + unit)](../../docs/operational/PORTAL-CODEGEN.md) — đọc trước khi quên thứ tự lệnh.
 
-Generate 4-layer scaffold from feature `spec.yaml` (Handlebars templates).
+Generate 4-layer scaffold from feature `spec.yaml` (Handlebars templates) into **`apps/web/src/`**.
 
 **Models:** `portal:gen` **không** sinh `models/`. Chạy `pnpm contract:gen --spec .../ir/spec.yaml` trước để có `@portal/models` (`packages/models/src/`).
 
@@ -24,7 +24,7 @@ pnpm portal:gen --spec ... --force
 
 - shadcn/ui = canonical (`#ui: AlertDialog`)
 - List default shell: `#shell: DataListPage` (aliases: `DataListTable`, `common list`)
-- `portal:gen` resolves shell → list template (`page.vue.hbs` vs `page.custom.vue.hbs`)
+- `portal:gen` resolves shell → list template (`page.tsx.hbs` vs `page.custom.tsx.hbs`)
 - Unknown `#ui:` / `#widget:` → dry-run fails
 
 ## Spec requirements
@@ -38,50 +38,28 @@ Copy `docs/templates/spec.yaml`. Required:
 - `api.endpoints` with `action: list` or `create`
 - `tags` — see `.cursor/extracts/codegen/tags.md`
 
-**List default tags (grill):**
+**Lifecycle:** Khi ghi `apps/web/src/app/(dashboard)/**/page.tsx`, portal-gen cập nhật registry (`prototype`) + `pnpm portal:lifecycle sync`. Xóa: `pnpm portal:remove --spec <file>`. Doc: `docs/operational/PAGE-LIFECYCLE.md`.
 
-```yaml
-tags:
-  - "#shell: DataListPage"
-  - "#pattern: CRUD"
-  - "#style: shadcn/ui"
-  - "#style: compact"
-  - "#style: flat"
-```
+## Output (Next.js)
 
-**Namespace collision:** `entity: hotel` + `module: chain-hotels` writes services under `chain-hotel/`, not `hotel/` (admin). Explicit `codegen.namespace: chain-hotel` also works.
-
-**Lifecycle:** Khi ghi `pages/*.vue`, portal-gen cập nhật registry (`prototype`) + `pnpm portal:lifecycle sync`. Xóa: `pnpm portal:remove --spec <file>`. Doc: `docs/operational/PAGE-LIFECYCLE.md`.
-
-## Output
-
-- App code under `services/`, `composables/`, `validations/`, `pages/`, `mocks/` (imports `@portal/models`)
-- `docs/features/{feature}/generated/HANDOFF.md` — *Prototype next*: slot inventory (`#needs-component`); gen does not emit `Mo*` stubs
-- `docs/features/{feature}/generated/codegen.manifest.json` (includes `shell`, `shellVariant`)
+- `apps/web/src/app/(dashboard)/{route}/page.tsx`
+- `apps/web/src/hooks/{entity}/use{Entity}List.ts`
+- `apps/web/src/services/{entity}.service.ts`
+- `apps/web/src/mocks/{entity}.mock.ts`
+- `apps/web/src/validations/{entity}/schemas.ts` (create profile)
+- `docs/features/{feature}/generated/HANDOFF.md` + `codegen.manifest.json`
 
 ## Templates
 
 ```
 scripts/portal-gen/templates/
-  list/       — DataListPage; wires cell slots only when Mo* file exists
-  create/     — form + useApiForm
+  list/       — DataListPage; wires cell slots when Mo* exists under apps/web
+  create/     — form scaffold (planned)
 scripts/portal-gen/lib/
-  design-registry.mjs  — load registry, resolve shell, validate tags
+  web-paths.mjs       — apps/web/src path helpers
+  design-registry.mjs — load registry, resolve shell, validate tags
 ```
 
 `#needs-component` in spec → page placeholder + HANDOFF; implement in `/prototype`, then re-gen.
 
-Tag examples:
-
-```yaml
-tags:
-  - "#shell: DataListPage"
-  - "#needs-component: cell-status:MoStatusChip:label"
-columns:
-  - key: status
-    render: custom
-```
-
-Stack: Node ESM + `yaml` + `handlebars` (same family as `scripts/docs/render-docs.mjs`).
-
-Registry promotion is **prototype-only** — see `docs/operational/DESIGN-REGISTRY-PROMOTION.md`.
+Stack: Node ESM + `yaml` + `handlebars`.

@@ -111,9 +111,10 @@ function hydrateMockRow(sample, title, suffix) {
   return row
 }
 
+import { routeToAppPagePath } from './web-paths.mjs'
+
 export function routeToPagePath(routePath) {
-  const trimmed = routePath.replace(/^\//, '').replace(/\/$/, '')
-  return `pages/${trimmed}/index.vue`
+  return routeToAppPagePath(routePath)
 }
 
 export function zodFieldForColumn(column) {

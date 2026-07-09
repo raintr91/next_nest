@@ -10,6 +10,7 @@ Handlebars.registerHelper('join', (items, sep) => {
   if (!Array.isArray(items)) return ''
   return items.join(typeof sep === 'string' ? sep : ', ')
 })
+Handlebars.registerHelper('eq', (a, b) => a === b)
 
 export async function renderTemplate(templateName, context) {
   const source = await fs.readFile(path.join(templatesDir, templateName), 'utf8')

@@ -1,30 +1,34 @@
-import { fileURLToPath } from 'node:url'
-import path from 'node:path'
-import vue from '@vitejs/plugin-vue'
-import { defineConfig } from 'vitest/config'
+import { fileURLToPath } from 'node:url';
+import path from 'node:path';
+import { defineConfig } from 'vitest/config';
 
-const __filename = fileURLToPath(import.meta.url)
-const __dirname = path.dirname(__filename)
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
+const webSrc = path.resolve(__dirname, 'apps/web/src');
 
 export default defineConfig({
-  plugins: [vue()],
   resolve: {
     alias: [
-      { find: '~/models', replacement: path.resolve(__dirname, 'packages/models/src') },
       { find: '@portal/models', replacement: path.resolve(__dirname, 'packages/models/src') },
-      { find: '~', replacement: __dirname },
-      { find: '@', replacement: __dirname }
-    ]
+      { find: '~/models', replacement: path.resolve(__dirname, 'packages/models/src') },
+      { find: '~/tests', replacement: path.resolve(__dirname, 'tests') },
+      { find: '@', replacement: webSrc },
+    ],
   },
   test: {
     environment: 'happy-dom',
     globals: true,
-    setupFiles: ['./tests/unit/_helpers/nuxtGlobals.ts'],
-    include: ['tests/unit/**/*.{test,spec}.{ts,tsx}'],
+    include: [
+      'tests/unit/models/**/*.test.ts',
+      'tests/unit/hooks/**/*.test.ts',
+      'tests/unit/services/**/*.test.ts',
+      'tests/unit/validations/**/*.test.ts',
+      'tests/unit/lib/data-table-logic.test.ts',
+      'tests/unit/scripts/**/*.test.ts',
+    ],
     coverage: {
       provider: 'v8',
       reporter: ['text', 'html'],
-      reportsDirectory: './coverage'
-    }
-  }
-})
+      reportsDirectory: './coverage',
+    },
+  },
+});

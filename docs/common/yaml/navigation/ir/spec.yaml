@@ -31,9 +31,9 @@ pageHeader:
     - Header actions chỉ dùng cho page-level action thật sự.
     - Nếu legacy/spec yêu cầu group_action trong card/form thì không đưa action lên page header.
 dynamicRoutes:
-  detail: pages/{module}/[id]/index.vue
-  edit: pages/{module}/[id]/edit.vue
-  child: pages/{module}/[id]/{child}.vue
+  detail: app/(dashboard)/{module}/[id]/page.tsx
+  edit: app/(dashboard)/{module}/[id]/edit/page.tsx
+  child: app/(dashboard)/{module}/[id]/{child}/page.tsx
 acceptance:
   - Sidebar không chứa route chưa làm prototype.
   - Page title rõ và nhất quán.

@@ -31,13 +31,29 @@ export function parseUnitTags(tags = []) {
   return parsed
 }
 
+const LAYER_SKIP_ALIASES = {
+  hook: ['composable', 'composable-list', 'composable-form'],
+  composable: ['hook'],
+  schema: ['models'],
+  models: ['schema']
+}
+
 /**
  * @param {import('./parse-tags.mjs').ReturnType<typeof parseUnitTags>} unitTags
  * @param {string} layer e.g. models, schema
  */
 export function isLayerSkipped(unitTags, layer) {
   const key = layer.toLowerCase()
-  return unitTags.skip.has(key) || unitTags.skip.has('all')
+  if (unitTags.skip.has(key) || unitTags.skip.has('all')) return true
+  const aliases = LAYER_SKIP_ALIASES[key] ?? []
+  return aliases.some((alias) => unitTags.skip.has(alias))
+}
+
+const GEN_TAG_ALIASES = {
+  hook: ['composable', 'composable-list', 'composable-form'],
+  composable: ['hook'],
+  'composable-list': ['hook'],
+  'composable-form': ['hook']
 }
 
 /**
@@ -45,5 +61,7 @@ export function isLayerSkipped(unitTags, layer) {
  * @param {string} genKey e.g. schema
  */
 export function hasExplicitGenTag(unitTags, genKey) {
-  return unitTags.gen.has(genKey)
+  if (unitTags.gen.has(genKey)) return true
+  const aliases = GEN_TAG_ALIASES[genKey] ?? []
+  return aliases.some((alias) => unitTags.gen.has(alias))
 }

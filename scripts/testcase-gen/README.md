@@ -50,6 +50,6 @@ Extract: `.cursor/extracts/portal-e2e-semantic-tags.md`
 
 - `setup.session` registered in `tests/e2e/helpers/applyTestcaseMocks.ts`
 - `setup.mocks[].response` registered in fixture registry (`tests/e2e/fixtures/`)
-- E2E API same-origin: `NUXT_PUBLIC_E2E=1` (Playwright `webServer` sets this)
+- E2E API: set `NEXT_PUBLIC_API_URL` or mock routes in Playwright helpers
 
 Hub: `docs/operational/TEST-PHASE-DIAGRAM.md` · `PORTAL-UNIT-GEN-ROADMAP.md` PR12–13

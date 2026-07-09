@@ -45,7 +45,7 @@ export function getBaseUrl() {
   const fromEnv = process.env.PLAYWRIGHT_BASE_URL?.trim()
   if (fromEnv) return fromEnv.replace(/\/$/, '')
 
-  const port = process.env.NUXT_E2E_PORT?.trim() || '3005'
+  const port = process.env.E2E_PORT?.trim() || '3005'
   return `http://127.0.0.1:${port}`
 }
 

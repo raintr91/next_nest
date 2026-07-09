@@ -1,6 +1,6 @@
 ---
-description: composables, services, stores, models, validations — delta vs invariants
-globs: composables/**/*,services/**/*,stores/**/*,models/**/*,validations/**/*
+description: hooks, services, stores, validations — delta vs invariants
+globs: apps/web/src/hooks/**/*,apps/web/src/services/**/*,apps/web/src/stores/**/*,apps/web/src/validations/**/*
 alwaysApply: false
 ---
 
@@ -8,8 +8,8 @@ alwaysApply: false
 
 Base rules: `portal-invariants.mdc`. Delta:
 
-- **Composables:** UI orchestration; call service/store — no raw `$apiFetch` in composable body except `useNuxtApp()` factory pattern
-- **Services:** `createXxxService($apiFetch)` · `parseApiData` · contract keys per `portal-contract-naming.mdc`
-- **Stores:** client state; call services — no endpoint strings embedded
-- **models/** vs **validations/**: API contract (loose) vs form rules (strict)
-- **Forms:** `useApiForm({ validationSchema, initialValues, submit })`
+- **Hooks:** UI orchestration; call service/store — no raw `apiFetch` in hook body
+- **Services:** `createXxxService(apiFetch?)` · `parseApiData` / `parseSchemaOrThrow` · contract keys per `portal-contract-naming.mdc`
+- **Stores:** client state (Zustand); call services — no endpoint strings embedded
+- **@portal/models** vs **validations/**: API contract (loose) vs form rules (strict)
+- **Forms:** `react-hook-form` + `zodResolver` + `validations/` schemas

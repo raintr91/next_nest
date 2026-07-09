@@ -1,10 +1,10 @@
 # Một container = một portal. Gateway → <PORTAL_STACK_PREFIX>-portal-node:3000 trên base_shared_net (không publish ra host).
-# pnpm dev chỉ chạy trong container; trên host: install, test, storybook, …
+# pnpm dev chỉ chạy trong container; trên host: install, test, …
 #
 #   docker compose --env-file .env -f docker-compose.yml up -d
 #
 # Mount source portal (code + lockfile). node_modules → volume riêng (không trùng host).
-# Container khởi động root một nhịp: chown volume → setpriv HOST_UID (trùng host; .nuxt trên bind mount không root).
+# Container khởi động root một nhịp: chown volume → setpriv HOST_UID (trùng host; .next trên bind mount không root).
 
 name: portal-${PORTAL_STACK_PREFIX:-base}
 
@@ -19,17 +19,14 @@ services:
       - /workspace/portal/docker/entrypoint-dev.sh
       - sh
       - -c
-      - mkdir -p /tmp/corepack /tmp/cache /tmp/config && cd /workspace/portal && if [ ! -x node_modules/.bin/nuxt ]; then corepack pnpm install; fi && corepack pnpm run dev
+      - mkdir -p /tmp/corepack /tmp/cache /tmp/config && cd /workspace/portal && if [ ! -x apps/web/node_modules/.bin/next ]; then corepack pnpm install; fi && corepack pnpm run dev
     environment:
       HOST_UID: "${HOST_UID:-1000}"
       HOST_GID: "${HOST_GID:-1000}"
-      # Polling chỉ khi bind mount qua Docker Desktop/WSL2 chậm. Native WSL ext4: để 0.
       CHOKIDAR_USEPOLLING: "${CHOKIDAR_USEPOLLING:-0}"
       CHOKIDAR_INTERVAL: "${CHOKIDAR_INTERVAL:-300}"
       WATCHPACK_POLLING: "${WATCHPACK_POLLING:-0}"
-      NUXT_WATCH_POLLING: "${NUXT_WATCH_POLLING:-0}"
-      NUXT_DEVTOOLS: "false"
-      NUXT_PORT: "3000"
+      PORT: "3000"
       HOME: /tmp
       COREPACK_HOME: /tmp/corepack
       XDG_CACHE_HOME: /tmp/cache

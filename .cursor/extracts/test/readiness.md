@@ -11,7 +11,7 @@ Prerequisite: `/prototype` done, `pnpm portal:gen:dry` passed in grill, route on
 |--------|---------|
 | `docs/features/yaml/.../ir/spec.yaml` | Requirements, routes, `ui.testIds`, acceptance |
 | `docs/features/yaml/.../{function}/*.test.yaml` | **E2E source of truth** — steps, assertions, mocks |
-| Prototype code | `data-testid`, composables, mocks |
+| Prototype code | `data-testid`, hooks, mocks |
 
 **No legacy** repos or blade in `/test` sessions — only spec, testcase, portal code.
 

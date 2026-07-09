@@ -15,13 +15,6 @@ if [ -f "$ROOT_DIR/.env" ]; then
   set +a
 fi
 
-E2E_PORT="${NUXT_E2E_PORT:-3005}"
-export NUXT_BUILD_DIR="${NUXT_BUILD_DIR:-.nuxt-e2e}"
-unset NUXT_PORT
-
+E2E_PORT="${E2E_PORT:-3005}"
 cd "$ROOT_DIR"
-mkdir -p "$ROOT_DIR/$NUXT_BUILD_DIR"
-if [ ! -f "$ROOT_DIR/$NUXT_BUILD_DIR/tsconfig.json" ]; then
-  NUXT_BUILD_DIR="$NUXT_BUILD_DIR" pnpm exec nuxt prepare
-fi
-exec pnpm exec nuxt dev --port "$E2E_PORT"
+exec pnpm --filter @portal/web exec next dev --hostname 127.0.0.1 --port "$E2E_PORT"

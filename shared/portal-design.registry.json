@@ -44,7 +44,7 @@
       },
       "portal": {
         "layer": "organism",
-        "path": "components/organisms/DataListPage.vue",
+        "path": "apps/web/src/components/organisms/data-list-page.tsx",
         "status": "implemented",
         "layout": "dashboard"
       },
@@ -52,10 +52,10 @@
         "codegenProfile": "list"
       },
       "portalGen": {
-        "templateStandard": "list/page.vue.hbs",
-        "templateCustom": "list/page.custom.vue.hbs",
+        "templateStandard": "list/page.tsx.hbs",
+        "templateCustom": "list/page.custom.tsx.hbs",
         "composableSuffix": "List",
-        "layers": ["models", "service", "composable", "page", "mock"]
+        "layers": ["models", "service", "hook", "page", "mock"]
       },
       "commonSpecRef": "docs/features/yaml/common/list-page/common-list-page.bundle.yaml",
       "includes": {
@@ -65,11 +65,11 @@
       },
       "variants": {
         "standard": {
-          "template": "list/page.vue.hbs",
+          "template": "list/page.tsx.hbs",
           "when": "default list; no overrideCommonPattern"
         },
         "custom": {
-          "template": "list/page.custom.vue.hbs",
+          "template": "list/page.custom.tsx.hbs",
           "when": "#shell: custom | ui.composition.pattern custom | overrideCommonPattern true"
         }
       }
@@ -82,8 +82,8 @@
       },
       "portal": {
         "layer": "organism",
-        "path": "components/organisms/DataTablePage.vue",
-        "status": "implemented"
+        "path": "apps/web/src/components/organisms/data-table-page.tsx",
+        "status": "planned"
       },
       "when": "Table đơn giản, không full search/filter shell"
     },
@@ -95,16 +95,16 @@
       },
       "portal": {
         "layer": "organism",
-        "path": "components/organisms/DataFormPage.vue",
+        "path": "apps/web/src/components/organisms/data-form-page.tsx",
         "status": "planned"
       },
       "defaultFor": {
         "codegenProfile": ["create", "edit"]
       },
       "portalGen": {
-        "templateStandard": "create/page.vue.hbs",
+        "templateStandard": "create/page.tsx.hbs",
         "composableSuffix": "Form",
-        "layers": ["models", "service", "composable", "validation", "page", "mock"]
+        "layers": ["models", "service", "hook", "validation", "page", "mock"]
       }
     },
     "DataDetailPage": {
@@ -116,7 +116,7 @@
       },
       "portal": {
         "layer": "organism",
-        "path": "components/organisms/DataDetailPage.vue",
+        "path": "apps/web/src/components/organisms/data-detail-page.tsx",
         "status": "planned"
       },
       "defaultFor": {
@@ -130,7 +130,7 @@
         "informal": ["override list", "custom layout", "layout đặc thù"]
       },
       "portalGen": {
-        "listTemplate": "list/page.custom.vue.hbs",
+        "listTemplate": "list/page.custom.tsx.hbs",
         "requiresReason": true
       }
     }
@@ -240,14 +240,14 @@
       "canonical": "Combobox",
       "tags": ["#widget: Combobox"],
       "shape": "scalar",
-      "portal": { "molecule": "MoComboboxField", "status": "implemented" }
+      "portal": { "molecule": "MoComboboxField", "status": "planned" }
     },
     "Autocomplete": {
       "canonical": "Autocomplete",
       "tags": ["#widget: Autocomplete"],
       "shape": "scalar",
       "aliases": { "ant": ["AutoComplete", "Cascader"] },
-      "portal": { "molecule": "MoAutocompleteField", "status": "implemented" }
+      "portal": { "molecule": "MoAutocompleteField", "status": "planned" }
     },
     "Checkbox": {
       "canonical": "Checkbox",
@@ -259,13 +259,13 @@
       "canonical": "Switch",
       "tags": ["#widget: Switch"],
       "shape": "scalar",
-      "portal": { "molecule": "MoSwitchField", "status": "implemented" }
+      "portal": { "molecule": "MoSwitchField", "status": "planned" }
     },
     "DatePicker": {
       "canonical": "DatePicker",
       "tags": ["#widget: DatePicker"],
       "shape": "scalar",
-      "portal": { "molecule": "MoDatePickerField", "status": "implemented" },
+      "portal": { "molecule": "MoDatePickerField", "status": "planned" },
       "uiAlias": "Calendar"
     },
     "FileUpload": {
@@ -273,7 +273,7 @@
       "tags": ["#widget: FileUpload"],
       "shape": "scalar",
       "aliases": { "ant": ["Upload"], "informal": ["file input", "uploader"] },
-      "portal": { "molecule": "MoFileInputField", "status": "implemented" }
+      "portal": { "molecule": "MoFileInputField", "status": "planned" }
     },
     "TagsInput": {
       "canonical": "TagsInput",
@@ -311,7 +311,7 @@
       "canonical": "NumberInput",
       "tags": ["#widget: NumberInput"],
       "shape": "scalar",
-      "portal": { "molecule": "MoNumberInputField", "status": "implemented" }
+      "portal": { "molecule": "MoNumberInputField", "status": "planned" }
     },
     "PinInput": {
       "canonical": "PinInput",

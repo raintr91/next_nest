@@ -6,9 +6,10 @@ import {
 } from '../../../scripts/portal-gen/lib/page-lifecycle.mjs'
 
 describe('page-lifecycle.mjs helpers', () => {
-  it('maps page file to route path', () => {
-    expect(routePathFromPageFile('pages/hotels/index.vue')).toBe('/hotels')
-    expect(routePathFromPageFile('pages/admin/hotels/index.vue')).toBe('/admin/hotels')
+  it('maps Next page file to route path', () => {
+    expect(routePathFromPageFile('apps/web/src/app/(dashboard)/hotels/page.tsx')).toBe('/hotels')
+    expect(routePathFromPageFile('apps/web/src/app/(dashboard)/admin/hotels/page.tsx')).toBe('/admin/hotels')
+    expect(routePathFromPageFile('apps/web/src/app/(dashboard)/page.tsx')).toBe('/')
   })
 
   it('does not downgrade stage by default', () => {

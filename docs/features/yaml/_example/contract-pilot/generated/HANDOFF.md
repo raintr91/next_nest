@@ -1,25 +1,24 @@
-# Nest codegen — HANDOFF
+# HANDOFF — Contract gen pilot
 
-Spec: `/home/vutv/workspace/portal/docs/features/yaml/_example/contract-pilot/backend/01-backend-spec.yaml`
+Generated from `docs/features/yaml/_example/contract-pilot/ir/spec.yaml` (profile: **list**).
 
-## Generated
+## Files
 
-- `apps/api/src/modules/example/example.module.ts` (module)
-- `apps/api/src/modules/example/sample-item/sample-item.controller.ts` (controller)
-- `apps/api/src/modules/example/sample-item/sample-item.resource.ts` (resource)
-- `apps/api/src/modules/example/sample-item/queries/search-sample-item.query.ts` (query)
-- `apps/api/src/modules/example/sample-item/queries/search-sample-item.handler.ts` (handler)
-- `apps/api/src/modules/example/sample-item/commands/create-sample-item.command.ts` (command)
-- `apps/api/src/modules/example/sample-item/commands/create-sample-item.handler.ts` (handler)
-- `apps/api/src/modules/example/sample-item/commands/update-sample-item.command.ts` (command)
-- `apps/api/src/modules/example/sample-item/commands/update-sample-item.handler.ts` (handler)
-- `apps/api/src/modules/example/sample-item/commands/delete-sample-item.command.ts` (command)
-- `apps/api/src/modules/example/sample-item/commands/delete-sample-item.handler.ts` (handler)
-- `apps/api/src/modules/example/sample-item/sample-item.entity.ts` (orm)
-- `apps/api/prisma/models/sample-item.prisma` (orm)
+- `apps/web/src/services/sample-item.service.ts`
+- `apps/web/src/hooks/sample-item/useSampleItemList.ts`
+- `apps/web/src/app/(dashboard)/sample-items/page.tsx`
+- `apps/web/src/mocks/sample-item.mock.ts`
 
-## Manual
+## Prototype next (/prototype)
 
-- Wire repository in Query/Command handlers (TypeORM/Prisma).
-- Register module in `AppModule` if not auto-imported.
-- Relation sync: read `@portal/models` `*.relationships.meta.ts`.
+_portal:gen does not emit component code for `#needs-component` / `#needs-ui` — implement molecules in /prototype, then re-run gen._
+
+- **contract-gen**: Run `pnpm contract:gen --spec <ir/spec.yaml>` before portal:gen if @portal/models entity package is missing.
+
+## Commands
+
+```bash
+pnpm docs:render
+# after spec edits
+pnpm portal:gen --spec ... --force  # re-generate after /prototype components
+```
