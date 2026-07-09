@@ -28,8 +28,6 @@ const FEATURE_FUNCTION_ORDER = [
   'export-report',
 ]
 const featureSidebarItems = buildFeatureSidebar()
-const commonSidebarItems = buildCommonSidebar()
-const flowTraceSidebarItems = buildFlowTraceSidebar()
 
 export default withMermaid(defineConfig({
   title: 'Portal Docs',
@@ -60,7 +58,7 @@ export default withMermaid(defineConfig({
     sidebar: [
       {
         text: 'Operational',
-        collapsed: false,
+        collapsed: true,
         items: [
           { text: 'Architecture', link: '/operational/ARCHITECTURE' },
           { text: 'Full cycle (overview)', link: '/operational/FULL-CYCLE-PIPELINE-DIAGRAM' },
@@ -91,25 +89,14 @@ export default withMermaid(defineConfig({
       },
       {
         text: 'Features',
-        collapsed: false,
+        collapsed: true,
         items: featureSidebarItems
       },
-      {
-        text: 'Common',
-        collapsed: false,
-        items: [
-          ...(commonSidebarItems.length ? commonSidebarItems : []),
-          { text: 'Common UI patterns', link: '/common-ui/' },
-          { text: 'Generated feature docs', link: '/common-ui/generated' }
-        ]
-      },
+      { text: 'Common', link: '/common-ui/' },
       {
         text: 'Flow trace',
-        collapsed: false,
-        items: [
-          { text: 'Index', link: '/flow-trace/' },
-          ...flowTraceSidebarItems
-        ]
+        collapsed: true,
+        items: [{ text: 'Index', link: '/flow-trace/' }]
       }
     ],
     search: {
@@ -123,27 +110,6 @@ function buildFeatureSidebar() {
   if (!existsSync(featuresRoot)) return []
 
   return listFeatureGroups(featuresRoot)
-}
-
-function buildCommonSidebar(): DefaultTheme.SidebarItem[] {
-  const commonRoot = join(docsRoot, 'common', 'md')
-  if (!existsSync(commonRoot)) return []
-
-  return listFeatureGroups(commonRoot)
-}
-
-function buildFlowTraceSidebar(): DefaultTheme.SidebarItem[] {
-  const flowTraceRoot = join(docsRoot, 'flow-trace')
-  if (!existsSync(flowTraceRoot)) return []
-
-  return readdirSync(flowTraceRoot, { withFileTypes: true })
-    .filter((entry) => entry.isFile() && entry.name.endsWith('.md') && entry.name !== 'index.md')
-    .map((entry) => join(flowTraceRoot, entry.name))
-    .sort((a, b) => a.localeCompare(b))
-    .map((file) => ({
-      text: readTitle(file),
-      link: specLink(file)
-    }))
 }
 
 function listFeatureGroups(dir: string): DefaultTheme.SidebarItem[] {
