@@ -34,11 +34,6 @@ async function main() {
   const specs = await listSpecFiles(legacyRoot)
   const bundles = await listBundleFiles(yamlRoot)
 
-  if (!specs.length && !bundles.length) {
-    console.error('docs:render: no *.spec.yaml or yaml/**/*.bundle.yaml under docs/features/')
-    process.exit(1)
-  }
-
   let testcaseCount = 0
   let failed = 0
 
