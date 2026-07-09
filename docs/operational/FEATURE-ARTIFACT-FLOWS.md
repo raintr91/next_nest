@@ -12,6 +12,7 @@
 | Doc | Nội dung |
 |-----|----------|
 | [FEATURE-ARTIFACT-LAYOUT](./FEATURE-ARTIFACT-LAYOUT.md) | Cây thư mục `yaml/` · `md/` · `ir/` · `generated/` |
+| [BACKEND-ARTIFACT-LAYOUT](../features/BACKEND-ARTIFACT-LAYOUT.md) | `backend/` · `contract:gen` · `nest:gen` |
 | [FEATURE-ARTIFACT-BUNDLE-IR](./FEATURE-ARTIFACT-BUNDLE-IR.md) | SSOT bundle → split/merge · `spec` vs `gen` |
 
 ## Team commands (AI)
@@ -21,7 +22,7 @@
 | [FEATURE-ARTIFACT-LEGACY-TRACE](./FEATURE-ARTIFACT-LEGACY-TRACE.md) | `/legacy-spec` → trace + bundle.legacy |
 | [FEATURE-ARTIFACT-GRILL](./FEATURE-ARTIFACT-GRILL.md) | `/bqa-grill-docs` → `/dev-grill-docs` → [`/grill-with-docs`] |
 | [DESIGN-PHASE-DIAGRAM](./DESIGN-PHASE-DIAGRAM.md) | Design lane đến `/prototype` |
-| [FEATURE-ARTIFACT-COMMANDS](./FEATURE-ARTIFACT-COMMANDS.md) | Lệnh `pnpm portal:*`, `spec:*`, `docs:render` |
+| [FEATURE-ARTIFACT-COMMANDS](./FEATURE-ARTIFACT-COMMANDS.md) | Lệnh `pnpm portal:*`, `contract:gen`, `nest:gen`, `docs:render` |
 
 ## Pipeline tổng (các phase khác)
 
@@ -30,8 +31,11 @@
 | [FULL-CYCLE-PIPELINE-DIAGRAM](./FULL-CYCLE-PIPELINE-DIAGRAM.md) | Design → Test · API → Wire → Ship |
 | [TEST-PHASE-DIAGRAM](./TEST-PHASE-DIAGRAM.md) | E2E · `testcase:gen` |
 | [UNIT-PHASE-DIAGRAM](./UNIT-PHASE-DIAGRAM.md) | Vitest · `portal:unit-gen` |
-| [BACKEND-PHASE-DIAGRAM](./BACKEND-PHASE-DIAGRAM.md) | API repo |
-| [WIRE-PHASE-DIAGRAM](./WIRE-PHASE-DIAGRAM.md) | Integration |
+| [BACKEND-PHASE-DIAGRAM](./BACKEND-PHASE-DIAGRAM.md) | Nest API · contract → nest:gen |
+| [NEST-UNIT-PHASE-DIAGRAM](./NEST-UNIT-PHASE-DIAGRAM.md) | Jest · `nest:unit-gen` |
+| [BACKEND-CODEGEN](./BACKEND-CODEGEN.md) | Hub script backend |
+| [TEAM-AI-BACKEND-WORKFLOW](./TEAM-AI-BACKEND-WORKFLOW.md) | Skills `/api-spec` … `/api-code` |
+| [WIRE-PHASE-DIAGRAM](./WIRE-PHASE-DIAGRAM.md) | Integration FE ↔ Nest |
 | [UPDATE-SPEC-FLOW](./UPDATE-SPEC-FLOW.md) | Gap loop |
 
 ---

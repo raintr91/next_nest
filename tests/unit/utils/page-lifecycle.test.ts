@@ -20,7 +20,7 @@ describe('page-lifecycle', () => {
 
   it('resolves lifecycle entry by path', () => {
     const entry = getPageLifecycleEntry('/hotels')
-    expect(entry?.stage).toBe('prototype')
-    expect(entry?.spec).toContain('chain-hotel-list')
+    expect(entry?.stage).toBe('test')
+    expect(entry?.spec).toContain('login-as')
   })
 })

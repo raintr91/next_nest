@@ -268,6 +268,12 @@ function buildHandoffItems(spec, parsedTags, useCustomShell, slotBindings, compo
     items.push({ type: 'open-question', detail: String(detail) })
   }
 
+  items.push({
+    type: 'contract-gen',
+    detail:
+      'Run `pnpm contract:gen --spec <ir/spec.yaml>` before portal:gen if @portal/models entity package is missing.'
+  })
+
   return items
 }
 
@@ -280,6 +286,7 @@ export function buildFilePlan(ctx) {
 
   const add = (layer, relativePath, template) => {
     if (skip.has(layer)) return
+    if (layer === 'models') return
     files.push({ layer, relativePath, template })
   }
 
@@ -288,9 +295,6 @@ export function buildFilePlan(ctx) {
       ctx.listPageTemplate ??
       (ctx.useCustomShell ? 'list/page.custom.vue.hbs' : 'list/page.vue.hbs')
 
-    add('models', `models/${entity}/${entity}.schema.ts`, 'list/model.schema.ts.hbs')
-    add('models', `models/${entity}/${entity}.types.ts`, 'list/model.types.ts.hbs')
-    add('models', `models/${entity}/index.ts`, 'list/model.index.ts.hbs')
     add('service', `services/${entity}.service.ts`, 'list/service.ts.hbs')
     add('composable', `composables/${entity}/use${entityPascal}List.ts`, 'list/useList.ts.hbs')
     add('page', ctx.pagePath, listTemplate)
@@ -298,9 +302,6 @@ export function buildFilePlan(ctx) {
   }
 
   if (profile === 'create') {
-    add('models', `models/${entity}/${entity}.schema.ts`, 'create/model.schema.ts.hbs')
-    add('models', `models/${entity}/${entity}.types.ts`, 'create/model.types.ts.hbs')
-    add('models', `models/${entity}/index.ts`, 'list/model.index.ts.hbs')
     add('service', `services/${entity}.service.ts`, 'create/service.ts.hbs')
     add('composable', `composables/${entity}/use${entityPascal}Form.ts`, 'create/useForm.ts.hbs')
     add('validation', `validations/${entity}/schemas.ts`, 'create/validation.ts.hbs')

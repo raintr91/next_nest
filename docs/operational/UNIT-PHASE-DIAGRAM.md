@@ -41,6 +41,8 @@ flowchart TD
 
 E2E (`/test`) — pipeline khác, không thay unit lane.
 
+**Song song:** API Jest lane — [NEST-UNIT-PHASE-DIAGRAM](./NEST-UNIT-PHASE-DIAGRAM.md) (backend, độc lập file này).
+
 ---
 
 ## `#needs-unit-test` — tag lifecycle
@@ -134,6 +136,8 @@ pnpm exec vitest run tests/unit/models/admin-hotel/ --coverage
 | Doc | Mục đích |
 |-----|----------|
 | [PORTAL-CODEGEN](./PORTAL-CODEGEN.md) | `portal:gen` + `portal:unit-gen` hub |
+| [BACKEND-CODEGEN](./BACKEND-CODEGEN.md) | `contract:gen` + `nest:gen` + `nest:unit-gen` hub |
+| [NEST-UNIT-PHASE-DIAGRAM](./NEST-UNIT-PHASE-DIAGRAM.md) | Jest lane chi tiết |
 | [UNIT-REGISTRY-PROMOTION](./UNIT-REGISTRY-PROMOTION.md) | `#gen:test-*` · `#needs-unit-test` promote |
 | [PORTAL-UNIT-GEN-ROADMAP](./PORTAL-UNIT-GEN-ROADMAP.md) | Patterns & PR roadmap |
 | `.cursor/extracts/portal-unit-workflow.md` | Checklist token-thin cho AI |

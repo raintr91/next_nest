@@ -9,10 +9,12 @@ const __dirname = path.dirname(__filename)
 export default defineConfig({
   plugins: [vue()],
   resolve: {
-    alias: {
-      '~': __dirname,
-      '@': __dirname
-    }
+    alias: [
+      { find: '~/models', replacement: path.resolve(__dirname, 'packages/models/src') },
+      { find: '@portal/models', replacement: path.resolve(__dirname, 'packages/models/src') },
+      { find: '~', replacement: __dirname },
+      { find: '@', replacement: __dirname }
+    ]
   },
   test: {
     environment: 'happy-dom',

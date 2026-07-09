@@ -4,9 +4,13 @@
 
 Generate 4-layer scaffold from feature `spec.yaml` (Handlebars templates).
 
+**Models:** `portal:gen` **không** sinh `models/`. Chạy `pnpm contract:gen --spec .../ir/spec.yaml` trước để có `@portal/models` (`packages/models/src/`).
+
 ## Usage
 
 ```bash
+pnpm contract:gen:dry --spec docs/features/yaml/.../ir/spec.yaml
+pnpm contract:gen --spec docs/features/yaml/.../ir/spec.yaml
 pnpm portal:registry   # validate shared/portal-design.registry.json
 pnpm portal:gen --spec docs/features/yaml/admin/hotel/list/ir/spec.yaml
 pnpm portal:gen:dry --spec docs/features/.../ir/spec.yaml
@@ -45,13 +49,13 @@ tags:
   - "#style: flat"
 ```
 
-**Namespace collision:** `entity: hotel` + `module: chain-hotels` writes to `models/chain-hotel/`, not `models/hotel/` (admin). Explicit `codegen.namespace: chain-hotel` also works.
+**Namespace collision:** `entity: hotel` + `module: chain-hotels` writes services under `chain-hotel/`, not `hotel/` (admin). Explicit `codegen.namespace: chain-hotel` also works.
 
 **Lifecycle:** Khi ghi `pages/*.vue`, portal-gen cập nhật registry (`prototype`) + `pnpm portal:lifecycle sync`. Xóa: `pnpm portal:remove --spec <file>`. Doc: `docs/operational/PAGE-LIFECYCLE.md`.
 
 ## Output
 
-- App code under `models/`, `services/`, `composables/`, `pages/`, `mocks/`
+- App code under `services/`, `composables/`, `validations/`, `pages/`, `mocks/` (imports `@portal/models`)
 - `docs/features/{feature}/generated/HANDOFF.md` — *Prototype next*: slot inventory (`#needs-component`); gen does not emit `Mo*` stubs
 - `docs/features/{feature}/generated/codegen.manifest.json` (includes `shell`, `shellVariant`)
 

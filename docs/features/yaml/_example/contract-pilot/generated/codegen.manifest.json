@@ -1,0 +1,90 @@
+{
+  "spec": "/home/vutv/workspace/portal/docs/features/yaml/_example/contract-pilot/backend/01-backend-spec.yaml",
+  "module": "Example",
+  "entity": "SampleItem",
+  "orm": "typeorm",
+  "files": [
+    {
+      "layer": "module",
+      "path": "apps/api/src/modules/example/example.module.ts",
+      "template": "module.module.ts.hbs"
+    },
+    {
+      "layer": "controller",
+      "path": "apps/api/src/modules/example/sample-item/sample-item.controller.ts",
+      "template": "entity.controller.ts.hbs"
+    },
+    {
+      "layer": "resource",
+      "path": "apps/api/src/modules/example/sample-item/sample-item.resource.ts",
+      "template": "entity.resource.ts.hbs"
+    },
+    {
+      "layer": "query",
+      "path": "apps/api/src/modules/example/sample-item/queries/search-sample-item.query.ts",
+      "template": "queries/search.query.ts.hbs"
+    },
+    {
+      "layer": "handler",
+      "path": "apps/api/src/modules/example/sample-item/queries/search-sample-item.handler.ts",
+      "template": "queries/search.handler.ts.hbs"
+    },
+    {
+      "layer": "command",
+      "path": "apps/api/src/modules/example/sample-item/commands/create-sample-item.command.ts",
+      "template": "commands/create.command.ts.hbs"
+    },
+    {
+      "layer": "handler",
+      "path": "apps/api/src/modules/example/sample-item/commands/create-sample-item.handler.ts",
+      "template": "commands/create.handler.ts.hbs"
+    },
+    {
+      "layer": "command",
+      "path": "apps/api/src/modules/example/sample-item/commands/update-sample-item.command.ts",
+      "template": "commands/update.command.ts.hbs"
+    },
+    {
+      "layer": "handler",
+      "path": "apps/api/src/modules/example/sample-item/commands/update-sample-item.handler.ts",
+      "template": "commands/update.handler.ts.hbs"
+    },
+    {
+      "layer": "command",
+      "path": "apps/api/src/modules/example/sample-item/commands/delete-sample-item.command.ts",
+      "template": "commands/delete.command.ts.hbs"
+    },
+    {
+      "layer": "handler",
+      "path": "apps/api/src/modules/example/sample-item/commands/delete-sample-item.handler.ts",
+      "template": "commands/delete.handler.ts.hbs"
+    },
+    {
+      "layer": "orm",
+      "path": "apps/api/src/modules/example/sample-item/sample-item.entity.ts",
+      "template": "orm/typeorm.entity.ts.hbs"
+    },
+    {
+      "layer": "orm",
+      "path": "apps/api/prisma/models/sample-item.prisma",
+      "template": "orm/prisma.model.prisma.hbs"
+    }
+  ],
+  "written": [
+    "apps/api/src/modules/example/example.module.ts",
+    "apps/api/src/modules/example/sample-item/sample-item.controller.ts",
+    "apps/api/src/modules/example/sample-item/sample-item.resource.ts",
+    "apps/api/src/modules/example/sample-item/queries/search-sample-item.query.ts",
+    "apps/api/src/modules/example/sample-item/queries/search-sample-item.handler.ts",
+    "apps/api/src/modules/example/sample-item/commands/create-sample-item.command.ts",
+    "apps/api/src/modules/example/sample-item/commands/create-sample-item.handler.ts",
+    "apps/api/src/modules/example/sample-item/commands/update-sample-item.command.ts",
+    "apps/api/src/modules/example/sample-item/commands/update-sample-item.handler.ts",
+    "apps/api/src/modules/example/sample-item/commands/delete-sample-item.command.ts",
+    "apps/api/src/modules/example/sample-item/commands/delete-sample-item.handler.ts",
+    "apps/api/src/modules/example/sample-item/sample-item.entity.ts",
+    "apps/api/prisma/models/sample-item.prisma"
+  ],
+  "skipped": [],
+  "generatedAt": "2026-07-09T04:02:08.875Z"
+}

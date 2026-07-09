@@ -12,12 +12,14 @@ pnpm docs:dev
 
 ## Operational
 
-- [Architecture](./operational/ARCHITECTURE.md)
-- [Full cycle (overview)](./operational/FULL-CYCLE-PIPELINE-DIAGRAM.md)
-- [Feature artifact flows](./operational/FEATURE-ARTIFACT-FLOWS.md)
+- [Architecture](./operational/ARCHITECTURE.md) — monorepo FE + `@portal/models` + `apps/api`
+- [Full cycle (overview)](./operational/FULL-CYCLE-PIPELINE-DIAGRAM.md) — phase map (Design · Scaffold · API · Wire)
+- [Feature artifact flows](./operational/FEATURE-ARTIFACT-FLOWS.md) — index diagram + lệnh (gồm backend + API unit lane)
 - [Prompt templates](./operational/PROMPT-TEMPLATES.md)
 - [E2E Test IDs](./operational/E2E-TESTIDS.md)
 - [Semantic UI Assertions](./operational/E2E-SEMANTIC-UI-ASSERTIONS.md)
+
+Backend/API chi tiết: đi từ [FEATURE-ARTIFACT-FLOWS](./operational/FEATURE-ARTIFACT-FLOWS.md) → [BACKEND-CODEGEN](./operational/BACKEND-CODEGEN.md) · [BACKEND-PHASE-DIAGRAM](./operational/BACKEND-PHASE-DIAGRAM.md).
 
 ## Onboarding (slides)
 
@@ -37,4 +39,4 @@ pnpm docs:dev
 - [WSL + Cursor perf](./dev-environment/WSL-CURSOR-PERF.md)
 - [Monorepo strategy](./dev-environment/MONOREPO-STRATEGY.md)
 
-Backend: repo `api/` → `src/docs/TEAM-AI-BACKEND-WORKFLOW.md`
+Backend: in-repo — [BACKEND-CODEGEN](./operational/BACKEND-CODEGEN.md) (thay `api/` repo cũ)

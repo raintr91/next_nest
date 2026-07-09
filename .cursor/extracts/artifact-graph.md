@@ -11,7 +11,9 @@ Path root: `docs/features/yaml/{role}/{domain}/{function}/`
 | bqa-grill | `ir/design.yaml`, `ir/legacy.yaml` ui slice, common bundles, `review` | ir/spec gen fields, legacy source |
 | dev-grill | `ir/design`, `ir/legacy`, write `gen` / ir/spec | legacy source, models/ |
 | grill-with-docs | bundle + ir/* reconcile | legacy source, archaeology |
-| portal:gen | **`ir/spec.yaml`** | bundle, legacy, design |
+| portal:gen | **`ir/spec.yaml`** | bundle, legacy, design, models (use contract:gen) |
+| contract:gen | **`ir/spec.yaml`** entities.fields | legacy source |
+| nest:gen | **`backend/01-backend-spec.yaml`** | FE pages |
 | docs:render | **`*.bundle.yaml`** | — |
 | prototype | **`ir/spec.yaml`** + HANDOFF | legacy IR |
 | /test | `*.test.yaml`, ir/spec testIds | legacy-api-migration |

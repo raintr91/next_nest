@@ -32,7 +32,18 @@
     "phase:common": "node scripts/run-phase.mjs common",
     "legacy-trace:validate": "node scripts/spec/legacy-trace-validate.mjs",
     "extracts:validate": "node scripts/extracts/validate.mjs",
-    "portal:gen": "node scripts/portal-gen/generate.mjs",
+    "contract:gen": "node scripts/contract-gen/generate.mjs",
+    "contract:gen:dry": "node scripts/contract-gen/generate.mjs --dry-run",
+    "contract:registry": "node scripts/contract-gen/validate-registry.mjs",
+    "nest:registry": "node scripts/nest-gen/validate-registry.mjs",
+    "nest:gen": "node scripts/nest-gen/generate.mjs",
+    "nest:gen:dry": "node scripts/nest-gen/generate.mjs --dry-run",
+    "nest:unit-gen": "node scripts/nest-unit-gen/generate.mjs",
+    "nest:unit-gen:dry": "node scripts/nest-unit-gen/generate.mjs --dry-run",
+    "nest:unit-registry": "node scripts/nest-unit-gen/validate-registry.mjs",
+    "openapi:gen": "node scripts/openapi-gen/generate.mjs",
+    "openapi:gen:dry": "node scripts/openapi-gen/generate.mjs --dry-run",
+    "dev:api": "pnpm --filter @portal/api dev",
     "portal:gen:dry": "node scripts/portal-gen/generate.mjs --dry-run",
     "portal:gen:common": "node scripts/portal-gen/generate.mjs --yaml-root docs/common/yaml",
     "portal:gen:dry:common": "node scripts/portal-gen/generate.mjs --yaml-root docs/common/yaml --dry-run",
@@ -86,7 +97,8 @@
     "vue": "^3.5.27",
     "vue-router": "^4.6.4",
     "vue-sonner": "^2.0.9",
-    "zod": "^3.25.76"
+    "zod": "^3.25.76",
+    "@portal/models": "workspace:*"
   },
   "pnpm": {
     "onlyBuiltDependencies": [

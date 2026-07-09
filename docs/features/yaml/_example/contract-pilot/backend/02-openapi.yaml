@@ -1,0 +1,137 @@
+openapi: 3.0.3
+info:
+  title: Contract pilot API
+  version: 0.1.0
+servers:
+  - url: http://localhost:4000
+    description: Local dev
+paths:
+  /api/sample-items:
+    get:
+      operationId: sample-item.search
+      tags:
+        - Example
+      summary: search SampleItem
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SampleItemCollection"
+      parameters:
+        - name: page
+          in: query
+          schema:
+            type: integer
+        - name: per_page
+          in: query
+          schema:
+            type: integer
+    post:
+      operationId: sample-item.create
+      tags:
+        - Example
+      summary: create SampleItem
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SampleItemResource"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/SampleItemCreateRequest"
+  /api/sample-items/{id}:
+    patch:
+      operationId: sample-item.update
+      tags:
+        - Example
+      summary: update SampleItem
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SampleItemResource"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/SampleItemUpdateRequest"
+    delete:
+      operationId: sample-item.delete
+      tags:
+        - Example
+      summary: delete SampleItem
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SampleItemDeleteResponse"
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+  schemas:
+    SampleItemSearchRequest:
+      type: object
+      properties:
+        page:
+          type: integer
+        per_page:
+          type: integer
+      required:
+        - page
+        - per_page
+    SampleItemCreateRequest:
+      type: object
+      properties:
+        name:
+          type: string
+      required:
+        - name
+    SampleItemUpdateRequest:
+      type: object
+      properties:
+        name:
+          type: string
+          nullable: true
+    SampleItemResource:
+      type: object
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+          nullable: true
+      required:
+        - id
+    SampleItemCollection:
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: "#/components/schemas/SampleItemResource"
+        meta:
+          type: object
+    SampleItemDeleteResponse:
+      type: object
+      properties:
+        success:
+          type: boolean
+      required:
+        - success
+security:
+  - bearerAuth: []

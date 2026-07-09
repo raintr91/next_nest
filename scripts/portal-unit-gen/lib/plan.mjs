@@ -121,13 +121,13 @@ async function appendSchemaPlan(ctx, registry, files, needsUnit, skippedPatterns
   }
 
   const modelPath = findManifestLayerPath(ctx.codegenManifest, 'models') ??
-    `models/${ctx.entity}/${ctx.entity}.schema.ts`
+    `packages/models/src/${ctx.entity}/${ctx.entity}.schema.ts`
   const absoluteModel = path.join(root, modelPath)
 
   try {
     await access(absoluteModel)
   } catch {
-    throw new Error(`Model file missing: ${modelPath} — run portal:gen first`)
+    throw new Error(`Model file missing: ${modelPath} — run contract:gen first`)
   }
 
   const relativePath = resolveOutputPath(pattern.output, ctx)

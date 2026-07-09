@@ -1,7 +1,7 @@
 # Feature artifact — lệnh script
 
 > Bảng tra cứu · Diagram: [FEATURE-ARTIFACT-FLOWS](./FEATURE-ARTIFACT-FLOWS.md)  
-> Codegen chi tiết tag/registry: [PORTAL-CODEGEN](./PORTAL-CODEGEN.md)
+> Codegen FE: [PORTAL-CODEGEN](./PORTAL-CODEGEN.md) · Codegen BE: [BACKEND-CODEGEN](./BACKEND-CODEGEN.md)
 
 ---
 
@@ -68,7 +68,39 @@ Lệnh tổng hợp chạy tuần tự các bước hạt nhân của mỗi phas
 | `pnpm portal:remove --spec .../ir/spec.yaml` | Xóa scaffold theo manifest |
 | `pnpm portal:lifecycle sync` | Đồng bộ page registry |
 
-**Output:** `{function}/generated/codegen.manifest.json`, `HANDOFF.md` + layers app.
+**Output:** `{function}/generated/codegen.manifest.json`, `HANDOFF.md` + layers app (không `models/` — dùng `contract:gen`).
+
+---
+
+## Contract (`contract:gen`)
+
+**Input:** `ir/spec.yaml` — `entities[].fields[]` ([CONTRACT-FIELD-REGISTRY](./CONTRACT-FIELD-REGISTRY.md))
+
+| Lệnh | Mục đích |
+|------|----------|
+| `pnpm contract:registry` | Validate `shared/contract-field.registry.json` |
+| `pnpm contract:gen:dry --spec .../ir/spec.yaml` | Plan Zod + relationships.meta |
+| `pnpm contract:gen --spec .../ir/spec.yaml` | Write `packages/models/src/...` |
+| `pnpm contract:gen --spec ... --force` | Overwrite |
+
+**Output:** `packages/models/...`, `{function}/generated/contract.manifest.json`
+
+---
+
+## Nest API (`nest:gen`)
+
+| Lệnh | Mục đích |
+|------|----------|
+| `pnpm nest:registry` | Validate `shared/nest-codegen.registry.json` |
+| `pnpm nest:gen:dry --spec .../backend/01-backend-spec.yaml` | Plan CQRS scaffold |
+| `pnpm nest:gen --spec ...` | Write `apps/api/src/modules/...` |
+| `pnpm nest:unit-registry` | Validate `shared/nest-unit-test.registry.json` |
+| `pnpm nest:unit-gen --spec .../backend/01-backend-spec.yaml` | Handler/resource Jest specs |
+| `pnpm openapi:gen --spec .../backend/01-backend-spec.yaml` | Write `02-openapi.yaml` |
+| `pnpm --filter @portal/api test` | Run API unit tests |
+| `pnpm dev:api` | Nest dev :4000 |
+
+Prerequisite: `pnpm contract:gen` cho `@portal/models`.
 
 ---
 

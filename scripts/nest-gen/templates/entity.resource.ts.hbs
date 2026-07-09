@@ -1,0 +1,28 @@
+import { BaseResource } from '../../../common/crud/base-resource'
+
+type {{entityPascal}}Row = {
+  id: number
+  name?: string | null
+  created_at?: string | Date | null
+  updated_at?: string | Date | null
+  managers?: Array<{ id: number; full_name?: string | null }>
+}
+
+export class {{entityPascal}}Resource extends BaseResource<{{entityPascal}}Row> {
+  fields(entity: {{entityPascal}}Row) {
+    return {
+      name: entity.name ?? null
+    }
+  }
+
+  relations(entity: {{entityPascal}}Row) {
+    if (!entity.managers) return {}
+    return {
+      managers: entity.managers.map((m) => ({ id: m.id, full_name: m.full_name ?? null }))
+    }
+  }
+
+  static toDto(entity: {{entityPascal}}Row) {
+    return new {{entityPascal}}Resource().toDto(entity)
+  }
+}

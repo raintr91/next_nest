@@ -2,13 +2,13 @@
 
 > **Doc chính (đọc file này trước).** Lệnh tra cứu: [FEATURE-ARTIFACT-COMMANDS](./FEATURE-ARTIFACT-COMMANDS.md) · Flow: [FEATURE-ARTIFACT-FLOWS](./FEATURE-ARTIFACT-FLOWS.md).  
 > Chi tiết tag: `.cursor/extracts/codegen/tags.md`, `.cursor/extracts/portal-unit-test-tags.md`, …  
-> **Dev lane Vitest:** [UNIT-PHASE-DIAGRAM](./UNIT-PHASE-DIAGRAM.md) · **E2E lane:** [TEST-PHASE-DIAGRAM](./TEST-PHASE-DIAGRAM.md)
+> **Dev lane Vitest:** [UNIT-PHASE-DIAGRAM](./UNIT-PHASE-DIAGRAM.md) · **Dev lane Jest (API):** [NEST-UNIT-PHASE-DIAGRAM](./NEST-UNIT-PHASE-DIAGRAM.md) · **E2E lane:** [TEST-PHASE-DIAGRAM](./TEST-PHASE-DIAGRAM.md) · **Backend hub:** [BACKEND-CODEGEN](./BACKEND-CODEGEN.md)
 
 Hai pipeline app + unit **tách script**, **tách registry** — E2E `testcase:gen` pipeline thứ ba (Playwright only):
 
 | Pipeline | Lệnh | Registry | Output app / test |
 |----------|------|----------|-------------------|
-| **App scaffold** | `pnpm portal:gen` | `shared/portal-design.registry.json` | `models/`, `services/`, `pages/`, `mocks/`, … |
+| **App scaffold** | `pnpm portal:gen` | `shared/portal-design.registry.json` | `services/`, `pages/`, `mocks/`, … (models → `contract:gen`) |
 | **Unit tests** | `pnpm portal:unit-gen` | `shared/portal-unit-test.registry.json` | `tests/unit/…` (một file / layer) |
 | **E2E tests** | `pnpm testcase:gen` | `shared/portal-e2e-test.registry.json` | `tests/e2e/…` + Page Objects |
 
@@ -18,6 +18,8 @@ Hai pipeline app + unit **tách script**, **tách registry** — E2E `testcase:g
 
 ```text
 /dev-grill-docs  →  bundle.gen / ir/spec.yaml
+       ↓
+pnpm contract:gen --spec …/ir/spec.yaml    # @portal/models — xem BACKEND-CODEGEN.md
        ↓
 pnpm portal:gen:dry --spec docs/features/yaml/.../ir/spec.yaml
 pnpm portal:gen --spec docs/features/yaml/.../ir/spec.yaml
@@ -32,8 +34,10 @@ pnpm portal:unit-gen --spec …    # smoke — unit.manifest.json + UNIT-HANDOFF
        ↓
 /test (E2E): testcase YAML → testcase:gen → /grill-test  — [TEST-PHASE-DIAGRAM](./TEST-PHASE-DIAGRAM.md)
        ↓
-/wire
+/wire  — [WIRE-PHASE-DIAGRAM](./WIRE-PHASE-DIAGRAM.md)
 ```
+
+**Backend song song:** [BACKEND-PHASE-DIAGRAM](./BACKEND-PHASE-DIAGRAM.md) · `nest:gen` sau `contract:gen` — không thay `portal:gen`.
 
 **Phase wire:** chạy lại `portal:unit-gen --spec … --phase wire` khi có template service (PR2+) — bổ sung test mock API, không đổi schema trừ `--force`.
 

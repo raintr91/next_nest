@@ -1,5 +1,5 @@
 # Derived from bundle.spec — portal:gen reads this file
-# Do not add review prose or legacy evidence here
+# contract:gen reads entities.fields — see docs/operational/CONTRACT-FIELD-REGISTRY.md
 
 id: role-domain-function
 title: Feature title
@@ -18,8 +18,34 @@ codegen:
 tags: []
 
 actors: []
-entities: []
-relationships: []
+entities:
+  # - name: Hotel
+  #   table: hotels
+  #   fields:
+  #     - key: id
+  #       kind: scalar
+  #       type: integer
+  #       scopes: [response, persistence]
+  #       readOnly: true
+  #     - key: name
+  #       kind: scalar
+  #       type: string
+  #       scopes: [form, response, persistence]
+  #     - key: managers
+  #       kind: relation
+  #       cardinality: many
+  #       target: User
+  #       scopes: [response]
+  #       persistence:
+  #         type: hasMany
+  #         orm: typeorm
+  #       contract:
+  #         read:
+  #           includeOn: [list]
+  #           embed: [id, full_name]
+
+relationships: []   # derived from entities.fields — do not author duplicate graph
+
 requirements: []
 
 ui:

@@ -1,0 +1,11 @@
+{
+  "spec": "/home/vutv/workspace/portal/docs/features/yaml/_example/contract-pilot/backend/01-backend-spec.yaml",
+  "written": [
+    "apps/api/src/modules/example/sample-item/queries/search-sample-item.handler.spec.ts",
+    "apps/api/src/modules/example/sample-item/commands/create-sample-item.handler.spec.ts",
+    "apps/api/src/modules/example/sample-item/commands/update-sample-item.handler.spec.ts",
+    "apps/api/src/modules/example/sample-item/commands/delete-sample-item.handler.spec.ts",
+    "apps/api/src/modules/example/sample-item/sample-item.resource.spec.ts"
+  ],
+  "generatedAt": "2026-07-09T04:00:18.631Z"
+}

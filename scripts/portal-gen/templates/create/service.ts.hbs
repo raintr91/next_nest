@@ -1,9 +1,9 @@
 import {
   {{entityPascal}}CreateRequestSchema,
-  {{entityPascal}}Schema
-} from '~/models/{{entity}}/{{entity}}.schema'
-import type { {{entityPascal}}CreateRequest, {{entityPascal}} } from '~/models/{{entity}}/{{entity}}.types'
-import type { ApiResponse } from '~/models/common/api.types'
+  {{entityPascal}}ReadSchema
+} from '@portal/models/{{entity}}'
+import type { {{entityPascal}}CreateRequest, {{entityPascal}} } from '@portal/models/{{entity}}'
+import type { ApiResponse } from '@portal/models/common/api.types'
 import { assertApiSuccess } from '~/services/shared/apiResponse'
 import { parseApiData } from '~/services/shared/parseApiData'
 
@@ -17,7 +17,7 @@ export function create{{entityPascal}}Service(apiFetch: ApiFetch) {
         body: payload
       })
       assertApiSuccess(res)
-      return parseApiData({{entityPascal}}Schema, res.data)
+      return parseApiData({{entityPascal}}ReadSchema, res.data)
     }
   }
 }

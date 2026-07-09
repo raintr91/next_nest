@@ -1,8 +1,8 @@
 import {
   {{entityPascal}}ListResponseSchema
-} from '~/models/{{entity}}/{{entity}}.schema'
-import type { {{entityPascal}}ListResponse } from '~/models/{{entity}}/{{entity}}.types'
-import type { ApiResponse } from '~/models/common/api.types'
+} from '@portal/models/{{entity}}'
+import type { {{entityPascal}}ListResponse } from '@portal/models/{{entity}}'
+import type { ApiResponse } from '@portal/models/common/api.types'
 import { assertApiSuccess } from '~/services/shared/apiResponse'
 import { parseApiData } from '~/services/shared/parseApiData'
 

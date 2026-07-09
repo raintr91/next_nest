@@ -1,12 +1,61 @@
-# Kiến trúc 4 tầng — Portal (Nuxt 4)
+# Kiến trúc — Portal monorepo (Nuxt 4 + Nest API)
 
-Tài liệu mô tả chuẩn kiến trúc **Composables → Services → Stores → Models/Schema** và đối chiếu với codebase hiện tại.
+Tài liệu mô tả:
 
-> **Kết luận nhanh:** Dự án đã có **4 tầng đầy đủ** (`composables` → `services` → `stores` → `models`). Auth flow (login/register/forgot/reset), data table, `parseApiData` runtime đã theo chuẩn. Còn tùy chọn: đổi tên `useAuth` store, user CRUD pages.
+1. **Monorepo** — Nuxt (root) + `apps/api` + `packages/models`
+2. **FE 4 tầng** — Composables → Services → Stores → Models/Schema
+3. **BE CQRS** — Controller → Handlers → Resource → TypeORM
+
+> **Kết luận nhanh:** FE đã có **4 tầng đầy đủ**. Contracts Zod nằm `@portal/models` (`packages/models`). Nest API in-repo `apps/api` — codegen [BACKEND-CODEGEN](./BACKEND-CODEGEN.md).
 
 ---
 
-## 1. Chuẩn mục tiêu (4 tầng)
+## 0. Monorepo (2026)
+
+```mermaid
+flowchart TB
+  subgraph Root["portal/ (pnpm workspace)"]
+    subgraph FE["Nuxt 4 — root"]
+      P[pages/ · components/]
+      CO[composables/]
+      SV[services/]
+      VA[validations/]
+    end
+
+    subgraph PKG["packages/models"]
+      ZOD["Zod SSOT\ncontract:gen"]
+    end
+
+    subgraph API["apps/api — Nest"]
+      CTL[modules/*/controller]
+      CQRS[CommandBus / QueryBus]
+      COM[common/crud]
+      DB[(MySQL TypeORM)]
+    end
+  end
+
+  CO --> SV
+  SV --> ZOD
+  CTL --> CQRS --> COM --> DB
+  CQRS --> ZOD
+```
+
+| Thành phần | Path | Doc |
+|------------|------|-----|
+| Nuxt app | Root (`pages/`, `services/`, …) | Phần 1–6 bên dưới |
+| Shared contracts | `packages/models` (`@portal/models`) | [CONTRACT-FIELD-REGISTRY](./CONTRACT-FIELD-REGISTRY.md) |
+| Nest API | `apps/api` (`@portal/api`) | [NEST-API-STRUCTURE](./NEST-API-STRUCTURE.md) · [BACKEND-API-QUICKSTART](./BACKEND-API-QUICKSTART.md) |
+| Codegen FE | `portal:gen` | [PORTAL-CODEGEN](./PORTAL-CODEGEN.md) |
+| Codegen BE | `contract:gen` · `nest:gen` | [BACKEND-CODEGEN](./BACKEND-CODEGEN.md) |
+| Wire FE↔BE | `/wire` | [WIRE-PHASE-DIAGRAM](./WIRE-PHASE-DIAGRAM.md) |
+
+Chi tiết workspace: [MONOREPO-STRATEGY](../dev-environment/MONOREPO-STRATEGY.md).
+
+**Import FE:** `~/models` alias → `@portal/models` (ưu tiên package trực tiếp trong code mới).
+
+---
+
+## 1. Chuẩn mục tiêu FE (4 tầng)
 
 ```mermaid
 flowchart TB
@@ -28,7 +77,7 @@ flowchart TB
   end
 
   subgraph L4["④ Models & Schema"]
-    MO[models/ — domain + API contract]
+    MO["@portal/models — Zod contract"]
     VA[validations/ — form rules]
   end
 
@@ -56,7 +105,7 @@ flowchart TB
 | **Composables** | `composables/` | Orchestration UI: form submit, loading/error, navigation, guard | Gọi `$apiFetch` trực tiếp |
 | **Services** | `services/` | HTTP/repository: endpoint, method, map response | Giữ state Pinia/cookie |
 | **Stores** | `stores/` | State client: token, user, toast, dialog | Logic HTTP chi tiết |
-| **Models** | `models/` + `validations/` | Contract dữ liệu: Zod schema, `z.infer` types, parse API | Render UI |
+| **Models** | `packages/models` + `validations/` | Contract Zod (`contract:gen`), `z.infer` types, parse API | Render UI |
 
 ### Quy tắc import (chuẩn)
 
@@ -151,29 +200,21 @@ stores/
 
 **Đặt tên chưa nhất quán:** `useAuth` (kiểu composable) vs `toastStore` / `dialogStore` (suffix `Store`).
 
-### 2.4 Models & Schema — ⚠️ Có, bị phân tán
+### 2.4 Models & Schema — `packages/models` + `validations/`
 
 ```
-models/                          ← domain + API contract (Zod)
+packages/models/src/           ← contract:gen (Zod SSOT)
 ├── common/
-│   ├── api.schema.ts            ApiSuccessSchema, ApiErrorSchema
-│   ├── api.types.ts
-│   ├── fields.ts                email, id, …
-│   └── parse.ts                 parseSchema — dùng qua services/parseApiData
+│   ├── api.schema.ts
+│   ├── fields.ts
+│   └── parse.ts
 ├── auth/
-│   ├── auth.schema.ts           LoginRequestSchema, TokenResponseSchema, …
-│   └── auth.types.ts            z.infer types
-└── user/
-    ├── user.schema.ts
-    └── user.types.ts
+├── user/
+└── {entity}/                  ← per feature entity
 
-validations/                     ← form rules (vee-validate toTypedSchema)
-├── auth/schemas.ts              loginSchema (min 8 chars password…)
-├── user/schemas.ts              sẵn sàng cho user CRUD (chưa có page)
-└── common/rules.ts, messages.ts
-
-types/
-└── apiFetch.d.ts                augment $apiFetch
+validations/                   ← form rules (vee-validate)
+├── auth/schemas.ts
+└── …
 ```
 
 **Hai nguồn Zod cho cùng concept (cố ý nhưng cần hiểu rõ):**
@@ -255,22 +296,24 @@ export type LoginRequest = z.infer<typeof LoginRequestSchema>
 ### 5.1 Thêm entity mới (ví dụ: `WorkOrder`)
 
 ```bash
-# 1. Model
-models/work-order/work-order.schema.ts   # Zod entity + request/response
-models/work-order/work-order.types.ts    # z.infer
-models/work-order/index.ts
+# 1. Contract (shared package)
+pnpm contract:gen --spec docs/features/yaml/.../ir/spec.yaml
+# → packages/models/src/work-order/
 
-# 2. Service
-services/work-order.service.ts           # list(), get(), create() — chỉ $apiFetch + parse
+# 2. Service (FE)
+services/work-order.service.ts   # list(), get(), create() — $apiFetch + parse
 
 # 3. Store (nếu cần cache UI state)
-stores/workOrderStore.ts                 # items, selectedId — gọi service
+stores/workOrderStore.ts
 
 # 4. Composable
 composables/work-order/useWorkOrderList.ts
 
 # 5. Validation (nếu có form)
 validations/work-order/schemas.ts
+
+# 6. Backend (song song, khi cần API thật)
+# → backend/01-backend-spec.yaml → nest:gen — xem BACKEND-CODEGEN.md
 ```
 
 ### 5.2 Template service
@@ -330,7 +373,11 @@ pnpm ui:add button
 
 ## 8. Tài liệu liên quan
 
-- [Docs Home](../index.md) — entrypoint docs local/VitePress
-- [E2E-TESTIDS.md](./E2E-TESTIDS.md) — quy ước `data-testid` + Cypress
-- `composables/forms/README.md` — spec `useApiForm` (chưa implement)
+- [Docs Home](../index.md) — entrypoint VitePress
+- [FULL-CYCLE-PIPELINE-DIAGRAM](./FULL-CYCLE-PIPELINE-DIAGRAM.md) — phase map
+- [PORTAL-CODEGEN](./PORTAL-CODEGEN.md) — FE `portal:gen`
+- [BACKEND-CODEGEN](./BACKEND-CODEGEN.md) — BE `nest:gen` + Jest
+- [WIRE-PHASE-DIAGRAM](./WIRE-PHASE-DIAGRAM.md) — integration FE ↔ Nest
+- [E2E-TESTIDS](./E2E-TESTIDS.md) — `data-testid`
+- [MONOREPO-STRATEGY](../dev-environment/MONOREPO-STRATEGY.md) — workspace layout
 - `plugins/fetch.ts` + `utils/fetchUtils.ts` — HTTP client

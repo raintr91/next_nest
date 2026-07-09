@@ -23,9 +23,9 @@ flowchart TD
 | Phase | Đại diện | Detail |
 |-------|----------|--------|
 | 1 Design | bundle yaml → ir/spec → prototype | [DESIGN-PHASE-DIAGRAM](./DESIGN-PHASE-DIAGRAM) · [FEATURE-ARTIFACT-FLOWS](./FEATURE-ARTIFACT-FLOWS) |
-| 2a Scaffold | `portal:gen` · `portal:unit-gen` · HANDOFF / manifests | [PORTAL-CODEGEN](./PORTAL-CODEGEN) |
+| 2a Scaffold | `portal:gen` · `portal:unit-gen` · HANDOFF / manifests | [PORTAL-CODEGEN](./PORTAL-CODEGEN) · [UNIT-PHASE-DIAGRAM](./UNIT-PHASE-DIAGRAM) |
 | 2b Tests | `*.test.yaml` · `testcase:gen` · grill-test | [TEST-PHASE-DIAGRAM](./TEST-PHASE-DIAGRAM) |
-| 2c API | api-spec · grill-api · api-code | [BACKEND-PHASE-DIAGRAM](./BACKEND-PHASE-DIAGRAM) |
+| 2c API | `contract:gen` · `nest:gen` · `nest:unit-gen` | [BACKEND-PHASE-DIAGRAM](./BACKEND-PHASE-DIAGRAM) · [BACKEND-CODEGEN](./BACKEND-CODEGEN) · [NEST-UNIT-PHASE-DIAGRAM](./NEST-UNIT-PHASE-DIAGRAM) |
 | 3 Wire | wire · grill-wire | [WIRE-PHASE-DIAGRAM](./WIRE-PHASE-DIAGRAM) |
 | 4 Ship | review · merge · deploy | — |
 
@@ -49,11 +49,14 @@ flowchart TD
 |-----|----------|
 | [TEST-PHASE-DIAGRAM](./TEST-PHASE-DIAGRAM.md) | E2E lane · testcase:gen · grill-test |
 | [UNIT-PHASE-DIAGRAM](./UNIT-PHASE-DIAGRAM.md) | Vitest lane · portal:unit-gen |
+| [NEST-UNIT-PHASE-DIAGRAM](./NEST-UNIT-PHASE-DIAGRAM.md) | Jest lane · nest:unit-gen |
 | [PORTAL-CODEGEN](./PORTAL-CODEGEN.md) | portal:gen + portal:unit-gen |
+| [BACKEND-CODEGEN](./BACKEND-CODEGEN.md) | contract:gen + nest:gen + nest:unit-gen |
 | [PORTAL-UNIT-GEN-ROADMAP](./PORTAL-UNIT-GEN-ROADMAP.md) | Roadmap smoke / registry / PRs |
 | [DESIGN-PHASE-DIAGRAM](./DESIGN-PHASE-DIAGRAM.md) | Spec → grill → prototype |
-| [BACKEND-PHASE-DIAGRAM](./BACKEND-PHASE-DIAGRAM.md) | API repo |
-| [WIRE-PHASE-DIAGRAM](./WIRE-PHASE-DIAGRAM.md) | Integration |
+| [BACKEND-PHASE-DIAGRAM](./BACKEND-PHASE-DIAGRAM.md) | API phase · Nest in-repo |
+| [BACKEND-API-QUICKSTART](./BACKEND-API-QUICKSTART.md) | Dev local TypeORM + MySQL |
+| [WIRE-PHASE-DIAGRAM](./WIRE-PHASE-DIAGRAM.md) | Integration FE ↔ Nest |
 
 ```bash
 pnpm docs:render && pnpm docs:dev

@@ -1,4 +1,9 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
+import path from 'node:path'
+import { fileURLToPath } from 'node:url'
+
+const rootDir = path.dirname(fileURLToPath(import.meta.url))
+const modelsDir = path.resolve(rootDir, 'packages/models/src')
 const portEnv = process.env.NUXT_PORT?.trim()
 const devPort = portEnv ? parseInt(portEnv, 10) : 0
 const devServerPort = Number.isFinite(devPort) ? devPort : 3004
@@ -33,6 +38,14 @@ export default defineNuxtConfig({
     port: devServerPort
   },
   vite: {
+    resolve: {
+      alias: [
+        { find: '~/models', replacement: modelsDir },
+        { find: '@portal/models', replacement: modelsDir },
+        { find: '~', replacement: rootDir },
+        { find: '@', replacement: rootDir }
+      ]
+    },
     server: {
       watch: watchPollingOpts
     }

@@ -18,8 +18,9 @@ pnpm portal:unit-gen --spec ... --write-spec-tags   # opt-in: merge #needs-unit-
 ## Prerequisites
 
 1. `codegen.profile` in spec (portal-gen-ready)
-2. `pnpm portal:gen` — `docs/features/{slug}/generated/codegen.manifest.json`
-3. App files on disk (`models/`, …)
+2. `pnpm contract:gen` — `@portal/models` in `packages/models/src/`
+3. `pnpm portal:gen` — `docs/features/{slug}/generated/codegen.manifest.json`
+4. App files on disk (`services/`, `composables/`, …)
 
 ## Registry
 

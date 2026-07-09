@@ -104,6 +104,25 @@
       ".cursor/extracts/core/agent-discipline.md",
       ".cursor/extracts/legacy/project-config.md"
     ],
+    "contract": [
+      ".cursor/extracts/core/agent-discipline.md",
+      ".cursor/extracts/codegen/readiness.md"
+    ],
+    "api-spec": [
+      ".cursor/extracts/core/agent-discipline.md"
+    ],
+    "grill-api-spec": [
+      ".cursor/extracts/core/agent-discipline.md"
+    ],
+    "api-code": [
+      ".cursor/extracts/core/agent-discipline.md"
+    ],
+    "api-update-spec": [
+      ".cursor/extracts/core/agent-discipline.md"
+    ],
+    "nest-base": [
+      ".cursor/extracts/core/agent-discipline.md"
+    ],
     "api": [
       ".cursor/extracts/core/agent-discipline.md",
       ".cursor/extracts/legacy/project-config.md",

@@ -4,100 +4,54 @@ Mục tiêu: dev nhẹ, release khả thi, module/package **chỉ chứa source*
 
 ---
 
-## Hiện trạng portal
+## Hiện trạng portal (2026)
 
-| Thành phần | Vấn đề dev |
-|------------|------------|
-| `node_modules/` | Bình thường với Nuxt 4 + Storybook + Playwright/Vitest |
-| `.pnpm-store/` 884MB **trong repo** | **Bất thường** — đã fix `.npmrc` store global |
-| `components/ui/` (shadcn) | Source trong app — OK cho product, có thể tách package sau |
+| Thành phần | Vị trí |
+|------------|--------|
+| Nuxt 4 | **Root** repo (chưa move `apps/portal`) |
+| Nest API | `apps/api` (`@portal/api`) |
+| Zod contracts | `packages/models` (`@portal/models`) |
+| `pnpm-workspace` | `.`, `packages/*`, `apps/*` |
 
-**Release:** `pnpm build` → `.output/` — server không cần full devDependencies.
+**Local Docker:** `docker/docker-compose.yml` — `frontend-node` + `api-node`  
+**Prod:** Nest image từ `docker/api/Dockerfile` · Nuxt build static → S3/CloudFront (member chọn SPA/SSG)
 
 ---
 
-## Hướng A — pnpm workspace (khuyến nghị FE)
+## Hướng A — pnpm workspace (đang áp dụng)
 
-### Cấu trúc mục tiêu
+### Cấu trúc
 
 ```
-~/workspace/                    # hoặc repo `platform`
-├── package.json
+portal/
+├── package.json              # Nuxt + orchestration scripts
 ├── pnpm-workspace.yaml
-├── pnpm-lock.yaml
-├── node_modules/               # ← duy nhất
-├── apps/
-│   └── portal/                 # Nuxt app hiện tại (di chuyển)
-└── packages/
-    ├── ui/                     # shadcn primitives đã customize
-    ├── models/                 # Zod schemas dùng chung
-    ├── eslint-config-portal/
-    └── tsconfig/
-```
-
-### `pnpm-workspace.yaml`
-
-```yaml
-packages:
-  - 'apps/*'
-  - 'packages/*'
-```
-
-### `packages/models/package.json` (chỉ code)
-
-```json
-{
-  "name": "@platform/models",
-  "version": "0.0.0",
-  "private": true,
-  "type": "module",
-  "exports": {
-    "./*": "./src/*.ts"
-  },
-  "dependencies": {
-    "zod": "^3.25.0"
-  }
-}
-```
-
-### `apps/portal/package.json`
-
-```json
-{
-  "name": "portal",
-  "dependencies": {
-    "@platform/models": "workspace:*",
-    "@platform/ui": "workspace:*",
-    "nuxt": "^4.3.0"
-  }
-}
+├── pages/, services/, …      # Nuxt at root
+├── apps/api/                 # NestJS + CQRS
+├── packages/models/          # @portal/models — contract:gen
+└── docker/
 ```
 
 Chạy từ root:
 
 ```bash
-pnpm install          # một lần — một node_modules
-pnpm --filter portal dev
-pnpm --filter portal build
+pnpm install
+pnpm dev                      # Nuxt
+pnpm dev:api                  # Nest :4000
+pnpm --filter @portal/api build
 ```
 
-### Lợi ích
+Codegen & phase diagrams: [BACKEND-CODEGEN](../operational/BACKEND-CODEGEN.md) · [BACKEND-PHASE-DIAGRAM](../operational/BACKEND-PHASE-DIAGRAM.md) · [ARCHITECTURE](../operational/ARCHITECTURE.md).
 
-- Một install, một lockfile
-- Package mới = thư mục + `package.json` nhỏ, **không** copy `node_modules`
-- CI: cache root `node_modules` / pnpm store
-- Docker: mount workspace root, `pnpm --filter portal dev`
+### Migration tiếp theo (optional)
 
-### Migration từng bước (không big-bang)
-
-1. Tạo root `pnpm-workspace.yaml`, move `portal` → `apps/portal`
-2. `pnpm install` tại root — xóa `apps/portal/node_modules` cũ
-3. Tách `models/` → `packages/models` (import `@platform/models`)
-4. (Sau) tách `components/ui` → `packages/ui` nếu nhiều app dùng chung
+1. ~~Tách `models/` → `packages/models`~~ — bắt đầu; root `models/` giữ tạm cho app cũ
+2. Move Nuxt → `apps/portal` khi cần Docker/CI tách hẳn
+3. Tách `components/ui` → `packages/ui` nếu nhiều app
 
 ---
 
-## Hướng B — Laravel API (đã đúng hướng)
+## Hướng B — Laravel API (legacy reference)
 
 ```
 api/
@@ -135,27 +89,25 @@ Vẫn **một** `node_modules` ở root (pnpm + turbo).
 
 ---
 
-## Production Docker (multi-stage) — portal
+## Production Docker
+
+| App | Image |
+|-----|--------|
+| Nest API | `docker/api/Dockerfile` multi-stage |
+| Nuxt | CI build artifact → S3 (không runtime Docker) |
 
 ```dockerfile
-# stage 1: build
-FROM node:24 AS build
-WORKDIR /app
-COPY pnpm-lock.yaml pnpm-workspace.yaml package.json ./
-COPY apps/portal apps/portal
-COPY packages packages
-RUN corepack pnpm install --frozen-lockfile
-RUN pnpm --filter portal build
-
-# stage 2: run
-FROM node:24-alpine
-WORKDIR /app
-COPY --from=build /app/apps/portal/.output .output
-ENV HOST=0.0.0.0 PORT=3000
-CMD ["node", ".output/server/index.mjs"]
+# docker/api/Dockerfile — chỉ api + models
+COPY packages/models packages/models
+COPY apps/api apps/api
+RUN pnpm --filter @portal/api build
 ```
 
-Image cuối **không** chứa Storybook, Playwright, Vitest, `.pnpm-store`.
+---
+
+## Hướng C — Turborepo (khi nhiều app FE)
+
+Nếu sau này có nhiều app FE — thêm `turbo.json` trên workspace hiện tại.
 
 ---
 
@@ -174,9 +126,7 @@ Image cuối **không** chứa Storybook, Playwright, Vitest, `.pnpm-store`.
 
 | Câu hỏi | Trả lời |
 |---------|---------|
-| Release product khả thi? | **Có** — build artifact nhỏ, harness dev tách riêng |
-| 1 node_modules FE? | **pnpm workspace** tại `workspace/` root |
-| API modules chỉ code? | **Đã có** — giữ `vendor/` một chỗ, `Modules/*` thin |
-| Dev nhẹ hơn ngay? | `up-gateway` + `up-mysql` + xóa `.pnpm-store` + một nơi chạy `pnpm dev` |
-
-Migration workspace — làm PR riêng khi team sẵn sàng; không block release hiện tại.
+| Nuxt ở đâu? | **Root** (tạm) — `apps/portal` sau |
+| Nest API? | `apps/api` — prod Docker riêng |
+| Zod SSOT? | `packages/models` — `contract:gen` |
+| Prod Nuxt? | S3 + CloudFront — SPA/SSG do member chọn |
