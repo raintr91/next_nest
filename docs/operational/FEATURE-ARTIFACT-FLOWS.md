@@ -30,6 +30,9 @@
 | [FULL-CYCLE-PIPELINE-DIAGRAM](./FULL-CYCLE-PIPELINE-DIAGRAM.md) | Design → Test · API → Wire → Ship |
 | [TEST-PHASE-DIAGRAM](./TEST-PHASE-DIAGRAM.md) | E2E · `testcase:gen` |
 | [UNIT-PHASE-DIAGRAM](./UNIT-PHASE-DIAGRAM.md) | Vitest · `portal:unit-gen` |
+| [NEEDS-COMPONENT-FLOW](./NEEDS-COMPONENT-FLOW.md) | `#needs-component` gap loop |
+| [NEEDS-TEST-FLOW](./NEEDS-TEST-FLOW.md) | needs-test gap loop |
+| [NEEDS-UNIT-FLOW](./NEEDS-UNIT-FLOW.md) | `#needs-unit-test` gap loop |
 | [BACKEND-PHASE-DIAGRAM](./BACKEND-PHASE-DIAGRAM.md) | API repo |
 | [WIRE-PHASE-DIAGRAM](./WIRE-PHASE-DIAGRAM.md) | Integration |
 | [UPDATE-SPEC-FLOW](./UPDATE-SPEC-FLOW.md) | Gap loop |
