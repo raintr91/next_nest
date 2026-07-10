@@ -93,7 +93,7 @@ Lệnh tổng hợp chạy tuần tự các bước hạt nhân của mỗi phas
 |------|----------|
 | `pnpm nest:registry` | Validate `shared/nest-codegen.registry.json` |
 | `pnpm nest:gen:dry --spec .../backend/01-backend-spec.yaml` | Plan CQRS scaffold |
-| `pnpm nest:gen --spec ...` | Write `apps/api/src/modules/...` |
+| `pnpm nest:gen --spec ...` | Write `server/src/modules/...` |
 | `pnpm nest:unit-registry` | Validate `shared/nest-unit-test.registry.json` |
 | `pnpm nest:unit-gen --spec .../backend/01-backend-spec.yaml` | Handler/resource Jest specs |
 | `pnpm openapi:gen --spec .../backend/01-backend-spec.yaml` | Write `02-openapi.yaml` |

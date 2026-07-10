@@ -8,8 +8,8 @@ Ba pipeline backend **tách script**, **tách registry** — song song portal `p
 | Pipeline | Lệnh | Registry | Output |
 |----------|------|----------|--------|
 | **Contract Zod** | `pnpm contract:gen` | `shared/contract-field.registry.json` | `packages/models/src/…` |
-| **Nest scaffold** | `pnpm nest:gen` | `shared/nest-codegen.registry.json` | `apps/api/src/modules/…` |
-| **API unit tests** | `pnpm nest:unit-gen` | `shared/nest-unit-test.registry.json` | `apps/api/…/*.spec.ts` (Jest) |
+| **Nest scaffold** | `pnpm nest:gen` | `shared/nest-codegen.registry.json` | `server/src/modules/…` |
+| **API unit tests** | `pnpm nest:unit-gen` | `shared/nest-unit-test.registry.json` | `server/…/*.spec.ts` (Jest) |
 | **OpenAPI artifact** | `pnpm openapi:gen` | — | `backend/02-openapi.yaml` |
 
 ---
@@ -94,8 +94,8 @@ docs/features/yaml/{role}/{domain}/{function}/
     HANDOFF.md
 
 packages/models/src/{entity}/     # contract:gen
-apps/api/src/modules/{module}/    # nest:gen
-apps/api/prisma/models/           # prisma fragment (optional)
+server/src/modules/{module}/    # nest:gen
+server/prisma/models/           # prisma fragment (optional)
 ```
 
 Layout: [BACKEND-ARTIFACT-LAYOUT](../features/BACKEND-ARTIFACT-LAYOUT.md) · Quickstart: [BACKEND-API-QUICKSTART](./BACKEND-API-QUICKSTART.md)

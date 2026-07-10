@@ -17,4 +17,4 @@ fi
 
 E2E_PORT="${E2E_PORT:-3005}"
 cd "$ROOT_DIR"
-exec pnpm --filter @portal/web exec next dev --hostname 127.0.0.1 --port "$E2E_PORT"
+exec pnpm exec next dev --hostname 127.0.0.1 --port "$E2E_PORT"

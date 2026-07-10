@@ -2,11 +2,11 @@
 
 Tài liệu mô tả:
 
-1. **Monorepo** — `apps/web` (Next.js) + `apps/api` + `packages/models`
+1. **Monorepo** — `src` (Next.js) + `server` + `packages/models`
 2. **FE 4 tầng** — Hooks → Services → Stores → Models/Schema
 3. **BE CQRS** — Controller → Handlers → Resource → TypeORM
 
-> **Kết luận nhanh:** FE trong `apps/web/src` với **4 tầng đầy đủ**. Contracts Zod nằm `@portal/models` (`packages/models`). Nest API in-repo `apps/api` — codegen [BACKEND-CODEGEN](./BACKEND-CODEGEN.md).
+> **Kết luận nhanh:** FE trong `src` với **4 tầng đầy đủ**. Contracts Zod nằm `@portal/models` (`packages/models`). Nest API in-repo `server` — codegen [BACKEND-CODEGEN](./BACKEND-CODEGEN.md).
 
 ---
 
@@ -15,7 +15,7 @@ Tài liệu mô tả:
 ```mermaid
 flowchart TB
   subgraph Root["portal/ (pnpm workspace)"]
-    subgraph FE["apps/web — Next.js 15"]
+    subgraph FE["src — Next.js 15"]
       APP["app/(dashboard)/"]
       HOOKS[hooks/]
       SV[services/]
@@ -27,7 +27,7 @@ flowchart TB
       ZOD["Zod SSOT\ncontract:gen"]
     end
 
-    subgraph API["apps/api — Nest"]
+    subgraph API["server — Nest"]
       CTL[modules/*/controller]
       CQRS[CommandBus / QueryBus]
       COM[common/crud]
@@ -44,16 +44,16 @@ flowchart TB
 
 | Thành phần | Path | Doc |
 |------------|------|-----|
-| Next app | `apps/web/src` (`app/`, `hooks/`, `services/`, …) | Phần 1–5 bên dưới |
+| Next app | `src` (`app/`, `hooks/`, `services/`, …) | Phần 1–5 bên dưới |
 | Shared contracts | `packages/models` (`@portal/models`) | [CONTRACT-FIELD-REGISTRY](./CONTRACT-FIELD-REGISTRY.md) |
-| Nest API | `apps/api` (`@portal/api`) | [NEST-API-STRUCTURE](./NEST-API-STRUCTURE.md) · [BACKEND-API-QUICKSTART](./BACKEND-API-QUICKSTART.md) |
-| Codegen FE | `portal:gen` → `apps/web/src` | [PORTAL-CODEGEN](./PORTAL-CODEGEN.md) |
+| Nest API | `server` (`@portal/api`) | [NEST-API-STRUCTURE](./NEST-API-STRUCTURE.md) · [BACKEND-API-QUICKSTART](./BACKEND-API-QUICKSTART.md) |
+| Codegen FE | `portal:gen` → `src` | [PORTAL-CODEGEN](./PORTAL-CODEGEN.md) |
 | Codegen BE | `contract:gen` · `nest:gen` | [BACKEND-CODEGEN](./BACKEND-CODEGEN.md) |
 | Wire FE↔BE | `/wire` | [WIRE-PHASE-DIAGRAM](./WIRE-PHASE-DIAGRAM.md) |
 
 Chi tiết workspace: [MONOREPO-STRATEGY](../dev-environment/MONOREPO-STRATEGY.md).
 
-**Import FE:** `@/` → `apps/web/src` · models → `@portal/models`.
+**Import FE:** `@/` → `src` · models → `@portal/models`.
 
 ---
 
@@ -104,9 +104,9 @@ flowchart TB
 
 | Tầng | Thư mục | Trách nhiệm | Không làm |
 |------|---------|-------------|-----------|
-| **Hooks** | `apps/web/src/hooks/` | Orchestration UI: form, list state, auth | Gọi `apiFetch` trực tiếp |
-| **Services** | `apps/web/src/services/` | HTTP: endpoint, parse response | Giữ Zustand state |
-| **Stores** | `apps/web/src/stores/` | Toast, dialog, ephemeral UI state | Logic HTTP chi tiết |
+| **Hooks** | `src/hooks/` | Orchestration UI: form, list state, auth | Gọi `apiFetch` trực tiếp |
+| **Services** | `src/services/` | HTTP: endpoint, parse response | Giữ Zustand state |
+| **Stores** | `src/stores/` | Toast, dialog, ephemeral UI state | Logic HTTP chi tiết |
 | **Models** | `@portal/models` + `validations/` | API contract + form rules | Render UI |
 
 ### Quy tắc import
@@ -123,10 +123,10 @@ app/ + components/
 
 ---
 
-## 2. Hiện trạng `apps/web`
+## 2. Hiện trạng `src`
 
 ```
-apps/web/src/
+src/
 ├── app/(auth)/login/
 ├── app/(dashboard)/
 ├── hooks/                     # useAuth, useDataTable, portal:gen hooks
@@ -168,7 +168,7 @@ Output: `app/(dashboard)/{route}/page.tsx`, `hooks/`, `services/`, `mocks/`.
 
 ```bash
 pnpm dev
-pnpm --filter @portal/web build
+pnpm build
 pnpm test:unit
 pnpm ui:add button
 ```

@@ -30,7 +30,7 @@ export default function SampleItemListPage() {
       items={items}
       pending={pending}
       total={total ?? undefined}
-      pageSize=10
+      pageSize={10}
       searchKeys={searchKeys}
     />
   );

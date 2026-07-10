@@ -1,7 +1,7 @@
 # Team AI Backend Workflow (Nest — in-repo)
 
 Progressive disclosure: **một session = một command**.  
-API code: `apps/api/` · Contracts: `packages/models/` · Spec: `docs/features/yaml/.../ir/`
+API code: `server/` · Contracts: `packages/models/` · Spec: `docs/features/yaml/.../ir/`
 
 Session mới: đọc `.harness/progress.md` trước khi tiếp tục cùng feature slug.
 
@@ -22,7 +22,7 @@ flowchart TD
   GS --> APR["approval approved"]
   APR --> C["/api-code\npnpm nest:gen"]
   C --> NUG["pnpm nest:unit-gen"]
-  C --> CODE["apps/api/src/modules"]
+  C --> CODE["server/src/modules"]
   NUG --> JEST["pnpm --filter @portal/api test"]
   CODE --> DB[("MySQL TypeORM")]
   CODE --> OUT["/grill-api → /wire"]
@@ -55,7 +55,7 @@ flowchart TD
 | `pnpm openapi:gen --spec .../backend/01-backend-spec.yaml` | Write `02-openapi.yaml` |
 | `pnpm nest:registry` | Validate `shared/nest-codegen.registry.json` |
 | `pnpm nest:gen:dry --spec ...` | Plan Nest CQRS scaffold |
-| `pnpm nest:gen --spec ...` | Write `apps/api` + manifest |
+| `pnpm nest:gen --spec ...` | Write `server` + manifest |
 | `pnpm nest:unit-gen --spec ...` | Jest handler specs |
 | `pnpm --filter @portal/api test` | Run API unit tests |
 | `pnpm dev:api` | Nest dev :4000 (TypeORM + MySQL) |

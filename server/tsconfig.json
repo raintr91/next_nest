@@ -15,8 +15,8 @@
     "strict": true,
     "paths": {
       "@portal/api/*": ["src/*"],
-      "@portal/models": ["../../packages/models/src/index.ts"],
-      "@portal/models/*": ["../../packages/models/src/*"]
+      "@portal/models": ["../packages/models/src/index.ts"],
+      "@portal/models/*": ["../packages/models/src/*"]
     }
   },
   "include": ["src/**/*", "test/**/*"]

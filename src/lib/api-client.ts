@@ -19,15 +19,28 @@ export class ApiClientError extends Error {
 
 export type ApiFetchOptions = Omit<RequestInit, 'body'> & {
   body?: unknown;
+  query?: Record<string, unknown>;
 };
 
 const API_BASE = `${process.env.NEXT_PUBLIC_API_URL ?? 'http://localhost:4000'}/api`;
 
+function buildUrl(path: string, query?: Record<string, unknown>): string {
+  const url = `${API_BASE}${path}`;
+  if (!query) return url;
+  const params = new URLSearchParams();
+  for (const [key, value] of Object.entries(query)) {
+    if (value === undefined || value === null) continue;
+    params.set(key, String(value));
+  }
+  const qs = params.toString();
+  return qs ? `${url}?${qs}` : url;
+}
+
 export async function apiFetch<T>(path: string, options: ApiFetchOptions = {}): Promise<T> {
-  const { body, headers, ...rest } = options;
+  const { body, headers, query, ...rest } = options;
   const token = typeof document !== 'undefined' ? document.cookie.match(/(?:^|; )auth_token=([^;]*)/)?.[1] : null;
 
-  const response = await fetch(`${API_BASE}${path}`, {
+  const response = await fetch(buildUrl(path, query), {
     ...rest,
     headers: {
       'Content-Type': 'application/json',

@@ -1,6 +1,6 @@
 # Nest codegen (`nest-gen`)
 
-HBS pipeline: `backend/01-backend-spec.yaml` → `apps/api/src/modules/` (CQRS).
+HBS pipeline: `backend/01-backend-spec.yaml` → `server/src/modules/` (CQRS).
 
 ## Usage
 
@@ -25,6 +25,6 @@ pnpm nest:unit-gen --spec .../backend/01-backend-spec.yaml
 
 Registry: `shared/nest-codegen.registry.json`  
 Unit tests: `pnpm nest:unit-gen` · `shared/nest-unit-test.registry.json`  
-Common layer: `apps/api/src/common/` · [NEST-API-STRUCTURE.md](../../docs/operational/NEST-API-STRUCTURE.md)
+Common layer: `server/src/common/` · [NEST-API-STRUCTURE.md](../../docs/operational/NEST-API-STRUCTURE.md)
 
 Workflow: [TEAM-AI-BACKEND-WORKFLOW.md](../../docs/operational/TEAM-AI-BACKEND-WORKFLOW.md)

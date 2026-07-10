@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "description": "Nest codegen tag registry — HBS templates for apps/api (CQRS).",
+  "description": "Nest codegen tag registry — HBS templates for server (CQRS).",
   "profiles": {
     "crud-standard": {
       "defaultGenTags": ["#gen:module", "#gen:crud", "#gen:orm", "#gen:test-unit"]

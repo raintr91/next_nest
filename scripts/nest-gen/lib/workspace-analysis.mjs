@@ -34,7 +34,7 @@ export function inferWireFromSpec(spec) {
 export function resolveWorkspacePaths(ctx, repoRoot) {
   const moduleKebab = toKebab(ctx.module)
   const entityKebab = toKebab(ctx.entity)
-  const moduleRoot = path.join(repoRoot, 'apps/api/src/modules', moduleKebab)
+  const moduleRoot = path.join(repoRoot, 'server/src/modules', moduleKebab)
   const entityRoot = path.join(moduleRoot, entityKebab)
 
   return {

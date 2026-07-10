@@ -38,16 +38,16 @@ echo "Base URL: $PLAYWRIGHT_BASE_URL"
 echo "E2E port: $E2E_PORT"
 
 echo ""
-echo "--- Playwright E2E tests -> apps/web/playwright-report/ ---"
-rm -rf "$ROOT_DIR/apps/web/playwright-report" "$ROOT_DIR/apps/web/test-results"
+echo "--- Playwright E2E tests -> playwright-report/ ---"
+rm -rf "$ROOT_DIR/playwright-report" "$ROOT_DIR/test-results"
 
 set +e
 pnpm exec playwright test "$@"
 PLAYWRIGHT_EXIT=$?
 set -e
 
-if [ -f "$ROOT_DIR/apps/web/playwright-report/index.html" ]; then
-  echo "Report: apps/web/playwright-report/index.html"
+if [ -f "$ROOT_DIR/playwright-report/index.html" ]; then
+  echo "Report: playwright-report/index.html"
 fi
 
 echo "=== e2e_test.sh finished (exit $PLAYWRIGHT_EXIT) at $(date '+%F %T') ==="

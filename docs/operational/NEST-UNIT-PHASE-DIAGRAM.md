@@ -1,6 +1,6 @@
 # API unit phase — Dev lane (Jest / Nest)
 
-> **Dev-only** — lane Jest cho `apps/api`, **độc lập** Vitest portal ([UNIT-PHASE-DIAGRAM](./UNIT-PHASE-DIAGRAM.md)) và E2E ([TEST-PHASE-DIAGRAM](./TEST-PHASE-DIAGRAM.md)).  
+> **Dev-only** — lane Jest cho `server`, **độc lập** Vitest portal ([UNIT-PHASE-DIAGRAM](./UNIT-PHASE-DIAGRAM.md)) và E2E ([TEST-PHASE-DIAGRAM](./TEST-PHASE-DIAGRAM.md)).  
 > Nằm trong phase **2c API** — [BACKEND-PHASE-DIAGRAM](./BACKEND-PHASE-DIAGRAM.md) · [FULL-CYCLE-PIPELINE-DIAGRAM](./FULL-CYCLE-PIPELINE-DIAGRAM).  
 > Hub codegen: [BACKEND-CODEGEN](./BACKEND-CODEGEN.md) · Skills: `/api-code` (sau grill) · verify Jest trong HANDOFF
 
@@ -67,7 +67,7 @@ flowchart TD
   NG["pnpm nest:gen"]
   NUG["pnpm nest:unit-gen"]
   PAT{"pattern.when"}
-  OUT["apps/api/.../*.spec.ts"]
+  OUT["server/.../*.spec.ts"]
   JEST["jest"]
 
   REG --> NUG
@@ -97,7 +97,7 @@ Mock chuẩn: `getRepositoryToken(Entity)` + `Test.createTestingModule` — khô
 
 ## 1 source logic → 1 file test
 
-| Source (`apps/api/src/modules/…`) | Test |
+| Source (`server/src/modules/…`) | Test |
 |-----------------------------------|------|
 | `queries/search-{entity}.handler.ts` | `queries/search-{entity}.handler.spec.ts` |
 | `commands/create-{entity}.handler.ts` | `commands/create-{entity}.handler.spec.ts` |
@@ -113,7 +113,7 @@ Contract Zod (`@portal/models`) — test riêng qua Vitest portal `tests/unit/mo
 
 | Đọc | Không đọc |
 |-----|-----------|
-| `generated/codegen.manifest.json`, `HANDOFF.md` | Toàn bộ `apps/api` inventory |
+| `generated/codegen.manifest.json`, `HANDOFF.md` | Toàn bộ `server` inventory |
 | `backend/01-backend-spec.yaml` `codegen.wire` | FE `pages/` |
 | Handler/resource file vừa gen | Laravel `~/workspace/api` runtime |
 

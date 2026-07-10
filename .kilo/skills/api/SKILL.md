@@ -1,7 +1,7 @@
 ---
 name: api
 extractBundle: api
-description: /api — Nest backend router in apps/api (in-repo).
+description: /api — Nest backend router in server (in-repo).
 disable-model-invocation: true
 ---
 
@@ -11,7 +11,7 @@ disable-model-invocation: true
 
 ## Scope
 
-`apps/api/` + `packages/models/` — not `apps/web` unless asked.
+`server/` + `packages/models/` — not `src` unless asked.
 
 ## Router
 

@@ -13,22 +13,22 @@
   "files": [
     {
       "layer": "service",
-      "path": "apps/web/src/services/sample-item.service.ts",
+      "path": "src/services/sample-item.service.ts",
       "template": "list/service.ts.hbs"
     },
     {
       "layer": "hook",
-      "path": "apps/web/src/hooks/sample-item/useSampleItemList.ts",
+      "path": "src/hooks/sample-item/useSampleItemList.ts",
       "template": "list/useList.ts.hbs"
     },
     {
       "layer": "page",
-      "path": "apps/web/src/app/(dashboard)/sample-items/page.tsx",
+      "path": "src/app/(dashboard)/sample-items/page.tsx",
       "template": "list/page.tsx.hbs"
     },
     {
       "layer": "mock",
-      "path": "apps/web/src/mocks/sample-item.mock.ts",
+      "path": "src/mocks/sample-item.mock.ts",
       "template": "list/mock.ts.hbs"
     }
   ],

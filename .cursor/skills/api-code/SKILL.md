@@ -18,6 +18,6 @@ pnpm nest:unit-gen --spec .../backend/01-backend-spec.yaml
 
 Read `generated/codegen.manifest.json` + `HANDOFF.md` — implement only TODO/manual items (repository wiring, relation sync).
 
-Patterns: `/nest-base` · `apps/api/src/common/`
+Patterns: `/nest-base` · `server/src/common/`
 
 Verify: `pnpm --filter @portal/api test`

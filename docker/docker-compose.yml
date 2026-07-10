@@ -19,7 +19,7 @@ services:
       - /workspace/portal/docker/entrypoint-dev.sh
       - sh
       - -c
-      - mkdir -p /tmp/corepack /tmp/cache /tmp/config && cd /workspace/portal && if [ ! -x apps/web/node_modules/.bin/next ]; then corepack pnpm install; fi && corepack pnpm run dev
+      - mkdir -p /tmp/corepack /tmp/cache /tmp/config && cd /workspace/portal && if [ ! -x ./node_modules/.bin/next ]; then corepack pnpm install; fi && corepack pnpm run dev
     environment:
       HOST_UID: "${HOST_UID:-1000}"
       HOST_GID: "${HOST_GID:-1000}"
@@ -50,7 +50,7 @@ services:
       - /workspace/portal/docker/entrypoint-dev.sh
       - sh
       - -c
-      - mkdir -p /tmp/corepack /tmp/cache /tmp/config && cd /workspace/portal && if [ ! -d apps/api/node_modules ]; then corepack pnpm install; fi && corepack pnpm run dev:api
+      - mkdir -p /tmp/corepack /tmp/cache /tmp/config && cd /workspace/portal && if [ ! -d server/node_modules ]; then corepack pnpm install; fi && corepack pnpm run dev:api
     environment:
       HOST_UID: "${HOST_UID:-1000}"
       HOST_GID: "${HOST_GID:-1000}"

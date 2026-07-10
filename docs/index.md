@@ -12,7 +12,7 @@ pnpm docs:dev
 
 ## Operational
 
-- [Architecture](./operational/ARCHITECTURE.md) — monorepo FE + `@portal/models` + `apps/api`
+- [Architecture](./operational/ARCHITECTURE.md) — monorepo FE + `@portal/models` + `server`
 - [Full cycle (overview)](./operational/FULL-CYCLE-PIPELINE-DIAGRAM.md) — phase map (Design · Scaffold · API · Wire)
 - [Feature artifact flows](./operational/FEATURE-ARTIFACT-FLOWS.md) — index diagram + lệnh (gồm backend + API unit lane)
 - [Prompt templates](./operational/PROMPT-TEMPLATES.md)

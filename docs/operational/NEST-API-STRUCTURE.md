@@ -1,8 +1,8 @@
 # Nest API structure — common layer
 
-Port Laravel `api/src/app/Http/*` traits/bases → `apps/api/src/common/`.
+Port Laravel `api/src/app/Http/*` traits/bases → `server/src/common/`.
 
-| Laravel | Nest (`apps/api/src/common/`) |
+| Laravel | Nest (`server/src/common/`) |
 |---------|-------------------------------|
 | `BaseController` success/error | `http/api-response.ts` + `ApiResponseInterceptor` + `ApiExceptionFilter` |
 | `Entry*Trait` | Controller → `CommandBus` / `QueryBus` |
@@ -43,7 +43,7 @@ Pivot M-N: không model pivot — sync trong `BaseWriteHandler` (giống Laravel
 ## Layout module
 
 ```text
-apps/api/src/modules/{module}/
+server/src/modules/{module}/
   {module}.module.ts
   {entity}/
     {entity}.controller.ts

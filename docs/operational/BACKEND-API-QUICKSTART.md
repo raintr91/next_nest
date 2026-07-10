@@ -1,6 +1,6 @@
 # Backend API — quick reference
 
-NestJS API in `apps/api/` · TypeORM (MySQL) · CQRS · shared Zod via `@portal/models`.
+NestJS API in `server/` · TypeORM (MySQL) · CQRS · shared Zod via `@portal/models`.
 
 ---
 
@@ -26,7 +26,7 @@ flowchart TB
   end
 
   subgraph runtime["Runtime"]
-    API["apps/api\nNest + TypeORM"]
+    API["server\nNest + TypeORM"]
     DB[("MySQL\ngateway mysql84")]
     SW["/api/docs\nSwagger UI"]
   end
@@ -56,7 +56,7 @@ MySQL host trong Docker network: `mysql84` (portal `api-node` đã set `DB_*` m�
 ### 2. API env
 
 ```bash
-cp apps/api/.env.example apps/api/.env
+cp server/.env.example server/.env
 # chỉnh DB_* nếu gateway khác mặc định
 ```
 
@@ -87,7 +87,7 @@ pnpm --filter @portal/api test
 | `codegen.orm` | Entity output | Extra |
 |---------------|---------------|-------|
 | `typeorm` | `*.entity.ts` + decorators thật | `DatabaseModule` + `TypeOrmModule.forFeature` |
-| `prisma` | stub entity + `prisma/models/*.prisma` (luôn gen từ fields + relationships.meta) | merge vào `apps/api/prisma/schema.prisma` |
+| `prisma` | stub entity + `prisma/models/*.prisma` (luôn gen từ fields + relationships.meta) | merge vào `server/prisma/schema.prisma` |
 
 Relation wiring: đọc `packages/models/src/{entity}/*.relationships.meta.ts`.
 
@@ -99,7 +99,7 @@ Relation wiring: đọc `packages/models/src/{entity}/*.relationships.meta.ts`.
 |------|--------|
 | `pnpm contract:gen` | `@portal/models` Zod |
 | `pnpm openapi:gen` | `backend/02-openapi.yaml` |
-| `pnpm nest:gen` | `apps/api/src/modules/...` |
+| `pnpm nest:gen` | `server/src/modules/...` |
 | `pnpm nest:unit-gen` | `*.handler.spec.ts` (Jest) |
 | `pnpm --filter @portal/api test` | API unit tests |
 
@@ -115,7 +115,7 @@ Chi tiết workflow AI: [TEAM-AI-BACKEND-WORKFLOW](./TEAM-AI-BACKEND-WORKFLOW.md
 
 ## Common layer
 
-| Laravel (legacy) | Nest (`apps/api/src/common/`) |
+| Laravel (legacy) | Nest (`server/src/common/`) |
 |------------------|-------------------------------|
 | ApiResponse trait | `http/api-response.*` |
 | BaseQuery | `crud/base-read.query.ts` |

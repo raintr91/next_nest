@@ -43,10 +43,10 @@ export function buildFilePlan(spec, options = {}) {
     files.push({ id, relativePath, template, layer })
   }
 
-  const base = `apps/api/src/modules/${moduleKebab}/${entityKebab}`
+  const base = `server/src/modules/${moduleKebab}/${entityKebab}`
   const templateCtx = { ...ctx, moduleKebab, entityKebab, entityPascal, modulePascal, spec }
 
-  add('module', `apps/api/src/modules/${moduleKebab}/${moduleKebab}.module.ts`, 'module.module.ts.hbs', 'module')
+  add('module', `server/src/modules/${moduleKebab}/${moduleKebab}.module.ts`, 'module.module.ts.hbs', 'module')
   add('controller', `${base}/${entityKebab}.controller.ts`, 'entity.controller.ts.hbs', 'controller')
   add('resource', `${base}/${entityKebab}.resource.ts`, 'entity.resource.ts.hbs', 'resource')
 
@@ -78,7 +78,7 @@ export function buildFilePlan(spec, options = {}) {
     add('entityOrm', `${base}/${entityKebab}.entity.ts`, `orm/${ctx.orm}.entity.ts.hbs`, 'orm')
     add(
       'prismaModel',
-      `apps/api/prisma/models/${entityKebab}.prisma`,
+      `server/prisma/models/${entityKebab}.prisma`,
       'orm/prisma.model.prisma.hbs',
       'orm'
     )

@@ -107,7 +107,7 @@ deploy:
 
 | Layer | Dev (nặng) | Production (nhẹ) |
 |-------|------------|------------------|
-| Portal | node_modules, Vitest, polling | `next build` (`apps/web`) → standalone image |
+| Portal | node_modules, Vitest, polling | `next build` (`src`) → standalone image |
 | API | full `vendor/`, dev tools | `composer install --no-dev` + PHP-FPM image |
 | Gateway stack | 10+ containers | 1 ingress + managed DB (RDS) — không LocalStack |
 
@@ -123,15 +123,13 @@ Tóm tắt **pnpm workspace**:
 
 ```
 workspace/
-  package.json          # workspace root
+  package.json          # workspace root + Next app
   pnpm-workspace.yaml
   node_modules/         # DUY NHẤT (hoisted)
-  apps/
-    web/                  # @portal/web — Next.js
+  src/                  # Next.js app source
+  server/               # @portal/api — NestJS
   packages/
-    ui/                 # chỉ src + package.json (peer deps)
     models/
-    eslint-config/
 ```
 
 Laravel API đã gần đúng: **một `vendor/`** tại `api/src`, modules chỉ PHP code.

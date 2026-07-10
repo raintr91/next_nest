@@ -8,13 +8,13 @@ Mục tiêu: dev nhẹ, release khả thi, module/package **chỉ chứa source*
 
 | Thành phần | Vị trí |
 |------------|--------|
-| Next.js 15 FE | `apps/web` (`@portal/web`) |
-| Nest API | `apps/api` (`@portal/api`) |
+| Next.js 15 FE | repo root (`src/`, shared root `package.json`) |
+| Nest API | `server/` (`@portal/api`) |
 | Zod contracts | `packages/models` (`@portal/models`) |
-| `pnpm-workspace` | `.`, `packages/*`, `apps/*` |
+| `pnpm-workspace` | `.`, `packages/*`, `server` |
 
 **Local Docker:** `docker/docker-compose.yml` — `frontend-node` + `api-node`  
-**Prod:** Nest image từ `docker/api/Dockerfile` · Next build (`apps/web`) → Node standalone hoặc static host (member chọn)
+**Prod:** Nest image từ `docker/api/Dockerfile` · Next build (`src`) → Node standalone hoặc static host (member chọn)
 
 ---
 
@@ -24,10 +24,10 @@ Mục tiêu: dev nhẹ, release khả thi, module/package **chỉ chứa source*
 
 ```
 portal/
-├── package.json              # orchestration scripts
+├── package.json              # Next + orchestration scripts
 ├── pnpm-workspace.yaml
-├── apps/web/                 # Next.js — app/, hooks/, services/, components/
-├── apps/api/                 # NestJS + CQRS
+├── src/                      # Next.js — app/, hooks/, services/, components/
+├── server/                   # NestJS + CQRS (@portal/api)
 ├── packages/models/          # @portal/models — contract:gen
 └── docker/
 ```
@@ -36,9 +36,9 @@ Chạy từ root:
 
 ```bash
 pnpm install
-pnpm dev                      # Next @ apps/web
+pnpm dev                      # Next @ root
+pnpm build                    # Next production build
 pnpm dev:api                  # Nest :4000
-pnpm --filter @portal/web build
 pnpm --filter @portal/api build
 ```
 
@@ -47,7 +47,7 @@ Codegen & phase diagrams: [BACKEND-CODEGEN](../operational/BACKEND-CODEGEN.md) �
 ### Migration tiếp theo (optional)
 
 1. ~~Tách `models/` → `packages/models`~~ — done (`@portal/models`)
-2. ~~Move FE → `apps/web`~~ — done
+2. ~~Move FE → `src`~~ — done
 3. Tách shared UI package chỉ khi có app FE thứ hai
 
 ---
@@ -71,12 +71,12 @@ Module = code + `composer.json` optional (path repo). **Không** nhân `vendor/`
 | App | Image |
 |-----|--------|
 | Nest API | `docker/api/Dockerfile` multi-stage |
-| Next FE | CI build `apps/web` → Node image hoặc static host |
+| Next FE | CI build `src` → Node image hoặc static host |
 
 ```dockerfile
 # docker/api/Dockerfile — chỉ api + models
 COPY packages/models packages/models
-COPY apps/api apps/api
+COPY server server
 RUN pnpm --filter @portal/api build
 ```
 
@@ -96,7 +96,7 @@ RUN pnpm --filter @portal/api build
 
 | Câu hỏi | Trả lời |
 |---------|---------|
-| Next FE ở đâu? | `apps/web` (`@portal/web`) |
-| Nest API? | `apps/api` — prod Docker riêng |
+| Next FE ở đâu? | repo root (`src/`) |
+| Nest API? | `server` — prod Docker riêng |
 | Zod SSOT? | `packages/models` — `contract:gen` |
 | Prod FE? | Next build artifact — runtime do member chọn |

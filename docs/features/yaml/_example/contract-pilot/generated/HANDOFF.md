@@ -4,10 +4,10 @@ Generated from `docs/features/yaml/_example/contract-pilot/ir/spec.yaml` (profil
 
 ## Files
 
-- `apps/web/src/services/sample-item.service.ts`
-- `apps/web/src/hooks/sample-item/useSampleItemList.ts`
-- `apps/web/src/app/(dashboard)/sample-items/page.tsx`
-- `apps/web/src/mocks/sample-item.mock.ts`
+- `src/services/sample-item.service.ts`
+- `src/hooks/sample-item/useSampleItemList.ts`
+- `src/app/(dashboard)/sample-items/page.tsx`
+- `src/mocks/sample-item.mock.ts`
 
 ## Prototype next (/prototype)
 

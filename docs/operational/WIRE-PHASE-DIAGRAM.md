@@ -4,7 +4,7 @@
 > Prerequisite API: [BACKEND-PHASE-DIAGRAM](./BACKEND-PHASE-DIAGRAM.md) · API unit green: [NEST-UNIT-PHASE-DIAGRAM](./NEST-UNIT-PHASE-DIAGRAM.md).  
 > Prerequisite FE: [PORTAL-CODEGEN](./PORTAL-CODEGEN.md) · E2E mock lane: [TEST-PHASE-DIAGRAM](./TEST-PHASE-DIAGRAM.md)
 
-Wire = chuyển feature từ **mock API / MSW** sang **Nest thật** (`apps/api`), đồng bộ contract `@portal/models`, bật auth lifecycle `wire`.
+Wire = chuyển feature từ **mock API / MSW** sang **Nest thật** (`server`), đồng bộ contract `@portal/models`, bật auth lifecycle `wire`.
 
 ---
 
@@ -16,7 +16,7 @@ flowchart TD
   PRE_API["nest:gen + nest:unit-gen\nJest green"]
   PRE_E2E["testcase:gen\nE2E mock green"]
   W["/wire"]
-  SVC["apps/web/src/services/*.ts\n→ apiFetch Nest URL"]
+  SVC["src/services/*.ts\n→ apiFetch Nest URL"]
   MOCK["mocks/ off hoặc\nNEXT_PUBLIC_API_URL"]
   PU["portal:unit-gen --phase wire"]
   E2E["test:e2e scoped"]
@@ -55,14 +55,14 @@ flowchart TD
 
 ```mermaid
 flowchart LR
-  subgraph FE["apps/web — Next.js"]
+  subgraph FE["src — Next.js"]
     P["app/(dashboard)/"]
     HO[hooks/]
     SV[services/]
     MO["@portal/models"]
   end
 
-  subgraph API["apps/api Nest"]
+  subgraph API["server Nest"]
     CTL[Controller]
     CQRS[QueryBus / CommandBus]
     ORM[TypeORM → MySQL]

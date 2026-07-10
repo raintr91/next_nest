@@ -488,7 +488,7 @@ Example prompt:
 
 Portal Base là nền để AI gen nhanh hơn và ít lệch pattern hơn.
 
-- Next.js 15 auth-first portal (`apps/web`)
+- Next.js 15 auth-first portal (`src`)
 - shadcn/ui + molecules + organisms
 - 4 tầng: page → composable → service/store → model/validation
 - Storybook để xem component

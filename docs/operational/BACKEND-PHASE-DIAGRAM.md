@@ -56,7 +56,7 @@ flowchart TD
   BE["01-backend-spec.yaml"]
   OG["openapi:gen → 02-openapi.yaml"]
   NG["nest:gen"]
-  MOD["apps/api/src/modules/"]
+  MOD["server/src/modules/"]
   PRISMA["prisma/models/*.prisma"]
   MAN["generated/codegen.manifest.json"]
 

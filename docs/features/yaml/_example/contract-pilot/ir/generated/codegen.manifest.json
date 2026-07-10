@@ -6,42 +6,42 @@
   "files": [
     {
       "layer": "module",
-      "path": "apps/api/src/modules/sample-items/sample-items.module.ts",
+      "path": "server/src/modules/sample-items/sample-items.module.ts",
       "template": "module.module.ts.hbs"
     },
     {
       "layer": "controller",
-      "path": "apps/api/src/modules/sample-items/sample-item/sample-item.controller.ts",
+      "path": "server/src/modules/sample-items/sample-item/sample-item.controller.ts",
       "template": "entity.controller.ts.hbs"
     },
     {
       "layer": "resource",
-      "path": "apps/api/src/modules/sample-items/sample-item/sample-item.resource.ts",
+      "path": "server/src/modules/sample-items/sample-item/sample-item.resource.ts",
       "template": "entity.resource.ts.hbs"
     },
     {
       "layer": "query",
-      "path": "apps/api/src/modules/sample-items/sample-item/queries/search-sample-item.query.ts",
+      "path": "server/src/modules/sample-items/sample-item/queries/search-sample-item.query.ts",
       "template": "queries/search.query.ts.hbs"
     },
     {
       "layer": "handler",
-      "path": "apps/api/src/modules/sample-items/sample-item/queries/search-sample-item.handler.ts",
+      "path": "server/src/modules/sample-items/sample-item/queries/search-sample-item.handler.ts",
       "template": "queries/search.handler.ts.hbs"
     },
     {
       "layer": "orm",
-      "path": "apps/api/src/modules/sample-items/sample-item/sample-item.entity.ts",
+      "path": "server/src/modules/sample-items/sample-item/sample-item.entity.ts",
       "template": "orm/typeorm.entity.ts.hbs"
     }
   ],
   "written": [
-    "apps/api/src/modules/sample-items/sample-items.module.ts",
-    "apps/api/src/modules/sample-items/sample-item/sample-item.controller.ts",
-    "apps/api/src/modules/sample-items/sample-item/sample-item.resource.ts",
-    "apps/api/src/modules/sample-items/sample-item/queries/search-sample-item.query.ts",
-    "apps/api/src/modules/sample-items/sample-item/queries/search-sample-item.handler.ts",
-    "apps/api/src/modules/sample-items/sample-item/sample-item.entity.ts"
+    "server/src/modules/sample-items/sample-items.module.ts",
+    "server/src/modules/sample-items/sample-item/sample-item.controller.ts",
+    "server/src/modules/sample-items/sample-item/sample-item.resource.ts",
+    "server/src/modules/sample-items/sample-item/queries/search-sample-item.query.ts",
+    "server/src/modules/sample-items/sample-item/queries/search-sample-item.handler.ts",
+    "server/src/modules/sample-items/sample-item/sample-item.entity.ts"
   ],
   "skipped": [],
   "generatedAt": "2026-07-09T13:08:23.965Z"
