@@ -54,3 +54,19 @@ docker/.env
 .cursor/skills-vendor/
 team-projects.local.json
 legacy-projects.local.json
+
+# platform-ai-link mirror (SSOT: platform-ai/ — edit there, then run ./scripts/platform-ai-link)
+.cursor/skills/
+.cursor/rules/
+.cursor/extracts/
+.kilo/skills/
+.kilo/instructions/
+.kilo/extracts/
+.kilo/command/
+
+# CodeGraph local index
+.codegraph/
+.codegraph-*/
+
+platform-repos.local.json
+legacy-repos.local.json
