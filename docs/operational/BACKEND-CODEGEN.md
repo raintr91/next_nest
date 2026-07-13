@@ -7,9 +7,9 @@ Ba pipeline backend **tách script**, **tách registry** — song song portal `p
 
 | Pipeline | Lệnh | Registry | Output |
 |----------|------|----------|--------|
-| **Contract Zod** | `pnpm contract:gen` | `shared/contract-field.registry.json` | `packages/models/src/…` |
-| **Nest scaffold** | `pnpm nest:gen` | `shared/nest-codegen.registry.json` | `server/src/modules/…` |
-| **API unit tests** | `pnpm nest:unit-gen` | `shared/nest-unit-test.registry.json` | `server/…/*.spec.ts` (Jest) |
+| **Contract Zod** | `pnpm contract:gen` | `registries/contract-field.registry.json` | `packages/models/src/…` |
+| **Nest scaffold** | `pnpm nest:gen` | `registries/nest-codegen.registry.json` | `server/src/modules/…` |
+| **API unit tests** | `pnpm nest:unit-gen` | `registries/nest-unit-test.registry.json` | `server/…/*.spec.ts` (Jest) |
 | **OpenAPI artifact** | `pnpm openapi:gen` | — | `backend/02-openapi.yaml` |
 
 ---

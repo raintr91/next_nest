@@ -7,7 +7,7 @@
   "shell": "DataListPage",
   "shellVariant": "standard",
   "commonSpecRef": "docs/features/yaml/common/list-page/common-list-page.bundle.yaml",
-  "designRegistry": "/home/vutv/workspace/portal/shared/portal-design.registry.json",
+  "designRegistry": "/home/vutv/workspace/portal/registries/design.registry.json",
   "slotBindings": [],
   "componentFiles": {},
   "files": [

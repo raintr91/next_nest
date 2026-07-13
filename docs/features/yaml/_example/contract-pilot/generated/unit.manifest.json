@@ -6,7 +6,7 @@
   "entity": "sample-item",
   "module": "sample-items",
   "codegenManifest": "generated/codegen.manifest.json",
-  "unitRegistry": "shared/portal-unit-test.registry.json",
+  "unitRegistry": "registries/unit-test.registry.json",
   "files": [
     {
       "layer": "models",
