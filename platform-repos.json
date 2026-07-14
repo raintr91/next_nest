@@ -1,18 +1,8 @@
 {
-  "defaultGroup": "next-nest-stack",
+  "defaultGroup": "platform-bases",
   "groups": {
-    "next-nest-stack": {
-      "description": "Next.js FE + NestJS BE (this monorepo)",
-      "primary": "next-nest-fe",
-      "projects": ["next-nest-fe", "next-nest-be"],
-      "contract": {
-        "frontend": "next-nest-fe",
-        "backend": "next-nest-be",
-        "sourceOfTruth": "docs-features-ir-spec"
-      }
-    },
     "platform-bases": {
-      "description": "Workspace base templates",
+      "description": "Workspace base templates — FE / BE / fullstack / MCP tooling",
       "primary": "next-nest",
       "projects": [
         "portal",
@@ -22,22 +12,110 @@
         "fast-api-base",
         "api",
         "integration",
-        "line"
+        "line",
+        "artifactgraph"
       ]
+    },
+    "next-nest-stack": {
+      "description": "Next.js FE + NestJS BE (this monorepo)",
+      "primary": "next-nest-fe",
+      "projects": [
+        "next-nest-fe",
+        "next-nest-be"
+      ],
+      "contract": {
+        "frontend": "next-nest-fe",
+        "backend": "next-nest-be",
+        "sourceOfTruth": "docs-features-ir-spec"
+      }
     }
   },
   "projects": {
+    "portal": {
+      "root": "../portal",
+      "role": "frontend",
+      "stack": "nuxt4",
+      "repo": "portal",
+      "skill": "platform-base",
+      "description": "Base Nuxt 4 (FE)",
+      "write": true
+    },
+    "nextjs": {
+      "root": "../nextjs",
+      "role": "frontend",
+      "stack": "nextjs",
+      "repo": "nextjs",
+      "skill": "platform-base",
+      "description": "Base Next.js (FE)",
+      "write": true
+    },
+    "nuxt-nest": {
+      "root": "../nuxt_nest",
+      "role": "fullstack",
+      "stack": "nuxt4-nest",
+      "repo": "nuxt_nest",
+      "skill": "platform-base",
+      "description": "Base Nuxt 4 + NestJS monorepo",
+      "write": true
+    },
     "next-nest": {
       "root": ".",
       "role": "fullstack",
+      "stack": "nextjs-nest",
       "repo": "next_nest",
       "skill": "platform-base",
-      "description": "Base Next.js + NestJS",
+      "description": "Base Next.js + NestJS monorepo",
+      "write": true
+    },
+    "fast-api-base": {
+      "root": "../fast-api-base",
+      "role": "backend",
+      "stack": "fastapi",
+      "repo": "fast-api-base",
+      "skill": "platform-base",
+      "description": "Base FastAPI (BE)",
+      "write": true
+    },
+    "api": {
+      "root": "../api",
+      "role": "backend",
+      "stack": "laravel",
+      "repo": "api",
+      "skill": "api-base",
+      "description": "Base Laravel 12 (BE)",
+      "write": true
+    },
+    "integration": {
+      "root": "../integration",
+      "role": "backend",
+      "stack": "dotnet-integration",
+      "repo": "integration",
+      "skill": "platform-base",
+      "description": "Base .NET (BE)",
+      "write": true
+    },
+    "line": {
+      "root": "../line",
+      "role": "client",
+      "stack": "dotnet-line",
+      "repo": "line",
+      "skill": "platform-base",
+      "description": "Base WinForms — override in platform-repos.local.json for D:/workspace/line",
+      "write": true
+    },
+    "artifactgraph": {
+      "root": "../artifactgraph",
+      "role": "tooling",
+      "stack": "mcp",
+      "repo": "artifactgraph",
+      "skill": "platform-ai",
+      "description": "Local MCP artifactgraph — gaps/tags/gen allowlist (raintr91/artifactgraph)",
       "write": true
     },
     "next-nest-fe": {
       "root": ".",
       "role": "frontend",
+      "stack": "nextjs",
       "repo": "next_nest",
       "skill": "platform-base",
       "write": true
@@ -45,56 +123,8 @@
     "next-nest-be": {
       "root": "server",
       "role": "backend",
+      "stack": "nestjs",
       "repo": "next_nest",
-      "skill": "platform-base",
-      "write": true
-    },
-    "portal": {
-      "root": "../portal",
-      "role": "frontend",
-      "repo": "portal",
-      "skill": "platform-base",
-      "write": true
-    },
-    "nextjs": {
-      "root": "../nextjs",
-      "role": "frontend",
-      "repo": "nextjs",
-      "skill": "platform-base",
-      "write": true
-    },
-    "nuxt-nest": {
-      "root": "../nuxt_nest",
-      "role": "fullstack",
-      "repo": "nuxt_nest",
-      "skill": "platform-base",
-      "write": true
-    },
-    "fast-api-base": {
-      "root": "../fast-api-base",
-      "role": "backend",
-      "repo": "fast-api-base",
-      "skill": "platform-base",
-      "write": true
-    },
-    "api": {
-      "root": "../api",
-      "role": "backend",
-      "repo": "api",
-      "skill": "api-base",
-      "write": true
-    },
-    "integration": {
-      "root": "../integration",
-      "role": "backend",
-      "repo": "integration",
-      "skill": "platform-base",
-      "write": true
-    },
-    "line": {
-      "root": "../line",
-      "role": "client",
-      "repo": "line",
       "skill": "platform-base",
       "write": true
     }
