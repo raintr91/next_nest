@@ -24,7 +24,7 @@ In `api/` workspace (see `api/.cursor/skills/api/SKILL.md`):
 | `/api-code` | Approved backend spec → Laravel implementation |
 | `/api` | Router — defaults to spec if no approved backend spec |
 
-Hashtags: `#call-external`, `#cross-entity-service` → `api/.cursor/extracts/`
+Hashtags: `#call-external`, `#cross-entity-service` → policy on **base-docs** (`product/shared/integrations/`). Detect/mark only here.
 
 ## Before Work (from Portal)
 

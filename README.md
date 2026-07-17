@@ -1,6 +1,6 @@
-# Portal Base (Next.js 15)
+# Portal Base (Next.js 15 + Nest)
 
-Auth-first Next.js monorepo — shadcn dashboard, kiến trúc 4 tầng trong `src`, harness AI cho feature mới.
+Auth-first Next.js monorepo + Nest API in-repo — shadcn dashboard, harness AI (code lane).
 
 ## Quick start
 
@@ -9,32 +9,27 @@ pnpm install
 pnpm dev
 ```
 
-FE chạy tại `src` (mặc định port 3000). API Nest: `pnpm dev:api`.
+FE mặc định port 3000. API Nest: `pnpm dev:api` (nếu có).
 
 ## Commands
 
 | Command | Mô tả |
 |---------|--------|
-| `pnpm dev` | Next dev (repo root) |
-| `pnpm build` | Next production build |
+| `pnpm dev` | Next dev |
+| `pnpm build` | Production build |
 | `pnpm test:unit` | Vitest |
-| `pnpm test:e2e` | Playwright — đọc [E2E-TESTIDS](docs/operational/E2E-TESTIDS.md) trước |
-| `pnpm docs:dev` | VitePress (`pnpm docs:render` trước) |
-
-## Documentation
-
-- [Docs hub](docs/index.md)
-- [Architecture](docs/operational/ARCHITECTURE.md)
-- [Feature artifact flows](docs/operational/FEATURE-ARTIFACT-FLOWS.md)
-- [Common UI](docs/common-ui/index.md)
-- [Docker / WSL](docs/dev-environment/DOCKER-DEV-LIGHT.md) · [Cursor perf](docs/dev-environment/WSL-CURSOR-PERF.md)
+| `pnpm test:e2e` | Playwright |
+| `pnpm portal:gen --id <W-…\|CMP-…>` | FE codegen |
 
 ## Repo này
 
-Auth-first skeleton: `/login`, `/` (protected dashboard), middleware cookie `auth_token`.
+Skeleton: `/login`, `/` (protected), middleware cookie `auth_token`.  
+Nest: `server/` (hoặc layout monorepo hiện tại).  
+Giữ: `codegen/`, `openapigen/`, `unitgen/`, `registries/`.
 
-API client (`apiFetch` trong `src/lib/api-client.ts`) gọi `NEXT_PUBLIC_API_URL/api/*`.
+API client: `src/lib/api-client.ts` → `NEXT_PUBLIC_API_URL/api/*`.
 
-## Team AI harness
+## AI harness (code lane)
 
-Commands và skills: [docs/operational/FEATURE-ARTIFACT-FLOWS.md](docs/operational/FEATURE-ARTIFACT-FLOWS.md) · [docs/operational/PROMPT-TEMPLATES.md](docs/operational/PROMPT-TEMPLATES.md). AI harness nằm trong `.cursor/` và `.kilo/`.
+Skills: `.cursor/skills/` · rules/extracts: `.cursor/`.  
+SSOT harness = `.cursor/` tại repo này.
