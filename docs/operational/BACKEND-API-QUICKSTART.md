@@ -1,6 +1,6 @@
 # Backend API — quick reference
 
-> **R2/R3:** Product Code + architecture → [`base-docs`](https://github.com/raintr91/base_docs) · E2E plans → [`base-tests`](https://github.com/raintr91/base_test) · gen: `pnpm portal:gen --id …` / `pnpm testcase:gen --id …` · [HUBS](https://github.com/raintr91/base_docs/blob/1.0.0/platform/toolchain/HUBS.md) / [DOCS-HUB](https://github.com/raintr91/base_docs/blob/1.0.0/platform/toolchain/DOCS-HUB.md) / [TESTS-HUB](https://github.com/raintr91/base_docs/blob/1.0.0/platform/toolchain/TESTS-HUB.md)
+> **R2/R3:** Product Code + architecture → [`base-docs`](https://github.com/raintr91/base_docs) · E2E plans → [`base-tests`](https://github.com/raintr91/base_test) · gen: `pnpm portal:gen --id …` / `pnpm testcase:gen --id …` · [Hub split](https://github.com/raintr91/base_test/blob/main/docs/HUBS.md) / [Docs hub](https://github.com/raintr91/base_docs) / [Tests hub](https://github.com/raintr91/base_test/blob/main/docs/TESTS-HUB.md)
 
 
 NestJS API in `server/` · TypeORM (MySQL) · CQRS · shared Zod via `@portal/models`.
@@ -110,8 +110,8 @@ Chi tiết workflow AI: [TEAM-AI-BACKEND-WORKFLOW](https://github.com/raintr91/b
 
 | Doc | Mục đích |
 |-----|----------|
-| [BACKEND-CODEGEN](https://github.com/raintr91/base_docs/blob/1.0.0/platform/toolchain/BACKEND-CODEGEN.md) | Hub script `contract:gen` · `nest:gen` · `nest:unit-gen` |
-| [NEST-UNIT-PHASE-DIAGRAM](https://github.com/raintr91/base_docs/blob/1.0.0/platform/toolchain/NEST-UNIT-PHASE-DIAGRAM.md) | Jest lane chi tiết |
+| [BACKEND-CODEGEN](./BACKEND-CODEGEN.md) | Hub script `contract:gen` · `nest:gen` · `nest:unit-gen` |
+| [NEST-UNIT-PHASE-DIAGRAM](./NEST-UNIT-PHASE-DIAGRAM.md) | Jest lane chi tiết |
 | [WIRE-PHASE-DIAGRAM](https://github.com/raintr91/base_docs/blob/1.0.0/platform/toolchain/WIRE-PHASE-DIAGRAM.md) | Sau API unit → integration |
 
 ---
@@ -127,4 +127,4 @@ Chi tiết workflow AI: [TEAM-AI-BACKEND-WORKFLOW](https://github.com/raintr91/b
 | BaseCriteria | `criteria/base-criteria.ts` |
 | — | `persistence/typeorm-write.repository.ts` |
 
-Layout module: [NEST-API-STRUCTURE](https://github.com/raintr91/base_docs/blob/1.0.0/platform/toolchain/NEST-API-STRUCTURE.md).
+Layout module: [NEST-API-STRUCTURE](./NEST-API-STRUCTURE.md).

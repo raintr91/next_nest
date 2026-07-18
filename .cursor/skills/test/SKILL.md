@@ -10,7 +10,7 @@ disable-model-invocation: true
 **Plans SSOT:** `base-tests` (read-only). **Scripts output:** `tests/e2e/` on this repo.
 
 Author/grill plans → **base-tests** `/testcase` · `/grill-testcase`.  
-Hub: `base-docs/platform/toolchain/TESTS-HUB.md` · template: `base-tests/templates/testcase.yaml`
+Hub: `https://github.com/raintr91/base_test/blob/main/docs/TESTS-HUB.md` · template: `base-tests/templates/testcase.yaml`
 
 ## Gen
 

@@ -7,7 +7,7 @@ disable-model-invocation: true
 
 # /prototype — UI Prototype (Mock API Boundary)
 
-Hub guide: `base-docs/platform/toolchain/PORTAL-CODEGEN.md` · layout: `FEATURE-ARTIFACT-LAYOUT.md` · [HUBS](base-docs/platform/toolchain/HUBS.md)
+Hub guide: `https://github.com/raintr91/nuxt_4/blob/nuxt_v_3/docs/operational/PORTAL-CODEGEN.md` · layout: `FEATURE-ARTIFACT-LAYOUT.md` · [Hub split](https://github.com/raintr91/base_test/blob/main/docs/HUBS.md)
 
 **Extracts:** `extractBundle: prototype` → `.cursor/extracts/extract-registry.json`
 
