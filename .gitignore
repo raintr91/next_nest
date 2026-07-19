@@ -12,6 +12,8 @@ out/
 # Node
 node_modules
 .pnpm-store
+pnpm-lock.yaml
+pnpm-workspace.yaml
 
 # Accidental CLI output
 --host/
@@ -46,21 +48,10 @@ server/dist
 !server/.env.example
 docker/.env
 
-# Local project maps (repo root SSOT)
-platform-repos.local.json
-legacy-repos.local.json
-.cursor/platform-repos.local.json
-.cursor/legacy-repos.local.json
-.cursor/skills/vendor/
-.cursor/rules-vendor/
-.cursor/skills-vendor/
+# Toolkit-generated entries (harness .cursor/, agent wiring, platform maps,
+# package install-state) are merged here by each toolkit's `init` — do not
+# hand-maintain them. Template SSOT: platform-dna/TODO-GITIGNORE.md.
 
-# Optional Kilo mirror (SSOT: .cursor/skills|rules|extracts)
-.kilo/skills/
-.kilo/instructions/
-.kilo/extracts/
-.kilo/command/
-
-# CodeGraph local index
+# CodeGraph local index (external tool — keep default ignore)
 .codegraph/
 .codegraph-*/
