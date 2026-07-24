@@ -2,13 +2,6 @@
 .next/
 out/
 
-# Legacy Nuxt (safe to delete if present)
-.output
-.data
-.nuxt
-.nitro
-.nuxt-e2e
-
 # Node
 node_modules
 .pnpm-store
