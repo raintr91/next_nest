@@ -19,17 +19,28 @@ FE mặc định port 3000. API Nest: `pnpm dev:api` (nếu có).
 | `pnpm build` | Production build |
 | `pnpm test:unit` | Vitest |
 | `pnpm test:e2e` | Playwright |
-| `pnpm portal:gen --id <W-…\|CMP-…>` | FE codegen |
 
 ## Repo này
 
 Skeleton: `/login`, `/` (protected), middleware cookie `auth_token`.  
 Nest: `server/` (hoặc layout monorepo hiện tại).  
-Giữ: `codegen/`, `openapigen/`, `unitgen/`, `registries/`.
+Giữ product code và registries trong repo. FE codegen/unitgen dùng Codegenkit;
+không lưu bản sao engine tại root repo.
 
 API client: `src/lib/api-client.ts` → `NEXT_PUBLIC_API_URL/api/*`.
 
-## AI harness (code lane)
+## AI workflow (code lane)
 
-Skills: `.cursor/skills/` · rules/extracts: `.cursor/`.  
-SSOT harness = `.cursor/` tại repo này.
+Skills: `/prototype` · `/grill-prototype` · `/platform-base` ·
+`/platform-mark` · `/wire` · `/test` · `/unit` · `/model` (+ grill-*).
+BE/fullstack thêm `/api` · `/grill-api`.
+
+Gen / gaps: **Artifactgraph MCP** + Codegenkit / Testkit CLI after toolkit
+init (no thin `pnpm` wrappers in this product repo).
+
+Platform rules luôn load `platform-ai.mdc`; rules theo file/slash gồm
+`platform-invariants`, contract naming, base UI/E2E/data, size/split/import,
+design vocabulary, team-flow prototype/unit/E2E/wire/model và CodeGraph.
+
+Platform DNA và từng toolkit là SSOT của harness. Các agent skills/rules/extracts
+được sync khi cài/init, không track bản sao `.cursor/` trong product repo.

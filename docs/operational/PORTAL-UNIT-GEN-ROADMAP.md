@@ -100,9 +100,9 @@ pnpm portal:unit-gen --spec … --phase wire
 ### PR11 — Token / workflow ✅
 
 - `docs/operational/UNIT-PHASE-DIAGRAM.md` — 2 Mermaid: unit lane + `#needs-unit-test` lifecycle (**không** FULL-CYCLE)
-- `.cursor/extracts/portal-unit-workflow.md` — checklist token-thin
-- Skills `/unit` (gap + gen + file) · `/grill-unit` (coverage + reqIds)
-- VitePress sidebar: Unit phase — dev lane
+- Skills `/unit` (gap + gen + file) · `/grill-unit` (coverage + reqIds), synced
+  by the toolkit
+- Docs navigation and site dependencies are owned by base-docs
 
 ### PR12 — `testcase:gen` (E2E, pipeline riêng) ✅
 
